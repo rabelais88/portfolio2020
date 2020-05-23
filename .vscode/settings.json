@@ -1,0 +1,6 @@
+{
+  "eslint.workingDirectories": [
+    { "directory": "front-www", "changeProcessCWD": true },
+    { "directory": "front-admin", "changeProcessCWD": true }
+  ]
+}
