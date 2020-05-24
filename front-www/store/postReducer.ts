@@ -1,5 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
-import getPosts from '../actions/getPosts';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import setPosts, { SET_POSTS } from '../actions/setPosts';
+// import getPosts from '../actions/getPosts';
+import Logger from '../lib/logger';
+
+const logger = new Logger('store/postReducer');
 
 export interface post {
   userId: number;
@@ -17,9 +21,16 @@ export const getDefaultState = (): postReducerDefaultState => ({
 });
 
 const extraReducers = (builder) => {
-  builder.addCase(getPosts.fulfilled, (state, { payload = [] }) => {
-    return { posts: payload };
-  });
+  // builder.addCase(getPosts.fulfilled, (state, { payload = [] }) => {
+  //   return { posts: payload };
+  // });
+  builder.addCase(
+    setPosts,
+    (state: postReducerDefaultState, action: PayloadAction<post[]>) => {
+      logger.log('setPosts!', { action, state });
+      return { ...state, posts: action.payload };
+    }
+  );
 };
 
 const postSlice = createSlice({

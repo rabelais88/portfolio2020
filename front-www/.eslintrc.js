@@ -31,6 +31,7 @@ module.exports = {
     'react/prop-types': 1,
     'react/jsx-props-no-spreading': 1,
     'lines-between-class-members': 0,
+    'react/jsx-one-expression-per-line': 0,
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   },

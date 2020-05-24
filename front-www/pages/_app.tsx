@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { NextPageContext } from 'next';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,6 +25,12 @@ const MyApp = ({ Component, pageProps }): JSX.Element => {
       </PersistGate>
     </Provider>
   );
+};
+
+MyApp.getInitialProps = async (ctx: NextPageContext) => {
+  const _ctx: any = ctx;
+  _ctx.store = store;
+  return {};
 };
 
 export default MyApp;
