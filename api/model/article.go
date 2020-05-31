@@ -6,4 +6,5 @@ type Article struct {
 	Title      string `gorm:"default:'untitled'" json:"title"`
 	Desc       string `json:"desc"`
 	CoverImage string `json:"coverImage"`
+	Link       string `json:"link"`
 }

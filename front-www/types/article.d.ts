@@ -6,6 +6,7 @@ interface article {
   title: string;
   desc: string;
   coverImage: string;
+  link: string;
 }
 
 export default article;
