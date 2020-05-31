@@ -1,4 +1,4 @@
-package app
+package control
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 )
 
 func TestPing(t *testing.T) {
-	handler := MountTestApp()
+	handler := mountTestApp()
 	server := httptest.NewServer(handler)
 	defer server.Close()
 

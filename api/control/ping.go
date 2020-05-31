@@ -1,9 +1,10 @@
-package app
+package control
 
 import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rabelais88/portfolio2020/api/env"
 )
 
 type PingResponse struct {
@@ -11,7 +12,7 @@ type PingResponse struct {
 }
 
 func GetPing(c echo.Context) error {
-	cc := c.(*CustomContext)
+	cc := c.(*env.CustomContext)
 	res := PingResponse{
 		Pong: true,
 	}

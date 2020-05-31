@@ -5,30 +5,28 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jinzhu/gorm"
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/rabelais88/portfolio2020/api/env"
 )
 
-type CustomContext struct {
-	echo.Context
-	Config *env.Config
-	Db     *gorm.DB
+type CustomValidator struct {
+	validator *validator.Validate
 }
 
-func extendContext(config env.Config, db *gorm.DB) func(echo.HandlerFunc) echo.HandlerFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			cc := &CustomContext{
-				c,
-				&config,
-				db,
-			}
-			return next(cc)
-		}
+type ValidationErrorResponse struct {
+	Detail  string `json:"detail"`
+	Message string `json:"message"`
+}
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	err := cv.validator.Struct(i)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, ValidationErrorResponse{err.Error(), "VALIDATION_FAILED"})
 	}
+	return err
 }
 
 func Init() http.Handler {
@@ -41,7 +39,8 @@ func Init() http.Handler {
 
 	db := ConnectDB(&config)
 	// extend default context
-	e.Use(extendContext(config, db))
+	e.Use(env.ExtendContext(config, db))
+	e.Validator = &CustomValidator{validator: validator.New()}
 
 	ConnectRouter(e)
 	_port := fmt.Sprintf(":%s", config.Port)

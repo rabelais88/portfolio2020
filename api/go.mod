@@ -6,11 +6,14 @@ require (
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gavv/httpexpect v2.0.0+incompatible
 	github.com/gavv/httpexpect/v2 v2.0.3
+	github.com/go-playground/universal-translator v0.17.0 // indirect
+	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/jinzhu/gorm v1.9.12
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo/v4 v4.1.16
+	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/valyala/fasthttp v1.13.1 // indirect

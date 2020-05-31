@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rabelais88/portfolio2020/api/env"
 )
 
 type HelloWorldResponse struct {
@@ -11,7 +12,7 @@ type HelloWorldResponse struct {
 }
 
 func GetHelloWorld(c echo.Context) error {
-	cc := c.(*CustomContext)
+	cc := c.(*env.CustomContext)
 	res := HelloWorldResponse{
 		Port: cc.Config.Port,
 	}
