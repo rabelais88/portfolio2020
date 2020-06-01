@@ -1,6 +1,6 @@
 module github.com/rabelais88/portfolio2020
 
-go 1.13
+go 1.14
 
 replace github.co/rabelais88/portfolio2020/api => ./api
 
@@ -10,9 +10,11 @@ require (
 	github.com/gavv/httpexpect v2.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/klauspost/compress v1.10.6 // indirect
 	github.com/moul/http2curl v1.0.0 // indirect
+	github.com/pilagod/gorm-cursor-paginator v1.3.0 // indirect
 	github.com/rabelais88/portfolio2020/api v0.0.0-20200529072325-40b9e319f3ce // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/stretchr/testify v1.6.0 // indirect

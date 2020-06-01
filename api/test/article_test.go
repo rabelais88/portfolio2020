@@ -25,3 +25,19 @@ func TestGetArticle(t *testing.T) {
 	e.GET(`/article`).Expect().Status(http.StatusBadRequest)
 	e.GET(`/article`).WithQuery("id", "12$$&A").Expect().Status(http.StatusBadRequest)
 }
+
+func TestGetArticles(t *testing.T) {
+	handler := mountTestApp()
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	e := httpexpect.WithConfig(httpexpect.Config{
+		BaseURL:  server.URL,
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
+
+	e.GET(`/articles`).Expect().Status(http.StatusOK)
+}

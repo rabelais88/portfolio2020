@@ -1,6 +1,6 @@
 module github.com/rabelais88/portfolio2020/api
 
-go 1.13
+go 1.14
 
 require (
 	github.com/fatih/structs v1.1.0 // indirect
@@ -14,6 +14,7 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/valyala/fasthttp v1.13.1 // indirect
