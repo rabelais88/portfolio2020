@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/jinzhu/gorm"
+
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -29,7 +31,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 	return err
 }
 
-func Init() http.Handler {
+func Init() (http.Handler, *gorm.DB) {
 	config := *env.GetConfig()
 
 	log.Println("app initialized")
@@ -38,6 +40,7 @@ func Init() http.Handler {
 	e.Use(middleware.Recover())
 
 	db := ConnectDB(&config)
+
 	// extend default context
 	e.Use(env.ExtendContext(config, db))
 	e.Validator = &CustomValidator{validator: validator.New()}
@@ -47,12 +50,12 @@ func Init() http.Handler {
 
 	// bails out if it's a test environment.
 	if config.Env == env.TEST {
-		return e
+		return e, db
 	}
 
 	err := e.Start(_port)
 	if err != nil {
 		e.Logger.Fatal(err)
 	}
-	return e
+	return e, db
 }

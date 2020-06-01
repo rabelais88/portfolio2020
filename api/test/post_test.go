@@ -6,9 +6,10 @@ import (
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
+	"github.com/rabelais88/portfolio2020/api/control"
 )
 
-func TestPing(t *testing.T) {
+func TestAddPost(t *testing.T) {
 	handler, db := mountTestApp()
 	server := httptest.NewServer(handler)
 	defer server.Close()
@@ -22,5 +23,11 @@ func TestPing(t *testing.T) {
 		},
 	})
 
-	e.GET(`/ping`).Expect().Status(http.StatusOK)
+	e.POST(`/post`).WithJSON(control.AddPostBody{
+		Content:    "testing 1234",
+		Title:      "OOOH lala",
+		Desc:       "this is a sample post",
+		CoverImage: "https://google.com",
+		Link:       "https://google.com",
+	}).Expect().Status(http.StatusOK)
 }

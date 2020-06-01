@@ -9,9 +9,10 @@ import (
 )
 
 func TestGetArticle(t *testing.T) {
-	handler := mountTestApp()
+	handler, db := mountTestApp()
 	server := httptest.NewServer(handler)
 	defer server.Close()
+	defer db.Close()
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		BaseURL:  server.URL,
@@ -27,9 +28,10 @@ func TestGetArticle(t *testing.T) {
 }
 
 func TestGetArticles(t *testing.T) {
-	handler := mountTestApp()
+	handler, db := mountTestApp()
 	server := httptest.NewServer(handler)
 	defer server.Close()
+	defer db.Close()
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		BaseURL:  server.URL,
@@ -40,4 +42,7 @@ func TestGetArticles(t *testing.T) {
 	})
 
 	e.GET(`/articles`).Expect().Status(http.StatusOK)
+	e.GET(`/articles`).WithQuery("after", "abce1234").Expect().Status(http.StatusOK)
+	e.GET(`/articles`).WithQuery("order", "asc").Expect().Status(http.StatusOK)
+	e.GET(`/articles`).WithQuery("order", "wrongorder").Expect().Status(http.StatusBadRequest)
 }

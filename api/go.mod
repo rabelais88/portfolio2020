@@ -8,6 +8,8 @@ require (
 	github.com/gavv/httpexpect/v2 v2.0.3
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
+	github.com/gofrs/uuid v3.3.0+incompatible
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/jinzhu/gorm v1.9.12

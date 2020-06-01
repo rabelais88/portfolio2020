@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
-	app.Init()
+	_, db := app.Init()
+	defer db.Close()
 }

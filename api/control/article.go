@@ -38,6 +38,7 @@ type ArticlesResponse struct {
 	List []ArticleResponse `json:"list"`
 }
 
+// https://github.com/pilagod/gorm-cursor-paginator
 func GetArticles(c echo.Context) error {
 	cc := c.(*env.CustomContext)
 	q := new(ArticlesQuery)

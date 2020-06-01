@@ -2,7 +2,7 @@ enum ARTICLE_TYPE {
   POST = 'POST',
   WORK = 'WORK',
   NOTICE = 'NOTICE',
-  PHOTO = 'PHOTO',
+  MEDIA = 'MEDIA',
 }
 
 export default ARTICLE_TYPE;

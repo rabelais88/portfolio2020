@@ -7,6 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/rabelais88/portfolio2020/api/env"
+	"github.com/rabelais88/portfolio2020/api/model"
 )
 
 func ConnectDB(config *env.Config) *gorm.DB {
@@ -26,7 +27,8 @@ func ConnectDB(config *env.Config) *gorm.DB {
 	if err != nil {
 		log.Fatalln("there was an error with database connection", err)
 	}
-	defer db.Close()
+
+	db.AutoMigrate(&model.Post{}, &model.Article{})
 
 	log.Println("connected to DB")
 
