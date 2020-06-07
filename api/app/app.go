@@ -45,7 +45,7 @@ func Init() (http.Handler, *gorm.DB) {
 	e.Use(env.ExtendContext(config, db))
 	e.Validator = &CustomValidator{validator: validator.New()}
 
-	ConnectRouter(e)
+	ConnectRouter(e, &config)
 	_port := fmt.Sprintf(":%s", config.Port)
 
 	// bails out if it's a test environment.

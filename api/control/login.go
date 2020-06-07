@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/rabelais88/portfolio2020/api/env"
 	"golang.org/x/oauth2"
@@ -46,9 +47,20 @@ func GetLoginToken(c echo.Context) error {
 	if errTok != nil || !tok.Valid() {
 		return MakeError(http.StatusUnauthorized, `GOOGLE_UNAUTHORIZED`)
 	}
-	res := LoginTokenResponse{tok.AccessToken}
 
 	// TODO: return processed jwt instead of raw token
-	err := cc.JSON(http.StatusOK, res)
-	return err
+	// https://echo.labstack.com/cookbook/jwt
+	tokenJwt := jwt.New(jwt.SigningMethodHS256)
+
+	claims := tokenJwt.Claims.(jwt.MapClaims)
+	claims["token"] = tok.AccessToken
+
+	token, err := tokenJwt.SignedString([]byte(cc.Config.SecretJWT))
+	if err != nil {
+		return MakeError(http.StatusInternalServerError, `FAILED_TOKEN_GENERATION`)
+	}
+
+	res := LoginTokenResponse{token}
+	errRes := cc.JSON(http.StatusOK, res)
+	return errRes
 }

@@ -14,6 +14,7 @@ type CustomContext struct {
 	Config      *Config
 	Db          *gorm.DB
 	OAuthConfig *oauth2.Config
+	UserToken   *string
 }
 
 func GetOAuthConfig(config Config) *oauth2.Config {
@@ -36,6 +37,7 @@ func ExtendContext(config Config, db *gorm.DB) func(echo.HandlerFunc) echo.Handl
 				&config,
 				db,
 				GetOAuthConfig(config),
+				nil,
 			}
 			return next(cc)
 		}

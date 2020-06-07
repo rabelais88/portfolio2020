@@ -74,7 +74,7 @@ func GetConfig() *Config {
 	port := lib.CheckString(os.Getenv(`PORT`), `4500`)
 
 	_config := Config{
-		Url:          lib.CheckString(os.Getenv(`URL`), fmt.Sprintf(`localhost:%s`, port)),
+		Url:          lib.CheckString(os.Getenv(`URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 		Port:         port,
 		Env:          env,
 		DBHost:       lib.CheckString(os.Getenv(`DB_HOST`), `localhost`),

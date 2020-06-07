@@ -3,6 +3,7 @@ module github.com/rabelais88/portfolio2020/api
 go 1.14
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gavv/httpexpect/v2 v2.0.3
 	github.com/go-playground/universal-translator v0.17.0 // indirect
