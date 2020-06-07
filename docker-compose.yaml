@@ -2,6 +2,12 @@ version: '3.7'
 services:
   api:
     image: portfolio2020-api:latest
+    restart: always
+    # deploy:
+    #   restart_policy:
+    #     condition: on-failure
+    networks:
+      - backend
     environment:
       - ENV=development
       - PORT=4500
@@ -9,7 +15,21 @@ services:
       - DB_PORT=5432
       - DB_USER=admin
       - DB_PASSWORD=1234
+      - DB_NAME=portfolio
+      - URL=http://localhost:4500 # used for google auth redirect
   db:
-    iamge:
+    image: postgres:13
+    restart: always
+    # deploy:
+    #   restart_policy:
+    #     condition: on-failure
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=portfolio
+    networks:
+      - backend
 
-
+networks:
+  backend:
+    driver: overlay

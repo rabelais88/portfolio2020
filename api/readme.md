@@ -12,7 +12,7 @@ go get -u
 # provide dev.env/prod.env/stage.env/test.env
 # or environment variables as follow
 # ENV=development|production|stage|test
-ENV=development PORT=4500 DB_HOST=localhost DB_PORT=5432 DB_USER=admin DB_PASSWORD=1234 go run main.go
+ENV=development PORT=4500 DB_HOST=localhost DB_PORT=5432 DB_USER=admin DB_PASSWORD=1234 DB_NAME=portfolio go run main.go
 # check .sh for more info
 
 # build

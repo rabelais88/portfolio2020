@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/rabelais88/portfolio2020/api/env"
 	"github.com/rabelais88/portfolio2020/api/model"
@@ -13,14 +14,21 @@ import (
 func ConnectDB(config *env.Config) *gorm.DB {
 	dbPath := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s", config.DBHost, config.DBPort, config.DBUser, config.DBName, config.DBPassword)
 	dbType := "postgres"
-	if config.Env == env.ENVIRONMENTS.TEST {
+	switch config.Env {
+	case env.ENVIRONMENTS.TEST:
 		dbPath = ":memory:"
 		dbType = "sqlite3"
-	}
-
-	if config.Env == env.ENVIRONMENTS.DEV {
-		log.Printf("host %s:%s / user %s / database name %s\n", config.DBHost, config.DBPort, config.DBUser, config.DBName)
-		log.Println("connecting to DB...")
+		log.Println("DB on memory for local test")
+	case env.ENVIRONMENTS.DEV:
+		if config.DBMemory == `true` {
+			dbPath = ":memory:"
+			dbType = "sqlite3"
+			log.Println("DB on memory for local test")
+		} else {
+			dbPath += " sslmode=disable"
+			log.Println(dbPath)
+			log.Println("connecting to DB...")
+		}
 	}
 
 	db, err := gorm.Open(dbType, dbPath)

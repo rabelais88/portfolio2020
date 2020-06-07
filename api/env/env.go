@@ -1,10 +1,12 @@
 package env
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/novalagung/gubrak/v2"
 	"github.com/rabelais88/portfolio2020/api/lib"
 )
 
@@ -39,13 +41,18 @@ var ENVIRONMENTS = &_environments{
 }
 
 type Config struct {
-	Port       string
-	Env        string
-	DBHost     string
-	DBPort     string
-	DBUser     string
-	DBName     string
-	DBPassword string
+	Url          string
+	Port         string
+	Env          string
+	DBHost       string
+	DBPort       string
+	DBUser       string
+	DBName       string
+	DBMemory     string // for local test
+	DBPassword   string
+	SecretJWT    string
+	GoogleID     string
+	GoogleSecret string
 }
 
 func GetConfig() *Config {
@@ -64,14 +71,21 @@ func GetConfig() *Config {
 		log.Printf("environment file missing(%s) -> the program will rely on local env", fileName)
 	}
 
+	port := lib.CheckString(os.Getenv(`PORT`), `4500`)
+
 	_config := Config{
-		Port:       lib.CheckString(os.Getenv(`PORT`), `4500`),
-		Env:        env,
-		DBHost:     lib.CheckString(os.Getenv(`DB_HOST`), `localhost`),
-		DBPort:     lib.CheckString(os.Getenv(`DB_PORT`), `5432`),
-		DBUser:     os.Getenv(`DB_USER`),
-		DBName:     lib.CheckString(os.Getenv(`DB_NAME`), `portfolio2020`),
-		DBPassword: os.Getenv(`DB_PASSWORD`),
+		Url:          lib.CheckString(os.Getenv(`URL`), fmt.Sprintf(`localhost:%s`, port)),
+		Port:         port,
+		Env:          env,
+		DBHost:       lib.CheckString(os.Getenv(`DB_HOST`), `localhost`),
+		DBPort:       lib.CheckString(os.Getenv(`DB_PORT`), `5432`),
+		DBUser:       os.Getenv(`DB_USER`),
+		DBName:       lib.CheckString(os.Getenv(`DB_NAME`), `portfolio2020`),
+		DBMemory:     lib.CheckString(os.Getenv(`DB_MEMORY`), `false`),
+		DBPassword:   os.Getenv(`DB_PASSWORD`),
+		SecretJWT:    lib.CheckString(os.Getenv(`SECRET_JWT`), gubrak.RandomString(15)),
+		GoogleID:     os.Getenv(`GOOGLE_CLIENT_ID`),
+		GoogleSecret: os.Getenv(`GOOGLE_CLIENT_SECRET`),
 	}
 	return &_config
 }

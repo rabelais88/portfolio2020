@@ -10,6 +10,8 @@ func ConnectRouter(e *echo.Echo) {
 	e.GET("/ping", control.GetPing)
 	e.GET("/article", control.GetArticle)
 	e.GET("/articles", control.GetArticles)
+	e.GET("/login", control.GetLogin)
+	e.GET("/login-cred", control.GetLoginToken)
 
 	e.POST("/post", control.AddPost)
 }

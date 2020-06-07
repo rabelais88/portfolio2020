@@ -1,0 +1,1 @@
+ENV=development DB_MEMORY=true go run main.go
