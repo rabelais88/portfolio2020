@@ -16,11 +16,14 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	// provides $JWT_TOKEN
 	e.GET("/login-cred", control.GetLoginToken)
 
-	r := e.Group("/admin")
+	// r == restricted to admin
+	// https://echo.labstack.com/cookbook/jwt for accessing middleware JWT data in controller
+	r := e.Group("/auth")
 	if config.Env != env.ENVIRONMENTS.TEST {
 		// Header: Authorization Bearer $JWT_TOKEN
 		r.Use(middleware.JWT([]byte(config.SecretJWT)))
 	}
 	r.GET("/ping", control.GetPing)
 	r.POST("/post", control.AddPost)
+
 }

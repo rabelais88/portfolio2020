@@ -23,7 +23,7 @@ func TestAddPost(t *testing.T) {
 		},
 	})
 
-	e.POST(`/admin/post`).WithJSON(control.AddPostBody{
+	e.POST(`/auth/post`).WithJSON(control.AddPostBody{
 		Content:    "testing 1234",
 		Title:      "OOOH lala",
 		Desc:       "this is a sample post",

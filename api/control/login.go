@@ -48,7 +48,6 @@ func GetLoginToken(c echo.Context) error {
 		return MakeError(http.StatusUnauthorized, `GOOGLE_UNAUTHORIZED`)
 	}
 
-	// TODO: return processed jwt instead of raw token
 	// https://echo.labstack.com/cookbook/jwt
 	tokenJwt := jwt.New(jwt.SigningMethodHS256)
 
