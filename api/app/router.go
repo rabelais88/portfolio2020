@@ -13,10 +13,12 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	e.GET("/article", control.GetArticle)
 	e.GET("/articles", control.GetArticles)
 	e.GET("/login", control.GetLogin)
+	// provides $JWT_TOKEN
 	e.GET("/login-cred", control.GetLoginToken)
 
 	r := e.Group("/admin")
 	if config.Env != env.ENVIRONMENTS.TEST {
+		// Header: Authorization Bearer $JWT_TOKEN
 		r.Use(middleware.JWT([]byte(config.SecretJWT)))
 	}
 	r.GET("/ping", control.GetPing)
