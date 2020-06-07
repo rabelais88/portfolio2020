@@ -5,6 +5,12 @@
  - https://github.com/thoas/go-funk
 
 # usage
+```env
+# dev.env, stage.env, prod.env
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+```
+
 ```sh
 # installing package
 go get -u
