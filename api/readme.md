@@ -1,10 +1,13 @@
 # portfolio API server
-# go libraries in consideration
+
+## go libraries in consideration
+
  - https://github.com/avelino/awesome-go
  - https://github.com/novalagung/gubrak
  - https://github.com/thoas/go-funk
 
 # usage
+
 ```env
 # dev.env, stage.env, prod.env
 GOOGLE_CLIENT_ID=...
@@ -20,7 +23,11 @@ go get -u
 # ENV=development|production|stage|test
 ENV=development PORT=4500 DB_HOST=localhost DB_PORT=5432 DB_USER=admin DB_PASSWORD=1234 DB_NAME=portfolio go run main.go
 # check .sh for more info
+```
 
+## build and run in production
+
+```sh
 # build
 source build.sh
 
