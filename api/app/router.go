@@ -1,6 +1,9 @@
 package app
 
 import (
+	"net/http"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rabelais88/portfolio2020/api/control"
@@ -26,4 +29,17 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	r.GET("/ping", control.GetPing)
 	r.POST("/post", control.AddPost)
 
+	// accessing token in context example
+	r.GET("/test", func(e echo.Context) error {
+		cc := e.(*env.CustomContext)
+		user := cc.Get("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		token := claims["token"].(string)
+		res := struct {
+			Success bool
+			Token   string
+		}{Success: true, Token: token}
+		err := cc.JSON(http.StatusOK, res)
+		return err
+	})
 }
