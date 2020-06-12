@@ -1,8 +1,9 @@
-FROM rabelais/gobuilder:1.14.4-alpine3.12
+FROM golang:1.14.4-alpine3.12
 
 WORKDIR /go/src/app
 COPY . .
 
+RUN apk add build-base
 RUN go get -d -v ./...
 RUN go install -v ./...
 RUN go build -o /go/src/app/bin/server main.go
