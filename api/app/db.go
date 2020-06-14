@@ -36,7 +36,7 @@ func ConnectDB(config *env.Config) *gorm.DB {
 		log.Fatalln("there was an error with database connection", err)
 	}
 
-	db.AutoMigrate(&model.Post{}, &model.Article{})
+	db.AutoMigrate(&model.Post{}, &model.Article{}, &model.User{})
 
 	log.Println("connected to DB")
 

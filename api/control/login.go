@@ -9,6 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/rabelais88/portfolio2020/api/env"
+	"github.com/rabelais88/portfolio2020/api/model"
 	"golang.org/x/oauth2"
 )
 
@@ -89,6 +90,24 @@ func GetLoginToken(c echo.Context) error {
 
 	// if user is not registered and no other users are detected, add user as master
 
+	if userInfo.Email != cc.Config.AdminGmailAccount {
+		return MakeError(http.StatusUnauthorized, `UNAUTHORIZED_ADMIN`)
+	}
+
+	u := model.User{
+		Token:  tok.AccessToken,
+		Email:  userInfo.Email,
+		UserID: "admin",
+		Role:   "ADMIN",
+	}
+	if blank := cc.Db.Where(&model.User{Token: tok.AccessToken}).First(&model.User{}).RecordNotFound(); !blank {
+		// return MakeError(http.StatusConflict, "USER_ALREADY_EXIST")
+		log.Println("user already exist")
+	} else {
+		cc.Db.Create(&u)
+		cc.Db.Save(&u)
+		log.Println("user saved", u)
+	}
 	res := LoginTokenResponse{token, userInfo.Email}
 	errRes := cc.JSON(http.StatusOK, res)
 	return errRes
