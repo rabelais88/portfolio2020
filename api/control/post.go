@@ -20,7 +20,7 @@ type AddPostBody struct {
 
 func AddPost(c echo.Context) error {
 	cc := c.(*env.CustomContext)
-	if cc.Get("userRole") != constants.USER_ROLE.ADMIN {
+	if cc.Get("userRole") != constants.USER_ROLE.ADMIN && cc.Config.Env != env.ENVIRONMENTS.TEST {
 		return MakeError(http.StatusUnauthorized, "NOT_AUTHORIZED")
 	}
 
