@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/rabelais88/portfolio2020/api/env"
+	"github.com/rabelais88/portfolio2020/api/lib"
 	"github.com/rabelais88/portfolio2020/api/model"
 	"github.com/vcraescu/go-paginator"
 	"github.com/vcraescu/go-paginator/adapter"
@@ -62,14 +63,13 @@ func GetArticles(c echo.Context) error {
 	}
 
 	var articles []model.Article
-	articleDb := cc.Db.Model(model.Article{}) // add .Where
-	pageSize := q.Size
-	if pageSize == 0 {
-		pageSize = 10
+	articleDb := cc.Db.Model(model.Article{})
+	if q.Type != "" {
+		articleDb = articleDb.Where(model.Article{Type: q.Type})
 	}
+	pageSize := lib.CheckInt(q.Size, 10)
 	p := paginator.New(adapter.NewGORMAdapter(articleDb), pageSize)
-	page := q.Page
-	p.SetPage(page)
+	p.SetPage(q.Page)
 
 	if err := p.Results(&articles); err != nil {
 		return MakeError(http.StatusInternalServerError, "INTERNAL_ERROR")
@@ -80,7 +80,7 @@ func GetArticles(c echo.Context) error {
 	err := cc.JSON(http.StatusOK, ArticlesResponse{
 		PagedResponse: PagedResponse{
 			p.Nums(),
-			page,
+			q.Page,
 			view.Next(),
 			view.Prev(),
 			view.Pages(),

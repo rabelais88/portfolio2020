@@ -27,4 +27,5 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	r.GET("/ping", control.GetPing)
 	r.POST("/post", control.AddPost)
 	r.GET("/test", control.UserTest)
+	r.POST("/work", control.AddWork)
 }
