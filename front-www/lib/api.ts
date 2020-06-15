@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types */
 import axios from 'axios';
 import qs from 'qs';
+import { API_URL } from '../env';
 
 export interface resolvedResult<T> {
   error?: Error;
@@ -67,6 +68,8 @@ export function joinUrl(urls: string[] | string, query?: any): string {
   return `${url}?${_query}`;
 }
 
-export const api = axios;
+export const api = axios.create({
+  baseURL: API_URL,
+});
 
 export default api;

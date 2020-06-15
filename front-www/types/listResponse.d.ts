@@ -4,7 +4,7 @@ interface listResponse<T> {
   next: number;
   prev: number;
   pages: number[];
-  items: T[];
+  list: T[];
 }
 
 export default listResponse;
