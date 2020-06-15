@@ -1,6 +1,8 @@
 package model
 
 import (
+	"log"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
@@ -17,6 +19,10 @@ type Article struct {
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
 	_uuid := uuid.New().String()
-	scope.SetColumn("ID", _uuid)
+	err := scope.SetColumn("ID", _uuid)
+	if err != nil {
+		// handle error
+		log.Println("error while creating UUID(article)")
+	}
 	return nil
 }

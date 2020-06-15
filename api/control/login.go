@@ -38,7 +38,7 @@ type LoginTokenResponse struct {
 	Email       string `json:"email"`
 }
 
-type UserInfo struct {
+type GoogleUserInfo struct {
 	Email         string `json:"email"`
 	EmailVerified bool   `json:"email_verified"`
 	Picture       string `json:"picture"`
@@ -81,15 +81,14 @@ func GetLoginToken(c echo.Context) error {
 	if err != nil {
 		return MakeError(http.StatusInternalServerError, `GOOGLE_DATA_WRONG_BODY`)
 	}
-	var userInfo UserInfo
+	var userInfo GoogleUserInfo
 	if err := json.Unmarshal(userInfoResp, &userInfo); err != nil {
 		return MakeError(http.StatusInternalServerError, `GOOGLE_JSON_NOT_READABLE`)
 	}
 
 	claims["email"] = userInfo.Email
 
-	// if user is not registered and no other users are detected, add user as master
-
+	// currently, signup is open for admin only
 	if userInfo.Email != cc.Config.AdminGmailAccount {
 		return MakeError(http.StatusUnauthorized, `UNAUTHORIZED_ADMIN`)
 	}
