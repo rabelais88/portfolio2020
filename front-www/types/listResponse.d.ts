@@ -1,7 +1,9 @@
 interface listResponse<T> {
-  cursor: number;
-  totalCount: number;
-  pageSize: number;
+  count: number;
+  page: number;
+  next: number;
+  prev: number;
+  pages: number[];
   items: T[];
 }
 
