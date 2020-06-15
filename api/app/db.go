@@ -38,6 +38,18 @@ func ConnectDB(config *env.Config) *gorm.DB {
 
 	db.AutoMigrate(&model.Post{}, &model.Article{}, &model.User{})
 
+	// for testing...
+	// db.Create(&model.Post{
+	// 	Article: &model.Article{
+	// 		Type:       constants.ARTICLES.POST,
+	// 		Title:      "aaaa",
+	// 		Desc:       "description!",
+	// 		CoverImage: "",
+	// 		Link:       "https://google.com",
+	// 	},
+	// 	Content: "skdlfjsdklfjweklwjsdklfjsk",
+	// })
+
 	log.Println("connected to DB")
 
 	return db

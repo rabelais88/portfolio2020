@@ -5,7 +5,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v5"
 	"github.com/gavv/httpexpect/v2"
+	"github.com/rabelais88/portfolio2020/api/model"
 )
 
 func TestGetArticle(t *testing.T) {
@@ -22,7 +24,19 @@ func TestGetArticle(t *testing.T) {
 		},
 	})
 
-	e.GET(`/article`).WithQuery("id", "4567").Expect().Status(http.StatusOK)
+	p := &model.Post{
+		Article: &model.Article{
+			Type:       "POST",
+			Title:      gofakeit.Sentence(2),
+			Desc:       gofakeit.Sentence(3),
+			CoverImage: gofakeit.ImageURL(340, 240),
+			Link:       gofakeit.URL(),
+		},
+		Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
+	}
+	db.Create(p)
+
+	e.GET(`/article`).WithQuery("id", p.ArticleID).Expect().Status(http.StatusOK)
 	e.GET(`/article`).Expect().Status(http.StatusBadRequest)
 	e.GET(`/article`).WithQuery("id", "12$$&A").Expect().Status(http.StatusBadRequest)
 }
@@ -41,8 +55,26 @@ func TestGetArticles(t *testing.T) {
 		},
 	})
 
+	for i := 0; i < 100; i++ {
+		p := &model.Post{
+			Article: &model.Article{
+				Type:       "POST",
+				Title:      gofakeit.Sentence(2),
+				Desc:       gofakeit.Sentence(3),
+				CoverImage: gofakeit.ImageURL(340, 240),
+				Link:       gofakeit.URL(),
+			},
+			Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
+		}
+		db.Create(p)
+	}
+	var ps []model.Post
+	db.Find(&ps)
+
 	e.GET(`/articles`).Expect().Status(http.StatusOK)
-	e.GET(`/articles`).WithQuery("after", "abce1234").Expect().Status(http.StatusOK)
+	e.GET(`/articles`).WithQuery("sort", "abce1234").Expect().Status(http.StatusOK)
 	e.GET(`/articles`).WithQuery("order", "asc").Expect().Status(http.StatusOK)
 	e.GET(`/articles`).WithQuery("order", "wrongorder").Expect().Status(http.StatusBadRequest)
+	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
+
 }
