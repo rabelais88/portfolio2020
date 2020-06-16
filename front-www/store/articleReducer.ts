@@ -3,6 +3,7 @@ import Logger from '../lib/logger';
 import queryPaging from '../types/queryPaging';
 import LOAD_STATE, { INIT, LOADING, SUCCESS, FAIL } from '../types/loadState';
 import ARTICLE_TYPE, { ALL } from '../types/articleType';
+import getArticles from '../actions/getArticles';
 
 const logger = new Logger('store/articleReducer.ts');
 
@@ -20,7 +21,7 @@ export interface article {
 }
 
 export interface articleReducerDefaultState extends queryPaging {
-  articleId?: string;
+  //   articleId?: string;
   articles: article[];
   articleType: ARTICLE_TYPE;
   count: number;
@@ -28,13 +29,13 @@ export interface articleReducerDefaultState extends queryPaging {
   prev: number;
   pages: number[];
   loadState: LOAD_STATE;
-  article: Partial<article>;
+  //   article: Partial<article>;
 }
 
 export const getDefaultState = (): articleReducerDefaultState => ({
   articleType: ALL,
-  articleId: null,
-  article: {},
+  //   articleId: null,
+  //   article: {},
   articles: [],
   count: 0,
   next: 0,
@@ -44,7 +45,15 @@ export const getDefaultState = (): articleReducerDefaultState => ({
   page: 0,
 });
 
-const extraReducers = (builder) => {};
+const extraReducers = (builder) => {
+  builder.addCase(
+    getArticles,
+    (state: articleReducerDefaultState, action: PayloadAction<void>) => {
+      logger.log('getArticles() finished');
+      return null;
+    }
+  );
+};
 
 const articleSlice = createSlice({
   name: 'article',
