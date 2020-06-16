@@ -18,24 +18,31 @@ import postReducer, {
   getDefaultState as getDefaultPostState,
   postReducerDefaultState,
 } from './postReducer';
+import articleReducer, {
+  getDefaultState as getDefaultArticleState,
+  articleReducerDefaultState,
+} from './articleReducer'
 
 export interface defaultState {
   post: postReducerDefaultState;
+  article: articleReducerDefaultState;
 }
 
 const getDefaultStates = () => ({
   post: getDefaultPostState(),
+  article: getDefaultArticleState(),
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['post'],
+  whitelist: ['post', 'article'],
   blacklist: ['main'],
 };
 
 const rootReducer = combineReducers({
   post: postReducer,
+  article: articleReducer,
 });
 
 const middleware = getDefaultMiddleware({
