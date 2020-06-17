@@ -13,7 +13,7 @@
     "seedrandom": "^3.0.5"
   },
   "scripts": {
-    "devLocal": "API_URL=http://localhost:4500 next",
+    "devLocal": "NEXT_PUBLIC_API_URL=http://localhost:4500 next",
     "dev": "next",
     "build": "next build",
     "start": "next start",

@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import getPostReducer from '../redux-getters/getPostReducer';
 import getPosts, { getPostsRequest } from '../actions/getPosts';
 import { getArticles } from '../services/article';
+import getArticlesAction from '../actions/getArticles';
 import post from '../types/post';
 import article from '../types/article';
 import setPosts from '../actions/setPosts';
@@ -28,6 +29,7 @@ const HomePage: _HomePage = ({ postsServer }) => {
   useEffect(() => {
     logger.log({ postsServer });
     dispatch(setPosts(postsServer));
+    dispatch(getArticlesAction({ page: 1 }));
   }, [postsServer]);
 
   const postStore = getPostReducer();

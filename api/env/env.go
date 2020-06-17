@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"github.com/novalagung/gubrak/v2"
@@ -54,6 +55,7 @@ type Config struct {
 	GoogleID          string
 	GoogleSecret      string
 	AdminGmailAccount string
+	AllowedOrigins    []string
 }
 
 func GetConfig() *Config {
@@ -88,6 +90,7 @@ func GetConfig() *Config {
 		GoogleID:          os.Getenv(`GOOGLE_CLIENT_ID`),
 		GoogleSecret:      os.Getenv(`GOOGLE_CLIENT_SECRET`),
 		AdminGmailAccount: os.Getenv(`ADMIN_GMAIL_ACCOUNT`),
+		AllowedOrigins:    strings.Split(os.Getenv(`ALLOWED_ORIGINS`), ","),
 	}
 	return &_config
 }
