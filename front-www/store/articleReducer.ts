@@ -47,7 +47,7 @@ export const getDefaultState = (): articleReducerDefaultState => ({
 
 const extraReducers = (builder) => {
   builder.addCase(
-    getArticles,
+    getArticles.fulfilled,
     (state: articleReducerDefaultState, action: PayloadAction<void>) => {
       logger.log('getArticles() finished');
       return null;

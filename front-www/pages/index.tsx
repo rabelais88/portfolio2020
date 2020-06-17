@@ -3,14 +3,17 @@ import { useDispatch } from 'react-redux';
 import { GetServerSideProps } from 'next';
 import getPostReducer from '../redux-getters/getPostReducer';
 import getPosts, { getPostsRequest } from '../actions/getPosts';
-import posts from '../types/post';
+import { getArticles } from '../services/article';
+import post from '../types/post';
+import article from '../types/article';
 import setPosts from '../actions/setPosts';
 import Logger from '../lib/logger';
 
 const logger = new Logger('pages/index.tsx');
 
 interface Props {
-  postsServer: posts[];
+  postsServer: post[];
+  articlesServer: article[];
 }
 
 interface _HomePage {
@@ -40,11 +43,19 @@ const HomePage: _HomePage = ({ postsServer }) => {
 // getStaticProps should be used for fetching ever-fixed article
 export const getServerSideProps: GetServerSideProps<Props> = async (arg) => {
   const reqPosts = await getPostsRequest({ page: 1 });
+  const props = { postsServer: [], articlesServer: [] };
   if (reqPosts.error) {
     logger.log('request failed!');
-    return { props: { postsServer: [] } };
+    return { props };
   }
-  return { props: { postsServer: reqPosts.result } };
+  props.postsServer = reqPosts.result;
+  const reqArticles = await getArticles({ page: 0 });
+  if (reqArticles.error) {
+    logger.log('request failed for reqArticles', reqArticles.error);
+    return { props };
+  }
+  props.articlesServer = reqArticles.result.list;
+  return { props };
 };
 
 export default HomePage;

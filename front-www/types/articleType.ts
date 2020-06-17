@@ -6,10 +6,5 @@ enum ARTICLE_TYPE {
   ALL = 'ALL',
 }
 
-export const POST;
-export const WORK;
-export const NOTICE;
-export const MEDIA;
-export const ALL;
-
+export const { POST, WORK, NOTICE, MEDIA, ALL } = ARTICLE_TYPE;
 export default ARTICLE_TYPE;

@@ -21,7 +21,7 @@ import postReducer, {
 import articleReducer, {
   getDefaultState as getDefaultArticleState,
   articleReducerDefaultState,
-} from './articleReducer'
+} from './articleReducer';
 
 export interface defaultState {
   post: postReducerDefaultState;

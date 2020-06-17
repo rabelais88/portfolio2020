@@ -1,8 +1,8 @@
-import ARTICLE_TYPE from './articleType';
+import ARTICLE_TYPE_ENUM from './articleType';
 
 interface article {
   id: string;
-  type: ARTICLE_TYPE;
+  type: ARTICLE_TYPE_ENUM;
   title: string;
   desc: string;
   coverImage: string;

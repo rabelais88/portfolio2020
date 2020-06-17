@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import article from '../types/article';
 import listResponse from '../types/listResponse';
+import { resolvedResult } from '../lib/api';
 import setArticlesLoadState from './setArticlesLoadState';
 import { LOADING } from '../types/loadState';
 import queryPaging from '../types/queryPaging';
@@ -14,18 +15,19 @@ interface getArticlesArg extends queryPaging {
   // ...
 }
 
-const getArticlesAction = createAsyncThunk<void, getArticlesArg>(
-  'GET_ARTICLES',
-  async (arg, thunkAPI) => {
-    thunkAPI.dispatch(setArticlesLoadState(LOADING));
-    const req = await getArticles(arg);
-    if (req.error) {
-      logger.err(req.error);
-      thunkAPI.rejectWithValue(req.errorCode);
-      return null;
-    }
+const getArticlesAction = createAsyncThunk<
+  resolvedResult<listResponse<article>>,
+  getArticlesArg
+>('GET_ARTICLES', async (arg, thunkAPI) => {
+  thunkAPI.dispatch(setArticlesLoadState(LOADING));
+  const req = await getArticles(arg);
+  logger.log('get articles!', req);
+  if (req.error) {
+    logger.err(req.error);
+    thunkAPI.rejectWithValue(req.errorCode);
     return null;
   }
-);
+  return req;
+});
 
 export default getArticlesAction;

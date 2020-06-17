@@ -5,8 +5,5 @@ enum LOAD_STATE {
   FAIL = 'FAIL',
 }
 
-export const INIT;
-export const LOADING;
-export const SUCCESS;
-export const FAIL;
+export const { INIT, LOADING, SUCCESS, FAIL } = LOAD_STATE;
 export default LOAD_STATE;

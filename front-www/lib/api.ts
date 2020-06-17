@@ -68,6 +68,7 @@ export function joinUrl(urls: string[] | string, query?: any): string {
   return `${url}?${_query}`;
 }
 
+if (!API_URL) throw Error('API_URL is undefined!, please set up env');
 export const api = axios.create({
   baseURL: API_URL,
 });
