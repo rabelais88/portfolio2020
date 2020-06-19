@@ -4,7 +4,7 @@ import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import article from '../types/article';
 import listResponse from '../types/listResponse';
 import { resolvedResult } from '../lib/api';
-import LOAD_STATE, { LOADING } from '../types/loadState';
+import LOAD_STATE, { LOADING, SUCCESS } from '../types/loadState';
 import queryPaging from '../types/queryPaging';
 import Logger from '../lib/logger';
 import { getArticles as getArticlesAPI } from '../services/article';
@@ -37,5 +37,10 @@ export const getArticles = createAsyncThunk<
     thunkAPI.rejectWithValue(req.errorCode);
     return req;
   }
+  thunkAPI.dispatch(setArticleCount(req.result.count));
+  thunkAPI.dispatch(setArticlePage(req.result.page));
+  thunkAPI.dispatch(setArticleLoadState(SUCCESS));
+  thunkAPI.dispatch(setArticlePages(req.result.pages));
+  thunkAPI.dispatch(setArticles(req.result.list));
   return req;
 });
