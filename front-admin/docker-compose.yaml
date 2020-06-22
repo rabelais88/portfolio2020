@@ -4,8 +4,8 @@ services:
     build:
       dockerfile: ./dockerfile
       context: .
-    environment:
-      - NGINX_PORT=5000
-      - NGINX_HOST=localhost
+    # environment:
+      # - NGINX_PORT=5000
+      # - NGINX_HOST=localhost
     ports:
       - 5000:80

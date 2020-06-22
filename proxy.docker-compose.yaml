@@ -1,0 +1,97 @@
+# offline dev only
+# environment variables from orchestration would override default environment setup
+version: "3.7"
+services:
+  apiserver:
+    # container_name is ignored in swarm mode
+    # can't use *-api as router name.
+    container_name: portfolio-apiserver
+    build:
+      dockerfile: local.fast.dockerfile
+      context: ./api
+    labels:
+      - traefik.http.routers.portfolio-apiserver.rule=Host(`api.localhost`)
+      - traefik.http.routers.portfolio-apiserver.entrypoints=web
+      - traefik.enable=true
+    restart: always
+    environment:
+      - ENV=development
+      - PORT=4500
+      # equivalent to postgres://db:5432
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PASSWORD=1234
+      - DB_NAME=portfolio
+      - URL=http://dev-api.localhost
+      # must include /login
+      - REDIRECT_URL=http://admin.localhost/login
+      # CORS setting
+      - ALLOWED_ORIGINS=http://localhost,http://admin.localhost
+      # secrets(will be later provided via file)
+      # - SECRET_JWT=
+      # - ADMIN_GMAIL_ACCOUNT=
+      # - GOOGLE_CLIENT_ID=
+      # - GOOGLE_CLIENT_SECRET=
+    ports:
+      - 4500:4500
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=portfolio
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  front-www:
+    restart: always
+    container_name: portfolio-front-www
+    build:
+      dockerfile: local.proxy.dockerfile
+      context: ./front-www
+    labels:
+      - traefik.http.routers.portfolio-front-www.rule=Host(`localhost`)
+      - traefik.http.routers.portfolio-front-www.entrypoints=web
+      - traefik.enable=true
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://api.localhost
+    ports:
+      - 3000:3000
+
+  # https://hub.docker.com/_/nginx
+  front-admin:
+    container_name: portfolio-front-admin
+    build:
+      dockerfile: local.proxy.dockerfile
+      context: ./front-admin
+    labels:
+      - traefik.http.routers.portfolio-front-admin.rule=Host(`admin.localhost`)
+      - traefik.http.routers.portfolio-front-admin.entrypoints=web
+      - traefik.enable=true
+      # API_URL is provided via dockerfile
+      # -> environment variable is precompiled
+    ports:
+      # listen to 80 and out to 5000
+      - 5000:80
+
+  reverse-proxy:
+    image: traefik:v2.2
+    container_name: traefik
+    labels:
+      - traefik.http.routers.traefik.rule=Host(`traefik.localhost`)
+      - traefik.http.routers.traefik.entrypoints=web
+      - traefik.enable=true
+    ports:
+      - 80:80
+      # web ui(--api.insecure=true)
+      - 8080:8080
+    volumes:
+      - ./traefik-local.yaml:/etc/traefik/traefik.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  db-data:
