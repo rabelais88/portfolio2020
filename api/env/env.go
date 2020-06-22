@@ -56,6 +56,7 @@ type Config struct {
 	GoogleSecret      string
 	AdminGmailAccount string
 	AllowedOrigins    []string
+	GoogleRedirectUrl string
 }
 
 func GetConfig() *Config {
@@ -91,6 +92,7 @@ func GetConfig() *Config {
 		GoogleSecret:      os.Getenv(`GOOGLE_CLIENT_SECRET`),
 		AdminGmailAccount: os.Getenv(`ADMIN_GMAIL_ACCOUNT`),
 		AllowedOrigins:    strings.Split(os.Getenv(`ALLOWED_ORIGINS`), ","),
+		GoogleRedirectUrl: lib.CheckString(os.Getenv(`REDIRECT_URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 	}
 	return &_config
 }

@@ -71,7 +71,9 @@ const extraReducers = (builder) => {
   builder.addCase(
     setArticlePage,
     (state: articleReducerDefaultState, action: PayloadAction<number>) => {
+      state.prev = action.payload - 1;
       state.page = action.payload;
+      state.next = action.payload + 1;
     }
   );
   builder.addCase(

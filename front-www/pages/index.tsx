@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import getPostReducer from '../redux-getters/getPostReducer';
 import getPosts, { getPostsRequest } from '../actions/getPosts';
 import { getArticles } from '../services/article';
-import getArticlesAction from '../actions/getArticles';
+import { getArticles as getArticlesAction } from '../actions/article';
 import post from '../types/post';
 import article from '../types/article';
 import setPosts from '../actions/setPosts';

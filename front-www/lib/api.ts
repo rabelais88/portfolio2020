@@ -2,6 +2,9 @@
 import axios from 'axios';
 import qs from 'qs';
 import { API_URL } from '../env';
+import Logger from './logger';
+
+const logger = new Logger('api.ts');
 
 export interface resolvedResult<T> {
   error?: Error;
@@ -68,6 +71,7 @@ export function joinUrl(urls: string[] | string, query?: any): string {
   return `${url}?${_query}`;
 }
 
+logger.log({ API_URL, processEnv: process.env.NEXT_PUBLIC_API_URL });
 export const api = axios.create({
   baseURL: API_URL,
 });

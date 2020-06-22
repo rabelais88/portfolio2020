@@ -1,8 +1,6 @@
 package env
 
 import (
-	"fmt"
-
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
@@ -21,7 +19,7 @@ func GetOAuthConfig(config Config) *oauth2.Config {
 	return &oauth2.Config{
 		ClientID:     config.GoogleID,
 		ClientSecret: config.GoogleSecret,
-		RedirectURL:  fmt.Sprintf(`%s/login-cred`, config.Url),
+		RedirectURL:  config.GoogleRedirectUrl,
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 		},

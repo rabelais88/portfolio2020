@@ -36,6 +36,7 @@ type LoginTokenQuery struct {
 type LoginTokenResponse struct {
 	AccessToken string `json:"accessToken"`
 	Email       string `json:"email"`
+	Picture     string `json:"picture"`
 }
 
 type GoogleUserInfo struct {
@@ -107,7 +108,7 @@ func GetLoginToken(c echo.Context) error {
 		cc.Db.Save(&u)
 		log.Println("user saved", u)
 	}
-	res := LoginTokenResponse{token, userInfo.Email}
+	res := LoginTokenResponse{token, userInfo.Email, userInfo.Picture}
 	errRes := cc.JSON(http.StatusOK, res)
 	return errRes
 }
