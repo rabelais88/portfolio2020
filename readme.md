@@ -2,7 +2,7 @@
 
 - [api readme](https://github.com/rabelais88/portfolio2020/tree/master/api/readme.md)
 - [frontend readme](https://github.com/rabelais88/portfolio2020/tree/master/front-www/readme.md)
-- [frontend(api) readme](https://github.com/rabelais88/portfolio2020/tree/master/front-api/readme.md)
+- [frontend(api) readme](https://github.com/rabelais88/portfolio2020/tree/master/front-api/README.md)
 
 # caveat
 
