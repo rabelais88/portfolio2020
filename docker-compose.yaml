@@ -1,22 +1,40 @@
-version: '3.7'
+# offline dev only
+# environment variables from orchestration would override default environment setup
+version: "3.7"
 services:
   api:
-    image: portfolio2020-api:latest
-    restart: always
+    # image: portfolio2020-api:latest
+    # restart: always
     # deploy:
     #   restart_policy:
     #     condition: on-failure
+    build:
+      dockerfile: ./api/scratch.dockerfile
+      context: ./api
     networks:
       - backend
     environment:
       - ENV=development
       - PORT=4500
+      # equivalent to postgres://db:5432
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=admin
       - DB_PASSWORD=1234
       - DB_NAME=portfolio
-      - URL=http://localhost:4500 # used for google auth redirect
+      - URL=http://localhost:4500
+      # must include /login
+      - REDIRECT_URL=http://localhost:5000/login
+      # CORS setting
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5000
+      # secrets(will be later provided via file)
+      # - SECRET_JWT=
+      # - ADMIN_GMAIL_ACCOUNT=
+      # - GOOGLE_CLIENT_ID=
+      # - GOOGLE_CLIENT_SECRET=
+    ports:
+      - 4500:4500
+
   db:
     image: postgres:13
     restart: always
@@ -29,6 +47,38 @@ services:
       - POSTGRES_DB=portfolio
     networks:
       - backend
+
+  front-www:
+    # image: portfolio2020-front-www:latest
+    # restart: always
+    build:
+      dockerfile: ./front-www/dockerfile
+      context: ./front-www
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://localhost:4500
+    ports:
+      - 3000:3000
+
+  # https://hub.docker.com/_/nginx
+  front-api:
+    build:
+      dockerfile: ./front-api/dockerfile
+      context: ./front-api
+    environment:
+      - NGINX_PORT=5000
+      - NGINX_HOST=localhost
+      # API_URL is provided via ./front-api/.env.development
+      # -> environment variable is precompiled
+    ports:
+      # listen to 80 and out to 5000
+      - 5000:80
+
+  reverse-proxy:
+    image: traefik:v2.2
+    # insecure option should be disabled in production
+    command: --api.insecure=true --providers.docker
+    
 
 networks:
   backend:
