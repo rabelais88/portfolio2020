@@ -11,8 +11,6 @@ services:
     build:
       dockerfile: local.fast.dockerfile
       context: ./api
-    networks:
-      - backend
     environment:
       - ENV=development
       - PORT=4500
@@ -34,6 +32,8 @@ services:
       # - GOOGLE_CLIENT_SECRET=
     ports:
       - 4500:4500
+    networks:
+      - backend
 
   db:
     image: postgres:13
@@ -70,9 +70,15 @@ services:
       context: ./front-admin
       # API_URL is provided via ./front-admin/.env.development
       # -> environment variable is precompiled
+    environment:
+      - NGINX_PORT=5000
+      - NGINX_HOST=localhost
+    volumes:
+      - ./front-admin/nginx/default.conf:/etc/nginx/templates/default.conf.template
     ports:
+      - 5000:5000
       # listen to 80 and out to 5000
-      - 5000:80
+      # - 5000:80
 
 networks:
   backend:

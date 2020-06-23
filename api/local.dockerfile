@@ -4,6 +4,9 @@ WORKDIR /go/src/app
 COPY . .
 
 RUN apk add build-base
+RUN apk add bash
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x wait-for-it.sh
 RUN go get -d -v ./...
 RUN go install -v ./...
 RUN go build -o /go/src/app/bin/server main.go
