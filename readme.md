@@ -20,12 +20,15 @@ cd front-www
 yarn dev
 
 # 2. run by Docker-Swarm without Traefik
-docker-compose -f noproxy.docker-compose.yaml up
-docker-compose -f noproxy.docker-compose.yaml down
+docker-compose -f local.noproxy.docker-compose.yaml up
+docker-compose -f local.noproxy.docker-compose.yaml down
 
 # 3. run by Docker-Swarm with Traefik(currently not working, Google API rejects localhost with subdomain)
-docker-compose -f proxy.docker-compose.yaml up
-docker-compose -f proxy.docker-compose.yaml down
+docker-compose -f local.proxy.docker-compose.yaml up
+docker-compose -f local.proxy.docker-compose.yaml down
+
+# 4. run by Kubernetes, Docker Desktop
+kubectl apply -f local.k8.yaml
 ```
 
 # caveat
