@@ -46,6 +46,17 @@ type GoogleUserInfo struct {
 	Sub           string `json:"sub"`
 }
 
+func MakeToken(_secret []byte, userId string, email string) (string, error) {
+	// https://echo.labstack.com/cookbook/jwt
+	tokenJwt := jwt.New(jwt.SigningMethodHS256)
+
+	claims := tokenJwt.Claims.(jwt.MapClaims)
+	claims["userId"] = userId
+	claims["email"] = email
+
+	return tokenJwt.SignedString(_secret)
+}
+
 func GetLoginToken(c echo.Context) error {
 	cc := c.(*env.CustomContext)
 	q := new(LoginTokenQuery)
@@ -58,17 +69,6 @@ func GetLoginToken(c echo.Context) error {
 	tok, errTok := cc.OAuthConfig.Exchange(oauth2.NoContext, q.Code)
 	if errTok != nil || !tok.Valid() {
 		return MakeError(http.StatusUnauthorized, `GOOGLE_UNAUTHORIZED`)
-	}
-
-	// https://echo.labstack.com/cookbook/jwt
-	tokenJwt := jwt.New(jwt.SigningMethodHS256)
-
-	claims := tokenJwt.Claims.(jwt.MapClaims)
-	claims["token"] = tok.AccessToken
-
-	token, err := tokenJwt.SignedString([]byte(cc.Config.SecretJWT))
-	if err != nil {
-		return MakeError(http.StatusInternalServerError, `FAILED_TOKEN_GENERATION`)
 	}
 
 	// fetch user info with token
@@ -87,28 +87,59 @@ func GetLoginToken(c echo.Context) error {
 		return MakeError(http.StatusInternalServerError, `GOOGLE_JSON_NOT_READABLE`)
 	}
 
-	claims["email"] = userInfo.Email
-
 	// currently, signup is open for admin only
 	if userInfo.Email != cc.Config.AdminGmailAccount {
 		return MakeError(http.StatusUnauthorized, `UNAUTHORIZED_ADMIN`)
 	}
 
 	u := model.User{
-		Token:  tok.AccessToken,
-		Email:  userInfo.Email,
-		UserID: "admin",
-		Role:   "ADMIN",
+		Email:   userInfo.Email,
+		Role:    "ADMIN",
+		Picture: userInfo.Picture,
 	}
+
 	if blank := cc.Db.Where(&model.User{Token: tok.AccessToken}).First(&model.User{}).RecordNotFound(); !blank {
 		// return MakeError(http.StatusConflict, "USER_ALREADY_EXIST")
 		log.Println("user already exist")
 	} else {
 		cc.Db.Create(&u)
-		cc.Db.Save(&u)
 		log.Println("user saved", u)
 	}
-	res := LoginTokenResponse{token, userInfo.Email, userInfo.Picture}
-	errRes := cc.JSON(http.StatusOK, res)
+
+	jwtToken, err := MakeToken([]byte(cc.Config.SecretJWT), u.UserID, u.Email)
+	if err != nil {
+		return MakeError(http.StatusInternalServerError, `TOKEN_GENERATION_ERROR`)
+	}
+	u.Token = jwtToken
+	cc.Db.Save(&u)
+
+	errRes := cc.JSON(http.StatusOK, u)
 	return errRes
+}
+
+func GetUser(c echo.Context) error {
+	cc := c.(*env.CustomContext)
+	u := GetUserFromContext(cc)
+	err := cc.JSON(http.StatusOK, u)
+	return err
+}
+
+func RefreshToken(c echo.Context) error {
+	cc := c.(*env.CustomContext)
+	if err := RoleUserOnly(cc); err != nil {
+		return err
+	}
+	u := GetUserFromContext(cc)
+	var _u model.User
+	if blank := cc.Db.Where(&model.User{Token: u.Token}).First(&_u).RecordNotFound(); !blank {
+		return MakeError(http.StatusInternalServerError, `USER_DB_NOT_FOUND`)
+	}
+	jwtToken, errToken := MakeToken([]byte(cc.Config.SecretJWT), _u.UserID, _u.Email)
+	if errToken != nil {
+		return MakeError(http.StatusInternalServerError, `TOKEN_GENERATION_ERROR`)
+	}
+	_u.Token = jwtToken
+	cc.Db.Save(&_u)
+	err := cc.JSON(http.StatusOK, u)
+	return err
 }

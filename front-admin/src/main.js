@@ -15,6 +15,8 @@ import router from './router';
 import '@/icons'; // icon
 import '@/permission'; // permission control
 
+import { ValidationProvider } from 'vee-validate';
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -30,6 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale });
+Vue.component('ValidationProvider', ValidationProvider);
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 

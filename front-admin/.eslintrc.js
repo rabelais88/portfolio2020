@@ -39,6 +39,7 @@ module.exports = {
     'global-require': 1,
     'no-return-assign': 0,
     'no-underscore-dangle': 0,
+    'vue/no-unused-vars': 1,
     // "vue/max-attributes-per-line": [2, {
     //   "singleline": 10,
     //   "multiline": {

@@ -8,7 +8,6 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
-	"github.com/rabelais88/portfolio2020/api/constants"
 	"github.com/rabelais88/portfolio2020/api/env"
 )
 
@@ -18,26 +17,33 @@ func CheckUser(next echo.HandlerFunc) echo.HandlerFunc {
 
 		user := cc.Get("user").(*jwt.Token)
 		claims := user.Claims.(jwt.MapClaims)
-		token := claims["token"].(string)
-		log.Println("token found", token)
+		userId := claims["userId"].(string)
+		log.Println("userId found from token", userId)
 
 		u := model.User{}
-		if cc.Db.Where(&model.User{Token: token}).First(&u).RecordNotFound() {
+		if cc.Db.Where(&model.User{UserID: userId}).First(&u).RecordNotFound() {
 			log.Println("unable to find user from DB", u)
-			c.Set("userRole", constants.USER_ROLE.NO_ROLE)
 			c.Set("userID", "")
-			c.Set("userToken", "")
-			c.Set("userEmail", "")
 			return next(c)
 		}
 		log.Println("found user from DB", u)
-		c.Set("userRole", u.Role)
 		c.Set("userID", u.UserID)
-		c.Set("userToken", u.Token)
-		c.Set("userEmail", u.Email)
-
 		return next(c)
 	}
+}
+
+func GetUserFromContext(cc *env.CustomContext) model.User {
+	u := model.User{}
+	cc.Db.Where(&model.User{UserID: cc.Get("userID").(string)}).First(&u)
+	return u
+}
+
+func RoleAdminOnly(cc *env.CustomContext) error {
+	u := GetUserFromContext(cc)
+	if u.Role != `ADMIN` {
+		return MakeError(http.StatusUnauthorized, `NOT_AUTHORIZED`)
+	}
+	return nil
 }
 
 type UserTestResponse struct {

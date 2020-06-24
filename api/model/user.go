@@ -9,10 +9,11 @@ import (
 
 type User struct {
 	NewGormModel
-	UserID string `gorm:"primary_key;unique;" json:"userId"`
-	Email  string `json:"email"`
-	Token  string `gorm:"unique;not null;" json:"token"`
-	Role   string `json:"role"`
+	UserID  string `gorm:"primary_key;unique;" json:"userId"`
+	Email   string `json:"email"`
+	Token   string `gorm:"unique;not null;" json:"token"`
+	Role    string `json:"role"`
+	Picture string `json:"picture"`
 }
 
 func (user *User) BeforeCreate(scope *gorm.Scope) error {

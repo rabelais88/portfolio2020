@@ -1,6 +1,13 @@
 import { login, logout, getInfo, getLoginUrl, getLoginToken } from '@/api/user';
 import asyncHandler from '@/utils/asyncHandler';
-import { getToken, setToken, removeToken } from '@/utils/auth';
+import {
+  getToken,
+  setToken,
+  removeToken,
+  setUserUpdatedAt,
+  getUserUpdatedAt,
+  removeUserUpdatedAt,
+} from '@/utils/auth';
 import { resetRouter } from '@/router';
 
 const getDefaultState = () => ({
@@ -52,51 +59,31 @@ const actions = {
   },
 
   // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token)
-        .then((response) => {
-          const { data } = response;
-
-          if (!data) {
-            reject('Verification failed, please Login again.');
-          }
-
-          const { name, avatar } = data;
-
-          commit('SET_NAME', name);
-          commit('SET_AVATAR', avatar);
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  async getInfo({ commit, state }) {
+    const req = await asyncHandler(getInfo, state.token);
+    console.log('getInfo', req);
+    if (req.error) {
+      throw Error('Verification failed, please login again');
+    }
+    commit('SET_EMAIL', req.result.email);
+    commit('SET_NAME', req.result.name);
+    commit('SET_AVATAR', req.result.picture);
+    return req;
   },
 
   // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token)
-        .then(() => {
-          removeToken(); // must remove  token  first
-          resetRouter();
-          commit('RESET_STATE');
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  async logout({ commit, state }) {
+    // await logout(state.token);
+    removeToken(); // must remove  token  first
+    removeUserUpdatedAt();
+    resetRouter();
+    commit('RESET_STATE');
   },
 
   // remove token
-  resetToken({ commit }) {
-    return new Promise((resolve) => {
-      removeToken(); // must remove  token  first
-      commit('RESET_STATE');
-      resolve();
-    });
+  async resetToken({ commit }) {
+    removeToken(); // must remove  token  first
+    commit('RESET_STATE');
   },
 
   async [GET_LOGIN_URL]({}) {
@@ -117,12 +104,12 @@ const actions = {
       console.error(req.error);
       return req;
     }
-    const token = req.result.accessToken;
-    commit(SET_TOKEN, token);
+    commit(SET_TOKEN, req.result.token);
     commit(SET_EMAIL, req.result.email);
     commit(SET_NAME, 'admin');
     commit(SET_AVATAR, req.result.picture);
-    setToken(token);
+    setToken(req.result.token);
+    setUserUpdatedAt(req.result.updatedAt);
     return req;
   },
 };

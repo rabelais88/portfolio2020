@@ -28,4 +28,6 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	r.POST("/post", control.AddPost)
 	r.GET("/test", control.UserTest)
 	r.POST("/work", control.AddWork)
+	r.GET("/user", control.GetUser)
+	r.GET("/token", control.RefreshToken)
 }
