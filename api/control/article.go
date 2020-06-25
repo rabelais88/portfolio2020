@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rabelais88/portfolio2020/api/constants"
+
 	"github.com/labstack/echo/v4"
 	"github.com/rabelais88/portfolio2020/api/env"
 	"github.com/rabelais88/portfolio2020/api/lib"
@@ -13,9 +15,6 @@ import (
 	"github.com/vcraescu/go-paginator/view"
 )
 
-type ArticleResponse struct {
-	model.Article
-}
 type ArticleQuery struct {
 	ID string `query:"id" json:"id" validate:"required,uuid"`
 }
@@ -38,8 +37,15 @@ func GetArticle(c echo.Context) error {
 		return MakeError(http.StatusNotFound, "ARTICLE_NOT_FOUND")
 	}
 
-	err := cc.JSON(http.StatusOK, ArticleResponse{*a})
-	return err
+	switch a.Type {
+	case constants.ARTICLES.POST:
+		p := &model.Post{ArticleID: a.ID}
+		cc.Db.Preload("Article").Find(&p)
+		return cc.JSON(http.StatusOK, p)
+	default:
+		return cc.JSON(http.StatusOK, a)
+	}
+
 }
 
 type ArticlesQuery struct {
@@ -77,7 +83,7 @@ func GetArticles(c echo.Context) error {
 	}
 
 	view := view.New(&p)
-	log.Printf("page request %d", pageSize)
+	log.Printf("page request size %d, currentPage %d", pageSize, q.Page)
 
 	err := cc.JSON(http.StatusOK, ArticlesResponse{
 		PagedResponse: PagedResponse{

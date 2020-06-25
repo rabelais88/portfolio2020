@@ -63,13 +63,19 @@ const post = {
   component: Layout,
   name: 'Post',
   meta: { title: 'post', icon: 'el-icon-document' },
-  redirect: '/article/edit',
+  redirect: '/article/create',
   children: [
     {
       path: 'create',
       name: 'CreatePost',
       component: () => import('@/views/post/Create.vue'),
       meta: { title: 'Create a Post', icon: 'el-icon-circle-plus' },
+    },
+    {
+      path: 'edit/:articleId',
+      name: 'EditPost',
+      component: () => import('@/views/post/Edit.vue'),
+      meta: { title: 'Edit a Post', icon: 'el-icon-circle-plus' },
     },
   ],
 };

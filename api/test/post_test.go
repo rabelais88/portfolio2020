@@ -23,11 +23,13 @@ func TestAddPost(t *testing.T) {
 		},
 	})
 
-	e.POST(`/auth/post`).WithJSON(control.AddPostBody{
+	id := e.POST(`/auth/post`).WithJSON(control.AddPostBody{
 		Content:    "testing 1234",
 		Title:      "OOOH lala",
 		Desc:       "this is a sample post",
 		CoverImage: "https://google.com",
 		Link:       "https://google.com",
-	}).Expect().Status(http.StatusOK)
+	}).Expect().Status(http.StatusOK).JSON().Object().Value("articleId").String().Raw()
+
+	e.GET(`/article`).WithQuery("id", id).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("content", "testing 1234")
 }

@@ -6,6 +6,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en'; // lang i18n
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import MavonEditor from 'mavon-editor';
+import 'mavon-editor/dist/css/index.css';
 
 import '@/styles/index.scss'; // global css
 
@@ -36,6 +38,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(ElementUI, { locale });
 
 setValidateRules();
+Vue.use(MavonEditor);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('FormMargin', FormMargin);

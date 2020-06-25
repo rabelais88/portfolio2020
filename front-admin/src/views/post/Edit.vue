@@ -36,6 +36,7 @@ import {
   SET_USER_TITLE,
   INIT,
   ADD_POST,
+  LOAD_POST,
   MODIFY_POST,
   SET_USER_CONTENT,
 } from '@/store/modules/post';
@@ -69,20 +70,17 @@ export default {
       setUserContent: SET_USER_CONTENT,
       setUserTitle: SET_USER_TITLE,
       init: INIT,
+      loadPost: LOAD_POST,
     }),
     ...mapActions('post', { addPost: ADD_POST, modifyPost: MODIFY_POST }),
     async onSubmit() {
-      if (!this.id) {
-        await this.addPost();
-        return null;
-      }
       await this.modifyPost();
       return null;
     },
   },
-  beforeMount() {
-    this.init();
-  },
+  // beforeMount() {
+  //   this.loadPost(this.$route.query.articleId);
+  // },
   beforeDestroy() {
     this.init();
   },
