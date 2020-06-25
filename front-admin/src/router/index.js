@@ -72,6 +72,7 @@ const post = {
       meta: { title: 'Create a Post', icon: 'el-icon-circle-plus' },
     },
     {
+      hidden: true,
       path: 'edit/:articleId',
       name: 'EditPost',
       component: () => import('@/views/post/Edit.vue'),

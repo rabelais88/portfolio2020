@@ -20,5 +20,6 @@ type PagedResponse struct {
 	Next  int   `json:"next"`
 	Prev  int   `json:"prev"`
 	Pages []int `json:"pages"`
+	Size  int   `json:"size"`
 	// add .List here
 }

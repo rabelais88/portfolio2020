@@ -1,17 +1,26 @@
 import { addPost } from '@/api/post';
 import asyncHandler from '@/utils/asyncHandler';
-import { mapArticle } from '@/vo/article.vo';
+import { mapPost } from '@/vo/post.vo';
+import { getArticle } from '@/api/article';
 
 const getDefaultPostState = () => ({
   id: null,
+  post: {},
   userTitle: '',
   userContent: '',
+  userLink: '',
+  userCoverImage: '',
+  userDesc: '',
 });
 
+export const INIT = 'INIT';
 export const SET_POST_ID = 'SET_POST_ID';
+export const SET_POST = 'SET_POST';
 export const SET_USER_TITLE = 'SET_USER_TITLE';
 export const SET_USER_CONTENT = 'SET_USER_CONTENT';
-export const INIT = 'INIT';
+export const SET_USER_LINK = 'SET_USER_LINK';
+export const SET_USER_COVER_IMAGE = 'SET_USER_COVER_IMAGE';
+export const SET_USER_DESC = 'SET_USER_DESC';
 
 export const ADD_POST = 'ADD_POST';
 export const MODIFY_POST = 'MODIFY_POST';
@@ -24,17 +33,32 @@ const mutations = {
       ([key, value]) => (state[key] = value),
     );
   },
+  [SET_POST]: (state, post) => (state.post = post),
   [SET_POST_ID]: (state, postId) => (state.id = postId),
   [SET_USER_TITLE]: (state, title) => (state.userTitle = title),
   [SET_USER_CONTENT]: (state, content) => (state.userContent = content),
+  [SET_USER_LINK]: (state, link) => (state.userLink = link),
+  [SET_USER_COVER_IMAGE]: (state, coverImage) =>
+    (state.userCoverImage = coverImage),
+  [SET_USER_DESC]: (state, desc) => (state.userDesc = desc),
 };
 
 const actions = {
-  [LOAD_POST]({ commit }, data) {
-    console.log('loadPost', { data });
-    commit(SET_POST_ID, data.articleId);
-    commit(SET_USER_TITLE, data.article.title);
-    commit(SET_USER_CONTENT, data.content);
+  async [LOAD_POST]({ commit, state }, articleId) {
+    const req = await asyncHandler(getArticle, { id: articleId });
+    if (req.error) {
+      return req;
+    }
+    const post = mapPost(req.result);
+    commit(SET_POST_ID, post.articleId);
+    commit(SET_POST, post);
+
+    commit(SET_USER_TITLE, state.post._title);
+    commit(SET_USER_CONTENT, state.post.content);
+    commit(SET_USER_LINK, state.post._link);
+    commit(SET_USER_COVER_IMAGE, state.post._coverImage);
+    commit(SET_USER_DESC, state.post._desc);
+    return req;
   },
   async [ADD_POST]({ state }) {
     const data = {

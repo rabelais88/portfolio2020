@@ -17,6 +17,7 @@ URL=http://localhost:4500 # api server
 REDIRECT_URL=http://localhost:5000/login # admin front
 SECRET_JWT=...
 ADMIN_GMAIL_ACCOUNT=...
+ALLOWED_ORIGINS=http://localhost:5000,http://localhost:3000 # front-admin, front-www. separate with comma(,)
 ```
 
 ```sh

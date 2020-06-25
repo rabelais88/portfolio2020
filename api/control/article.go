@@ -92,6 +92,7 @@ func GetArticles(c echo.Context) error {
 			view.Next(),
 			view.Prev(),
 			view.Pages(),
+			pageSize,
 		},
 		List: articles,
 	})

@@ -2,7 +2,7 @@
   <form-margin>
     <el-table
       :data="articles"
-      @selection-change="handleSelectionChange"
+      @selection-change="onSelectionChange"
       style="width: 100%;"
       size="mini"
     >
@@ -24,17 +24,28 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      layout="prev, pager, next"
+      :total="count"
+      :page-size="pageSize"
+      :current-page.sync="page"
+      @current-change="onPageChange"
+      @size-change="onSizeChange"
+    />
   </form-margin>
 </template>
 
 <script>
+import { mapActions, mapState, mapMutations } from 'vuex';
+import store from '@/store';
+
 import { GET_ARTICLES, SET_PAGE, GET_ARTICLE } from '@/store/modules/article';
 import { LOAD_POST } from '@/store/modules/post';
-import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState('article', ['articles']),
+    ...mapState('article', ['articles', 'count', 'pageSize', 'page']),
     ...mapState('article', { _page: 'page' }),
     page: {
       get() {
@@ -46,30 +57,58 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('article', {
+      setPage: SET_PAGE,
+    }),
     ...mapActions('article', {
       getArticles: GET_ARTICLES,
-      setPage: SET_PAGE,
       getArticle: GET_ARTICLE,
     }),
     ...mapActions('post', {
       loadPost: LOAD_POST,
     }),
-    handleSelectionChange(ev) {
+    onSelectionChange(ev) {
       console.log('selection changed', ev);
     },
+    onSizeChange(ev) {
+      console.log('onSizeChange', ev);
+    },
+    onPageChange(ev) {
+      console.log('onPageChange', ev);
+    },
     onEdit(article) {
+      console.log('onEdit', { article });
       if (article.type === 'POST') {
         this.$router.push({
           name: 'EditPost',
-          query: { articleId: article.articleId },
+          params: { articleId: article.id },
         });
         return null;
       }
       return null;
     },
   },
-  beforeMount() {
-    this.getArticles();
+  async beforeRouteUpdate(to, from, next) {
+    const page = Math.round((to.query || {}).page || 1);
+    if (page >= 1) {
+      await store.commit(`article/${SET_PAGE}`, page, {
+        root: true,
+      });
+      await store.dispatch(`article/${GET_ARTICLES}`, null, { root: true });
+    }
+    next();
   },
+  async beforeRouteEnter(to, from, next) {
+    console.log({ to, from, next });
+    const page = Math.round((to.query || {}).page || 1);
+    await store.commit(`article/${SET_PAGE}`, page, {
+      root: true,
+    });
+    await store.dispatch(`article/${GET_ARTICLES}`, null, { root: true });
+    next();
+  },
+  // beforeMount() {
+  //   this.getArticles();
+  // },
 };
 </script>
