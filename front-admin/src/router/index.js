@@ -30,6 +30,130 @@ Vue.use(Router);
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
+const dashboard = {
+  path: '/',
+  component: Layout,
+  redirect: '/dashboard',
+  children: [
+    {
+      path: 'dashboard',
+      name: 'Dashboard',
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: 'Dashboard', icon: 'dashboard' },
+    },
+  ],
+};
+
+const article = {
+  path: '/article',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      name: 'Article',
+      component: () => import('@/views/article/Articles.vue'),
+      meta: { title: 'Browse All Articles', icon: 'form' },
+    },
+  ],
+};
+
+const post = {
+  path: '/post',
+  component: Layout,
+  name: 'Post',
+  meta: { title: 'post', icon: 'el-icon-document' },
+  redirect: '/article/edit',
+  children: [
+    {
+      path: 'create',
+      name: 'CreatePost',
+      component: () => import('@/views/post/Create.vue'),
+      meta: { title: 'Create a Post', icon: 'el-icon-circle-plus' },
+    },
+  ],
+};
+
+const example = {
+  path: '/example',
+  component: Layout,
+  redirect: '/example/table',
+  name: 'Example',
+  meta: { title: 'Example', icon: 'el-icon-s-help' },
+  children: [
+    {
+      path: 'table',
+      name: 'Table',
+      component: () => import('@/views/table/index'),
+      meta: { title: 'Table', icon: 'table' },
+    },
+    {
+      path: 'tree',
+      name: 'Tree',
+      component: () => import('@/views/tree/index'),
+      meta: { title: 'Tree', icon: 'tree' },
+    },
+  ],
+};
+
+const nested = {
+  path: '/nested',
+  component: Layout,
+  redirect: '/nested/menu1',
+  name: 'Nested',
+  meta: {
+    title: 'Nested',
+    icon: 'nested',
+  },
+  children: [
+    {
+      path: 'menu1',
+      component: () => import('@/views/nested/menu1/index'), // Parent router-view
+      name: 'Menu1',
+      meta: { title: 'Menu1' },
+      children: [
+        {
+          path: 'menu1-1',
+          component: () => import('@/views/nested/menu1/menu1-1'),
+          name: 'Menu1-1',
+          meta: { title: 'Menu1-1' },
+        },
+        {
+          path: 'menu1-2',
+          component: () => import('@/views/nested/menu1/menu1-2'),
+          name: 'Menu1-2',
+          meta: { title: 'Menu1-2' },
+          children: [
+            {
+              path: 'menu1-2-1',
+              component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+              name: 'Menu1-2-1',
+              meta: { title: 'Menu1-2-1' },
+            },
+            {
+              path: 'menu1-2-2',
+              component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+              name: 'Menu1-2-2',
+              meta: { title: 'Menu1-2-2' },
+            },
+          ],
+        },
+        {
+          path: 'menu1-3',
+          component: () => import('@/views/nested/menu1/menu1-3'),
+          name: 'Menu1-3',
+          meta: { title: 'Menu1-3' },
+        },
+      ],
+    },
+    {
+      path: 'menu2',
+      component: () => import('@/views/nested/menu2/index'),
+      meta: { title: 'menu2' },
+    },
+  ],
+};
+
 export const constantRoutes = [
   {
     path: '/login',
@@ -43,63 +167,10 @@ export const constantRoutes = [
     hidden: true,
   },
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard', icon: 'dashboard' },
-      },
-    ],
-  },
-
-  {
-    path: '/article',
-    component: Layout,
-    name: 'Article',
-    meta: { title: 'article', icon: 'el-icon-document' },
-    redirect: '/article/edit',
-    children: [
-      {
-        path: 'create',
-        name: 'CreateArticle',
-        component: () => import('@/views/article/Create.vue'),
-        meta: { title: 'Create an Article', icon: 'el-icon-circle-plus' },
-      },
-      {
-        path: 'edit',
-        name: 'EditArticle',
-        component: () => import('@/views/article/Create.vue'),
-        meta: { title: 'Edit Articles', icon: 'el-icon-edit' },
-      },
-    ],
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' },
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' },
-      },
-    ],
-  },
+  dashboard,
+  article,
+  post,
+  example,
 
   {
     path: '/form',
@@ -114,63 +185,7 @@ export const constantRoutes = [
     ],
   },
 
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested',
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' },
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' },
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' },
-              },
-            ],
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' },
-          },
-        ],
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' },
-      },
-    ],
-  },
+  nested,
 
   {
     path: 'external-link',
@@ -187,11 +202,12 @@ export const constantRoutes = [
   { path: '*', redirect: '/404', hidden: true },
 ];
 
-const createRouter = () => new Router({
-  mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes,
-});
+const createRouter = () =>
+  new Router({
+    mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
+  });
 
 const router = createRouter();
 

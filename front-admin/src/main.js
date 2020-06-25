@@ -5,17 +5,19 @@ import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en'; // lang i18n
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 
 import '@/styles/index.scss'; // global css
 
-import App from './App';
+import '@/icons'; // icon
+import '@/permission'; // permission control
+import FormMargin from '@/components/FormMargin';
+
+import App from './App.vue';
 import store from './store';
 import router from './router';
 
-import '@/icons'; // icon
-import '@/permission'; // permission control
-
-import { ValidationProvider } from 'vee-validate';
+import setValidateRules from './validateRules';
 
 /**
  * If you don't want to use mock-server
@@ -32,13 +34,17 @@ if (process.env.NODE_ENV === 'production') {
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale });
+
+setValidateRules();
 Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('FormMargin', FormMargin);
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false;
 
-new Vue({
+const app = new Vue({
   el: '#app',
   router,
   store,

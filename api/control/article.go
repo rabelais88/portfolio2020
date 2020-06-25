@@ -1,6 +1,7 @@
 package control
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -76,6 +77,7 @@ func GetArticles(c echo.Context) error {
 	}
 
 	view := view.New(&p)
+	log.Printf("page request %d", pageSize)
 
 	err := cc.JSON(http.StatusOK, ArticlesResponse{
 		PagedResponse: PagedResponse{

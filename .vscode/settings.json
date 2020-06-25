@@ -1,6 +1,20 @@
 {
   "eslint.workingDirectories": [
-    { "directory": "front-www", "changeProcessCWD": true },
-    { "directory": "front-admin", "changeProcessCWD": true }
-  ]
+    {
+      "directory": "front-www",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "front-admin",
+      "changeProcessCWD": true
+    }
+  ],
+  "vetur.format.defaultFormatter.html": "prettier",
+  "vetur.format.defaultFormatter.css": "prettier",
+  "vetur.format.defaultFormatter.postcss": "prettier",
+  "vetur.format.defaultFormatter.scss": "prettier",
+  "vetur.format.defaultFormatter.less": "prettier",
+  "vetur.format.defaultFormatter.stylus": "stylus-supremacy",
+  "vetur.format.defaultFormatter.js": "prettier",
+  "vetur.format.defaultFormatter.ts": "prettier"
 }

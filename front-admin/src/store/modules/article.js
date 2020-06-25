@@ -1,14 +1,29 @@
+import { getArticles } from '@/api/article';
+
 const getDefaultArticleState = () => ({
-  userTitle: '',
+  articles: [],
+  page: 1,
 });
 
-export const SET_USER_TITLE = 'SET_USER_TITLE';
+export const SET_ARTICLES = 'SET_ARTICLES';
 
 const mutations = {
-  [SET_USER_TITLE]: (state, title) => (state.userTitle = title),
+  [SET_ARTICLES]: (state, articles) => (state.articles = articles),
 };
 
-const actions = {};
+export const GET_ARTICLES = 'GET_ARTICLES';
+
+const actions = {
+  async [GET_ARTICLES]({ commit, state }) {
+    const opt = { page: state.page };
+    const req = await getArticles(opt);
+    if (req.error) {
+      return req;
+    }
+    commit(SET_ARTICLES, req.result.list);
+    return req;
+  },
+};
 
 export default {
   namespaced: true,

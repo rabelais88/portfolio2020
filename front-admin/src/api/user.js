@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { AUTH_REQUIRED, USER_INFO } from './path';
 
 export function login(data) {
   return request({
@@ -9,8 +10,9 @@ export function login(data) {
 }
 
 export function getInfo(token) {
+  const url = [AUTH_REQUIRED, USER_INFO].join('/');
   return request({
-    url: '/auth/user',
+    url: `/${url}`,
     method: 'get',
     headers: { Authorization: `Bearer ${token}` },
   });

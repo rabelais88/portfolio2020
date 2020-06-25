@@ -126,9 +126,6 @@ func GetUser(c echo.Context) error {
 
 func RefreshToken(c echo.Context) error {
 	cc := c.(*env.CustomContext)
-	if err := RoleUserOnly(cc); err != nil {
-		return err
-	}
 	u := GetUserFromContext(cc)
 	var _u model.User
 	if blank := cc.Db.Where(&model.User{Token: u.Token}).First(&_u).RecordNotFound(); !blank {
