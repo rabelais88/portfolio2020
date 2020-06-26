@@ -40,8 +40,11 @@ module.exports = {
     'no-return-assign': 0,
     'no-underscore-dangle': 0,
     'vue/no-unused-vars': 1,
+    'no-unused-vars': 1,
     'vue/max-attributes-per-line': 0,
     'import/prefer-default-export': 1,
+    'vue/html-self-closing': 0,
+    'vue/attributes-order': 0,
     // "vue/max-attributes-per-line": [2, {
     //   "singleline": 10,
     //   "multiline": {

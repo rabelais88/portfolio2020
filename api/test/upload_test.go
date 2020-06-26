@@ -1,10 +1,10 @@
 package control
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
@@ -32,10 +32,14 @@ func TestUploadFile(t *testing.T) {
 		},
 	})
 
-	fileLoc := e.POST(`/auth/file`).WithMultipart().WithFile("files", "./test_image.svg").Expect().Status(http.StatusOK).JSON().Object().Value("urls").Array().First().String().Raw()
-	fileLoc = fmt.Sprintf("../files/%s", fileLoc)
+	fileName := e.POST(`/auth/file`).WithMultipart().WithFile("files", "./test_image.svg").Expect().Status(http.StatusOK).JSON().Object().Value("urls").Array().First().String().Raw()
+	fileLoc := filepath.Join("../files", fileName)
 	if !fileExists(fileLoc) {
 		t.Errorf("file doesn't exist! - %s", fileLoc)
 	}
+
+	servedFileLoc := filepath.Join("/assets", fileName)
+	e.GET(servedFileLoc).Expect().Status(http.StatusOK)
+
 	os.Remove(fileLoc)
 }

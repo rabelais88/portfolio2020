@@ -3,13 +3,13 @@ package control
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/rabelais88/portfolio2020/api/constants"
 	"github.com/rabelais88/portfolio2020/api/env"
 )
 
@@ -20,17 +20,20 @@ type UploadFileResponse struct {
 func UploadFile(c echo.Context) error {
 	cc := c.(*env.CustomContext)
 
-	// skips authorization test & jwt validation for test env
-	if cc.Config.Env != env.ENVIRONMENTS.TEST {
-		u := GetUserFromContext(cc)
-		if u.Role != constants.USER_ROLE.ADMIN {
-			return MakeError(http.StatusUnauthorized, "NOT_AUTHORIZED")
-		}
+	if err := RoleAdminOnly(cc); err != nil {
+		return err
 	}
 
 	form, err := cc.MultipartForm()
 	if err != nil {
 		return MakeError(http.StatusBadRequest, "BAD_MULTIPART_FORM")
+	}
+
+	if _, err := os.Stat(cc.Config.FileLocation); os.IsNotExist(err) {
+		_err := os.MkdirAll(cc.Config.FileLocation, os.ModePerm)
+		if _err != nil {
+			log.Printf("error while creating directory at %s", cc.Config.FileLocation)
+		}
 	}
 
 	files := form.File["files"]
@@ -47,8 +50,7 @@ func UploadFile(c echo.Context) error {
 
 		now := time.Now()
 		filename := fmt.Sprintf("%d-%s", now.UnixNano(), filepath.Clean(file.Filename))
-		directory := fmt.Sprintf("%s%s", cc.Config.FileLocation, string(filepath.Separator))
-		fileLoc := fmt.Sprintf("%s%s", directory, filename)
+		fileLoc := filepath.Join(cc.Config.FileLocation, filename)
 
 		// Destination
 		dst, err := os.Create(fileLoc)

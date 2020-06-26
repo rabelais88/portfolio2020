@@ -32,6 +32,27 @@
           </el-form-item>
         </validation-provider>
 
+        <el-form-item label="Cover Image">
+          <el-upload
+            action="#"
+            list-type="picture-card"
+            :multiple="false"
+            :show-file-list="false"
+            :before-upload="beforeCoverUpload"
+            :http-request="onHttpRequest"
+            :file-list="fileList"
+            :limit="1"
+            ref="coverUploader"
+            v-if="userCoverImage === ''"
+          />
+          <img
+            class="el-upload el-upload--picture-card"
+            v-if="userCoverImage !== ''"
+            :src="userCoverImageUrl"
+            @click="onRemoveCoverImage"
+          />
+        </el-form-item>
+
         <el-form-item>
           <el-button @click="handleSubmit(onSubmit)">submit</el-button>
         </el-form-item>
@@ -43,15 +64,17 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
 import { Loading, Message } from 'element-ui';
+import { uploadFile, getFileUrl } from '@/api/upload';
 import {
   INIT,
   ADD_POST,
-  MODIFY_POST,
   SET_USER_TITLE,
   SET_USER_CONTENT,
   SET_USER_DESC,
   SET_USER_LINK,
+  SET_USER_COVER_IMAGE,
 } from '@/store/modules/post';
+import asyncHandler from '@/utils/asyncHandler';
 
 export default {
   computed: {
@@ -60,6 +83,7 @@ export default {
       _userContent: 'userContent',
       _userLink: 'userLink',
       _userDesc: 'userDesc',
+      _userCoverImage: 'userCoverImage',
       postId: 'id',
     }),
     userTitle: {
@@ -86,6 +110,17 @@ export default {
         this.setUserLink(v);
       },
     },
+    userCoverImage: {
+      get() {
+        return this._userCoverImage;
+      },
+      set(v) {
+        this.setUserCoverImage(v);
+      },
+    },
+    userCoverImageUrl() {
+      return getFileUrl(this.userCoverImage);
+    },
     userDesc: {
       get() {
         return this._userDesc;
@@ -94,6 +129,10 @@ export default {
         this.setUserDesc(v);
       },
     },
+    fileList() {
+      if (this.userCoverImage === '') return [];
+      return [{ name: 'coverImage.jpg', url: getFileUrl(this.userCoverImage) }];
+    },
   },
   methods: {
     ...mapMutations('post', {
@@ -101,9 +140,10 @@ export default {
       setUserTitle: SET_USER_TITLE,
       setUserDesc: SET_USER_DESC,
       setUserLink: SET_USER_LINK,
+      setUserCoverImage: SET_USER_COVER_IMAGE,
       init: INIT,
     }),
-    ...mapActions('post', { addPost: ADD_POST, modifyPost: MODIFY_POST }),
+    ...mapActions('post', { addPost: ADD_POST }),
     async onSubmit() {
       this.$loading = Loading.service({ fullscreen: true });
       const req = await this.addPost();
@@ -122,6 +162,20 @@ export default {
         params: { articleId: req.result.articleId },
       });
       return null;
+    },
+    beforeCoverUpload(file) {}, // return bool for validation
+    onRemoveCoverImage() {
+      this.userCoverImage = '';
+    },
+    async onHttpRequest(ev) {
+      const req = await asyncHandler(uploadFile, ev.file);
+      if (req.error) {
+        this.$refs.uploadFile.abort();
+        return null;
+      }
+      const [imageUrl] = req.result.urls;
+      this.userCoverImage = imageUrl;
+      return req;
     },
   },
   beforeMount() {

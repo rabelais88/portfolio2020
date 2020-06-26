@@ -1,4 +1,4 @@
-import { addPost } from '@/api/post';
+import { addPost, modifyPost } from '@/api/post';
 import asyncHandler from '@/utils/asyncHandler';
 import { mapPost } from '@/vo/post.vo';
 import { getArticle } from '@/api/article';
@@ -43,6 +43,20 @@ const mutations = {
   [SET_USER_DESC]: (state, desc) => (state.userDesc = desc),
 };
 
+const _getters = {
+  userPost(state) {
+    const p = {
+      title: state.userTitle,
+      desc: state.userDesc,
+      content: state.userContent,
+      coverImage: state.userCoverImage,
+      link: state.userLink,
+    };
+    if (state.id) p.id = state.id;
+    return p;
+  },
+};
+
 const actions = {
   async [LOAD_POST]({ commit, state }, articleId) {
     const req = await asyncHandler(getArticle, { id: articleId });
@@ -60,25 +74,21 @@ const actions = {
     commit(SET_USER_DESC, state.post._desc);
     return req;
   },
-  async [ADD_POST]({ state }) {
-    const data = {
-      title: state.userTitle,
-      content: state.userContent,
-    };
-    const req = await asyncHandler(addPost, data);
+  async [ADD_POST]({ getters }) {
+    const req = await asyncHandler(addPost, getters.userPost);
     if (req.error) {
       console.error(req.error);
       return req;
     }
     return req;
   },
-  async [MODIFY_POST]({ state }) {
-    const data = {
-      id: state.id,
-      title: state.userTitle,
-      content: state.userContent,
-    };
-    //
+  async [MODIFY_POST]({ getters }) {
+    const req = await asyncHandler(modifyPost, getters.modifyPost);
+    if (req.error) {
+      console.error(req.error);
+      return req;
+    }
+    return req;
   },
 };
 
@@ -86,5 +96,6 @@ export default {
   namespaced: true,
   state: getDefaultPostState(),
   mutations,
+  getters: _getters,
   actions,
 };

@@ -9,3 +9,12 @@ export function addPost(data) {
     data,
   });
 }
+
+export function modifyPost(data) {
+  const url = [AUTH_REQUIRED, POST].join('/');
+  return request({
+    url: `/${url}`,
+    method: 'put',
+    data,
+  });
+}

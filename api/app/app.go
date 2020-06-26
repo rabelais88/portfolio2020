@@ -42,6 +42,7 @@ func Init() (http.Handler, *gorm.DB) {
 		AllowOrigins: config.AllowedOrigins,
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
+	e.Static("/assets", config.FileLocation)
 
 	db := ConnectDB(&config)
 
