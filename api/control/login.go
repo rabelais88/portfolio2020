@@ -120,6 +120,9 @@ func GetLoginToken(c echo.Context) error {
 func GetUser(c echo.Context) error {
 	cc := c.(*env.CustomContext)
 	u := GetUserFromContext(cc)
+	if u.UserID == "" {
+		return MakeError(http.StatusUnauthorized, `JWT_INCONSISTENT_WITH_DB`)
+	}
 	err := cc.JSON(http.StatusOK, u)
 	return err
 }

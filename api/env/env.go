@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -57,6 +58,7 @@ type Config struct {
 	AdminGmailAccount string
 	AllowedOrigins    []string
 	GoogleRedirectUrl string
+	FileLocation      string
 }
 
 func GetConfig() *Config {
@@ -77,6 +79,14 @@ func GetConfig() *Config {
 
 	port := lib.CheckString(os.Getenv(`PORT`), `4500`)
 
+	//
+	defaultFileLoc := "../files"
+	fileLoc := lib.CheckString(os.Getenv(`FILE_LOCATION`), defaultFileLoc)
+	fileLoc, err = filepath.Abs(fileLoc)
+	if err != nil {
+		fileLoc, _ = filepath.Abs(defaultFileLoc)
+	}
+
 	_config := Config{
 		Url:               lib.CheckString(os.Getenv(`URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 		Port:              port,
@@ -93,6 +103,7 @@ func GetConfig() *Config {
 		AdminGmailAccount: os.Getenv(`ADMIN_GMAIL_ACCOUNT`),
 		AllowedOrigins:    strings.Split(os.Getenv(`ALLOWED_ORIGINS`), ","),
 		GoogleRedirectUrl: lib.CheckString(os.Getenv(`REDIRECT_URL`), fmt.Sprintf(`http://localhost:%s`, port)),
+		FileLocation:      fileLoc,
 	}
 	return &_config
 }
