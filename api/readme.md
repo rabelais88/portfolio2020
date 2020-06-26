@@ -18,6 +18,7 @@ REDIRECT_URL=http://localhost:5000/login # admin front
 SECRET_JWT=...
 ADMIN_GMAIL_ACCOUNT=...
 ALLOWED_ORIGINS=http://localhost:5000,http://localhost:3000 # front-admin, front-www. separate with comma(,)
+FILE_LOCATION=/usr/data/files
 ```
 
 ```sh
@@ -54,10 +55,3 @@ source build.sh
 # run compiled program for production
 ENV=production $ARGUMENTS ./bin/server
 ```
-
-## issues
- - alpine build suffers from huge image size
- - scratch build doesn't guarantee fine execution in server environment(esp. credentials)
- - choosing orchestrator best suited for the project: K8 vs docker-swarm
- - rigorous stress test
- - cache(redis) support

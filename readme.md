@@ -1,6 +1,6 @@
 # portfolio renewal project 2020
 
-- [api readme](https://github.com/rabelais88/portfolio2020/tree/master/api/readme.md)
+- [api readme](https://github.com/rabelais88/portfolio2020/tree/master/api/README.md)
 - [frontend readme](https://github.com/rabelais88/portfolio2020/tree/master/front-www/README.md)
 - [frontend(api) readme](https://github.com/rabelais88/portfolio2020/tree/master/front-api/README.md)
 
@@ -34,6 +34,11 @@ kubectl apply -f local.k8.yaml
 # caveat
 
 - api frontend must be served in accordance with [vue history mode configuration](https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations)
+
+# issues
+ - Golang alpine build suffers from huge image size, due to gcc
+ - rigorous stress test
+ - cache(redis) support
 
 # what I've learned
 - don't use docker `:scratch` build unless it's necessary. If you feel tempted, don't.
