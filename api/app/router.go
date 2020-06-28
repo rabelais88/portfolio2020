@@ -27,6 +27,7 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	}
 	r.GET("/ping", control.GetPing)
 
+	r.DELETE("/article", control.DeleteArticle)
 	r.POST("/post", control.AddPost)
 	r.PUT("/post", control.ModifyPost)
 

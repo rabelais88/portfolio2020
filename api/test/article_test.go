@@ -5,7 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/brianvoe/gofakeit/v5"
+	"github.com/rabelais88/portfolio2020/api/app"
+
 	"github.com/gavv/httpexpect/v2"
 	"github.com/rabelais88/portfolio2020/api/model"
 )
@@ -24,17 +25,9 @@ func TestGetArticle(t *testing.T) {
 		},
 	})
 
-	p := &model.Post{
-		Article: &model.Article{
-			Type:       "POST",
-			Title:      gofakeit.Sentence(2),
-			Desc:       gofakeit.Sentence(3),
-			CoverImage: gofakeit.ImageURL(340, 240),
-			Link:       gofakeit.URL(),
-		},
-		Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
-	}
-	db.Create(p)
+	p := model.Post{}
+	app.MakeFakeData(db)
+	db.Last(&p)
 
 	e.GET(`/article`).WithQuery("id", p.ArticleID).Expect().Status(http.StatusOK)
 	e.GET(`/article`).Expect().Status(http.StatusBadRequest)
@@ -54,21 +47,8 @@ func TestGetArticles(t *testing.T) {
 			httpexpect.NewDebugPrinter(t, true),
 		},
 	})
-
-	for i := 0; i < 100; i++ {
-		p := &model.Post{
-			Article: &model.Article{
-				Type:       "POST",
-				Title:      gofakeit.Sentence(2),
-				Desc:       gofakeit.Sentence(3),
-				CoverImage: gofakeit.ImageURL(340, 240),
-				Link:       gofakeit.URL(),
-			},
-			Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
-		}
-		db.Create(p)
-	}
-	var ps []model.Post
+	app.MakeFakeData(db)
+	ps := []model.Post{}
 	db.Find(&ps)
 
 	e.GET(`/articles`).Expect().Status(http.StatusOK)
@@ -78,4 +58,34 @@ func TestGetArticles(t *testing.T) {
 	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
 	e.GET(`/articles`).WithQuery("type", "POST").Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
 	e.GET(`/articles`).WithQuery("type", "MEDIA").Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", 0)
+}
+
+func TestDeleteArticle(t *testing.T) {
+	handler, db := mountTestApp()
+	server := httptest.NewServer(handler)
+	defer server.Close()
+	defer db.Close()
+
+	e := httpexpect.WithConfig(httpexpect.Config{
+		BaseURL:  server.URL,
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
+	app.MakeFakeData(db)
+	ps := []model.Post{}
+	var beforeCount int
+	db.Find(&ps).Count(&beforeCount)
+	// db.Limit(2).Find(&ps)
+
+	e.DELETE(`/auth/article`).WithQuery("articleId", "totallywrongid").Expect().Status(http.StatusBadRequest)
+
+	e.DELETE(`/auth/article`).WithQuery("articleId", ps[0].ArticleID).Expect().Status(http.StatusOK)
+	var afterCount int
+	db.Find(&ps).Count(&afterCount)
+	if afterCount >= beforeCount {
+		t.Errorf("count before %d count after %d - record not deleted", beforeCount, afterCount)
+	}
+	e.GET(`/articles`).Expect().Status(http.StatusOK)
 }

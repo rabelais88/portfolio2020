@@ -10,7 +10,7 @@
       <el-table-column label="Title">
         <template slot-scope="scope">{{ scope.row.title }}</template>
       </el-table-column>
-      <el-table-column label="Last Edited">
+      <el-table-column label="Last Edited" width="150">
         <template slot-scope="scope">
           <span v-if="scope.row._updatedAt > scope.row._createdAt">{{
             scope.row._updatedAt
@@ -25,14 +25,27 @@
           }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Edit" width="80">
+      <el-table-column label="Type" width="70">
+        <template slot-scope="scope">{{ scope.row.type }}</template>
+      </el-table-column>
+      <el-table-column label="Edit" width="150">
         <template slot-scope="scope"
           ><el-button size="mini" @click="onEdit(scope.row)"
             ><i class="el-icon-edit"></i
           ></el-button>
+          <!-- <el-button size="mini" @click="onRemove(scope.row)">
+            <i class="el-icon-delete"></i>
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
+    <el-button
+      size="mini"
+      @click="onRemove"
+      :disabled="selectedArticlesId.length === 0"
+    >
+      <i class="el-icon-delete"></i>delete selected
+    </el-button>
     <el-pagination
       small
       layout="prev, pager, next"
@@ -47,12 +60,22 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex';
+import { Message } from 'element-ui';
 import store from '@/store';
 
-import { GET_ARTICLES, SET_PAGE, GET_ARTICLE } from '@/store/modules/article';
+import {
+  GET_ARTICLES,
+  SET_PAGE,
+  GET_ARTICLE,
+  // REMOVE_ARTICLE,
+  REMOVE_ARTICLES,
+} from '@/store/modules/article';
 import { LOAD_POST } from '@/store/modules/post';
 
 export default {
+  data: () => ({
+    selectedArticlesId: [],
+  }),
   computed: {
     ...mapState('article', ['articles', 'count', 'pageSize', 'page']),
     ...mapState('article', { _page: 'page' }),
@@ -72,12 +95,14 @@ export default {
     ...mapActions('article', {
       getArticles: GET_ARTICLES,
       getArticle: GET_ARTICLE,
+      // removeArticle: REMOVE_ARTICLE,
+      removeArticles: REMOVE_ARTICLES,
     }),
     ...mapActions('post', {
       loadPost: LOAD_POST,
     }),
-    onSelectionChange(ev) {
-      console.log('selection changed', ev);
+    onSelectionChange(rows) {
+      this.selectedArticlesId = rows.map((r) => r.id);
     },
     onSizeChange(ev) {
       console.log('onSizeChange', ev);
@@ -85,6 +110,15 @@ export default {
     onPageChange(page) {
       // console.log('onPageChange', ev);
       this.$router.push({ query: { page } });
+    },
+    async onRemove() {
+      const reqs = await this.removeArticles(this.selectedArticlesId);
+      if (reqs.find((r) => r.error)) {
+        Message({ message: 'error while deleting the article', type: 'error' });
+        return null;
+      }
+      Message({ message: 'the article is deleted', type: 'success' });
+      return null;
     },
     onEdit(article) {
       console.log('onEdit', { article });

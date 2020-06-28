@@ -9,11 +9,11 @@ export function getArticles(query) {
   });
 }
 
-export function getArticle(query) {
+export function getArticle(articleId) {
   return request({
     url: `/${ARTICLE}`,
     method: 'get',
-    params: query,
+    params: { id: articleId },
   });
 }
 
@@ -22,5 +22,12 @@ export function getTags(keyword) {
     url: `/${TAGS}`,
     methods: 'get',
     params: { keyword },
+  });
+}
+
+export function removeArticle(articleId) {
+  const url = [AUTH_REQUIRED, ARTICLE].join('/');
+  return request.delete(`/${url}`, {
+    params: { articleId },
   });
 }

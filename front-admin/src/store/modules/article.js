@@ -1,4 +1,4 @@
-import { getArticles, getArticle, getTags } from '@/api/article';
+import { getArticles, getArticle, getTags, removeArticle } from '@/api/article';
 import asyncHandler from '@/utils/asyncHandler';
 import { mapArticle } from '@/vo/article.vo';
 
@@ -37,6 +37,8 @@ const mutations = {
 export const GET_ARTICLES = 'GET_ARTICLES';
 export const GET_ARTICLE = 'GET_ARTICLE';
 export const GET_TAGS = 'GET_TAGS';
+export const REMOVE_ARTICLE = 'REMOVE_ARTICLE';
+export const REMOVE_ARTICLES = 'REMOVE_ARTICLES';
 
 const actions = {
   async [GET_ARTICLES]({ commit, state }) {
@@ -52,8 +54,7 @@ const actions = {
   },
   async [GET_ARTICLE]({ commit, state }, articleId) {
     commit(SET_ARTICLE_ID, articleId);
-    const opt = { id: articleId };
-    const req = await asyncHandler(getArticle, opt);
+    const req = await asyncHandler(getArticle, articleId);
     if (req.error) {
       return req;
     }
@@ -68,6 +69,22 @@ const actions = {
       return [];
     }
     return req.result.tags;
+  },
+  async [REMOVE_ARTICLE]({ dispatch }, articleId) {
+    const req = await asyncHandler(removeArticle, articleId);
+    if (req.error) {
+      return req;
+    }
+    // await dispatch(GET_ARTICLES);
+    return req;
+  },
+  async [REMOVE_ARTICLES]({ dispatch }, articleIds) {
+    const ops = articleIds.map((articleId) =>
+      dispatch(REMOVE_ARTICLE, articleId),
+    );
+    const reqs = await Promise.all(ops);
+    await dispatch(GET_ARTICLES);
+    return reqs;
   },
 };
 

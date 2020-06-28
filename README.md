@@ -39,6 +39,7 @@ kubectl apply -f local.k8.yaml
  - Golang alpine build suffers from huge image size, due to gcc
  - rigorous stress test
  - cache(redis) support
+ - deletions burst cause missing tables: need to check if it's in-memory db issue
 
 # what I've learned
 - don't use docker `:scratch` build unless it's necessary. If you feel tempted, don't.

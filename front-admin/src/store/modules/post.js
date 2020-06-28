@@ -63,7 +63,7 @@ const _getters = {
 
 const actions = {
   async [LOAD_POST]({ commit, state }, articleId) {
-    const req = await asyncHandler(getArticle, { id: articleId });
+    const req = await asyncHandler(getArticle, articleId);
     if (req.error) {
       return req;
     }

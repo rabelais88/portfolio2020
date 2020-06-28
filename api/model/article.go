@@ -16,7 +16,6 @@ type Article struct {
 	CoverImage string `json:"coverImage"`
 	Link       string `json:"link"`
 	Tags       []*Tag `gorm:"many2many:article_tags;association_foreignkey:value;foreign_key:iD;" json:"tags"`
-	// Tags       string `json:"tags"` // "tags" is in fact a string that can be separated by comma(,)
 }
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {

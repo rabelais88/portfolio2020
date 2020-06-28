@@ -98,3 +98,40 @@ func GetArticles(c echo.Context) error {
 	})
 	return err
 }
+
+type DeleteArticleQuery struct {
+	ArticleID string `validate:"required" query:"articleId"`
+}
+
+type DeleteArticleResponse struct {
+	Success bool `json:"success"`
+}
+
+func DeleteArticle(c echo.Context) error {
+	cc := c.(*env.CustomContext)
+
+	if err := RoleAdminOnly(cc); err != nil {
+		return err
+	}
+
+	q := new(DeleteArticleQuery)
+	if err := cc.Bind(q); err != nil {
+		return MakeError(http.StatusBadRequest, "QUERY_NOT_UNDERSTANDABLE")
+	}
+	if err := cc.Validate(q); err != nil {
+		return err
+	}
+
+	a := model.Article{}
+	if blank := cc.Db.Where(&model.Article{ID: q.ArticleID}).Find(&a).RecordNotFound(); blank {
+		return MakeError(http.StatusBadRequest, "ARTICLE_NOT_EXIST")
+	}
+	switch a.Type {
+	case "POST":
+		cc.Db.Where(&model.Post{ArticleID: q.ArticleID}).Delete(&model.Post{})
+	default:
+	}
+	cc.Db.Where(&model.Article{ID: q.ArticleID}).Delete(&model.Article{})
+	err := cc.JSON(http.StatusOK, DeleteArticleResponse{Success: true})
+	return err
+}

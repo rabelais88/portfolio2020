@@ -62,16 +62,17 @@
             @close="onRemoveTag(tag)"
             >{{ tag }}</el-tag
           >
-          <el-input
+          <el-autocomplete
             class="input-new-tag"
             v-if="tagInputVisible"
             v-model="tagInput"
             ref="saveTagInput"
             size="mini"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
+            @keyup.enter.native="onInputConfirm"
+            @select="onTagSelect"
+            :fetch-suggestions="tagSearch"
           >
-          </el-input>
+          </el-autocomplete>
           <el-button
             v-else
             class="button-new-tag"
@@ -93,6 +94,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex';
 import { Loading, Message } from 'element-ui';
 import { uploadFile, getFileUrl } from '@/api/upload';
+import { GET_TAGS } from '@/store/modules/article';
 import {
   INIT,
   ADD_POST,
@@ -106,6 +108,7 @@ import {
 import asyncHandler from '@/utils/asyncHandler';
 
 export default {
+  data: () => ({ tagInput: '', tagInputVisible: false }),
   computed: {
     ...mapState('post', {
       _userTitle: 'userTitle',
@@ -183,6 +186,12 @@ export default {
       init: INIT,
     }),
     ...mapActions('post', { addPost: ADD_POST }),
+    ...mapActions('article', { getTags: GET_TAGS }),
+    async tagSearch(keyword, cb) {
+      const tags = await this.getTags(keyword);
+      console.log('tag', tags);
+      cb(tags.map((t) => ({ value: t.tag, count: t.articleCount })));
+    },
     async onSubmit() {
       this.$loading = Loading.service({ fullscreen: true });
       const req = await this.addPost();
@@ -205,7 +214,12 @@ export default {
     onRemoveTag(tag) {
       this.userTags = this.userTags.filter((t) => t !== tag);
     },
-    handleInputConfirm() {
+    onTagSelect({ value, count }) {
+      this.userTags = [...this.userTags, value];
+      this.tagInput = '';
+      this.tagInputVisible = false;
+    },
+    onInputConfirm() {
       // replace this with autocomplete later
       if (this.tagInput !== '') {
         this.userTags = [...this.userTags, this.tagInput];
@@ -246,7 +260,7 @@ export default {
   padding-bottom: 0;
 }
 .input-new-tag {
-  width: 90px;
+  width: 150px;
   margin-left: 10px;
   vertical-align: bottom;
 }

@@ -102,7 +102,6 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 import { GET_TAGS } from '@/store/modules/article';
 import {
   INIT,
-  ADD_POST,
   LOAD_POST,
   MODIFY_POST,
   SET_USER_TITLE,
@@ -197,7 +196,7 @@ export default {
       init: INIT,
       loadPost: LOAD_POST,
     }),
-    ...mapActions('post', { addPost: ADD_POST, modifyPost: MODIFY_POST }),
+    ...mapActions('post', { modifyPost: MODIFY_POST }),
     ...mapActions('article', { getTags: GET_TAGS }),
     async tagSearch(keyword, cb) {
       const tags = await this.getTags(keyword);
@@ -267,7 +266,7 @@ export default {
   padding-bottom: 0;
 }
 .input-new-tag {
-  width: 130px;
+  width: 150px;
   margin-left: 10px;
   vertical-align: bottom;
 }
