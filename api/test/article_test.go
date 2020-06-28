@@ -58,6 +58,12 @@ func TestGetArticles(t *testing.T) {
 	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
 	e.GET(`/articles`).WithQuery("type", "POST").Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
 	e.GET(`/articles`).WithQuery("type", "MEDIA").Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", 0)
+
+	db.Create(&model.Article{
+		Title: "testTitle",
+	})
+
+	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().Value("list").Array().First().Object().ValueEqual("title", "testTitle")
 }
 
 func TestDeleteArticle(t *testing.T) {

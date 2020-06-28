@@ -70,7 +70,7 @@ func GetArticles(c echo.Context) error {
 	}
 
 	var articles []model.Article
-	articleDb := cc.Db.Preload("Tags").Model(model.Article{})
+	articleDb := cc.Db.Order("updated_at desc").Preload("Tags").Model(model.Article{})
 	if q.Type != "" {
 		articleDb = articleDb.Where(model.Article{Type: q.Type})
 	}
