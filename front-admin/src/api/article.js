@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { AUTH_REQUIRED, ARTICLES, ARTICLE } from './path';
+import { AUTH_REQUIRED, ARTICLES, ARTICLE, TAGS } from './path';
 
 export function getArticles(query) {
   return request({
@@ -14,5 +14,13 @@ export function getArticle(query) {
     url: `/${ARTICLE}`,
     method: 'get',
     params: query,
+  });
+}
+
+export function getTags(keyword) {
+  return request({
+    url: `/${TAGS}`,
+    methods: 'get',
+    params: { keyword },
   });
 }

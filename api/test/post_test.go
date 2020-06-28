@@ -32,9 +32,11 @@ func TestAddPost(t *testing.T) {
 		Desc:       "this is a sample post",
 		CoverImage: "https://google.com",
 		Link:       "https://google.com",
+		Tags:       "tag1,tag2,tag3",
 	}).Expect().Status(http.StatusOK).JSON().Object().Value("articleId").String().Raw()
 
 	e.GET(`/article`).WithQuery("id", id).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("content", "testing 1234")
+	e.GET(`/tags`).WithQuery("keyword", "tag1").Expect().Status(http.StatusOK).JSON().Object().Value("tags").Array().First().Object().ValueEqual("articleCount", 1)
 }
 
 func TestModifyPost(t *testing.T) {
@@ -64,6 +66,10 @@ func TestModifyPost(t *testing.T) {
 		Desc:       "testDesc",
 		CoverImage: "testCoverImage",
 		Link:       "https://google.com",
+		Tags: []*model.Tag{
+			{Value: "testTag1"},
+			{Value: "testTag2"},
+		},
 	}
 	p := model.Post{
 		Article: &a,
@@ -78,6 +84,7 @@ func TestModifyPost(t *testing.T) {
 		CoverImage: "modifiedCoverImage",
 		Link:       "https://modified.google.com",
 		Content:    "modifiedContent",
+		Tags:       "modifiedTag,modifiedTag2",
 	}).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("content", "modifiedContent")
 	// e.GET(`/article`).WithQuery("id", id).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("content", "testing 1234")
 }

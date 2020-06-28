@@ -40,7 +40,7 @@ func GetArticle(c echo.Context) error {
 	switch a.Type {
 	case constants.ARTICLES.POST:
 		p := &model.Post{ArticleID: a.ID}
-		cc.Db.Preload("Article").Find(&p)
+		cc.Db.Preload("Article").Preload("Article.Tags").Find(&p)
 		return cc.JSON(http.StatusOK, p)
 	default:
 		return cc.JSON(http.StatusOK, a)
@@ -70,7 +70,7 @@ func GetArticles(c echo.Context) error {
 	}
 
 	var articles []model.Article
-	articleDb := cc.Db.Model(model.Article{})
+	articleDb := cc.Db.Preload("Tags").Model(model.Article{})
 	if q.Type != "" {
 		articleDb = articleDb.Where(model.Article{Type: q.Type})
 	}

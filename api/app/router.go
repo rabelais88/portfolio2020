@@ -15,6 +15,7 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	e.GET("/login", control.GetLogin)
 	// provides $JWT_TOKEN
 	e.GET("/login-cred", control.GetLoginToken)
+	e.GET("/tags", control.BrowseTags)
 
 	// r == restricted to admin
 	// https://echo.labstack.com/cookbook/jwt for accessing middleware JWT data in controller

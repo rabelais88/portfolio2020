@@ -53,6 +53,34 @@
           />
         </el-form-item>
 
+        <el-form-item label="tag">
+          <el-tag
+            v-for="tag in userTags"
+            :key="tag"
+            closable
+            :disable-transitions="false"
+            @close="onRemoveTag(tag)"
+            >{{ tag }}</el-tag
+          >
+          <el-input
+            class="input-new-tag"
+            v-if="tagInputVisible"
+            v-model="tagInput"
+            ref="saveTagInput"
+            size="mini"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button
+            v-else
+            class="button-new-tag"
+            size="small"
+            @click="() => (tagInputVisible = true)"
+            >+ New Tag</el-button
+          >
+        </el-form-item>
+
         <el-form-item>
           <el-button @click="handleSubmit(onSubmit)">submit</el-button>
         </el-form-item>
@@ -73,6 +101,7 @@ import {
   SET_USER_DESC,
   SET_USER_LINK,
   SET_USER_COVER_IMAGE,
+  SET_USER_TAGS,
 } from '@/store/modules/post';
 import asyncHandler from '@/utils/asyncHandler';
 
@@ -84,6 +113,7 @@ export default {
       _userLink: 'userLink',
       _userDesc: 'userDesc',
       _userCoverImage: 'userCoverImage',
+      _userTags: 'userTags',
       postId: 'id',
     }),
     userTitle: {
@@ -129,6 +159,14 @@ export default {
         this.setUserDesc(v);
       },
     },
+    userTags: {
+      get() {
+        return this._userTags;
+      },
+      set(v) {
+        this.setUserTags(v);
+      },
+    },
     fileList() {
       if (this.userCoverImage === '') return [];
       return [{ name: 'coverImage.jpg', url: getFileUrl(this.userCoverImage) }];
@@ -141,6 +179,7 @@ export default {
       setUserDesc: SET_USER_DESC,
       setUserLink: SET_USER_LINK,
       setUserCoverImage: SET_USER_COVER_IMAGE,
+      setUserTags: SET_USER_TAGS,
       init: INIT,
     }),
     ...mapActions('post', { addPost: ADD_POST }),
@@ -163,6 +202,17 @@ export default {
       });
       return null;
     },
+    onRemoveTag(tag) {
+      this.userTags = this.userTags.filter((t) => t !== tag);
+    },
+    handleInputConfirm() {
+      // replace this with autocomplete later
+      if (this.tagInput !== '') {
+        this.userTags = [...this.userTags, this.tagInput];
+      }
+      this.tagInputVisible = false;
+      this.tagInput = '';
+    },
     beforeCoverUpload(file) {}, // return bool for validation
     onRemoveCoverImage() {
       this.userCoverImage = '';
@@ -183,3 +233,21 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+</style>

@@ -18,9 +18,18 @@
           <span v-else>{{ scope.row._createdAt }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="Tag" width="130">
+        <template slot-scope="scope">
+          <el-tag size="mini" v-for="tag in scope.row._tags" :key="tag">{{
+            tag
+          }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="Edit" width="80">
         <template slot-scope="scope"
-          ><el-button size="mini" @click="onEdit(scope.row)">edit</el-button>
+          ><el-button size="mini" @click="onEdit(scope.row)"
+            ><i class="el-icon-edit"></i
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,8 +82,9 @@ export default {
     onSizeChange(ev) {
       console.log('onSizeChange', ev);
     },
-    onPageChange(ev) {
-      console.log('onPageChange', ev);
+    onPageChange(page) {
+      // console.log('onPageChange', ev);
+      this.$router.push({ query: { page } });
     },
     onEdit(article) {
       console.log('onEdit', { article });

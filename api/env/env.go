@@ -59,6 +59,7 @@ type Config struct {
 	AllowedOrigins    []string
 	GoogleRedirectUrl string
 	FileLocation      string
+	FakeData          bool
 }
 
 func GetConfig() *Config {
@@ -104,6 +105,13 @@ func GetConfig() *Config {
 		AllowedOrigins:    strings.Split(os.Getenv(`ALLOWED_ORIGINS`), ","),
 		GoogleRedirectUrl: lib.CheckString(os.Getenv(`REDIRECT_URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 		FileLocation:      fileLoc,
+		FakeData:          false,
 	}
+
+	fakeData := lib.CheckString(os.Getenv(`FAKE_DATA`), `false`)
+	if fakeData == `true` {
+		_config.FakeData = true
+	}
+
 	return &_config
 }

@@ -11,6 +11,7 @@ const getDefaultPostState = () => ({
   userLink: '',
   userCoverImage: '',
   userDesc: '',
+  userTags: [],
 });
 
 export const INIT = 'INIT';
@@ -21,6 +22,7 @@ export const SET_USER_CONTENT = 'SET_USER_CONTENT';
 export const SET_USER_LINK = 'SET_USER_LINK';
 export const SET_USER_COVER_IMAGE = 'SET_USER_COVER_IMAGE';
 export const SET_USER_DESC = 'SET_USER_DESC';
+export const SET_USER_TAGS = 'SET_USER_TAGS';
 
 export const ADD_POST = 'ADD_POST';
 export const MODIFY_POST = 'MODIFY_POST';
@@ -41,6 +43,7 @@ const mutations = {
   [SET_USER_COVER_IMAGE]: (state, coverImage) =>
     (state.userCoverImage = coverImage),
   [SET_USER_DESC]: (state, desc) => (state.userDesc = desc),
+  [SET_USER_TAGS]: (state, tags) => (state.userTags = tags),
 };
 
 const _getters = {
@@ -51,6 +54,7 @@ const _getters = {
       content: state.userContent,
       coverImage: state.userCoverImage,
       link: state.userLink,
+      tags: state.userTags.join(','),
     };
     if (state.id) p.id = state.id;
     return p;
@@ -72,6 +76,7 @@ const actions = {
     commit(SET_USER_LINK, state.post._link);
     commit(SET_USER_COVER_IMAGE, state.post._coverImage);
     commit(SET_USER_DESC, state.post._desc);
+    commit(SET_USER_TAGS, state.post._tags);
     return req;
   },
   async [ADD_POST]({ getters }) {

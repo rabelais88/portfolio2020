@@ -1,8 +1,10 @@
 import _cloneDeep from 'lodash/cloneDeep';
+
 export const mapArticle = (_article) => {
   const a = _cloneDeep(_article);
   a._createdAt = new Date(a.createdAt).getTime();
   a._updatedAt = new Date(a.updatedAt).getTime();
+  a._tags = _article.tags.map((t) => t.value);
   return a;
 };
 

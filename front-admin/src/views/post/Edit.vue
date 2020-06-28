@@ -53,6 +53,35 @@
           />
         </el-form-item>
 
+        <el-form-item label="tags">
+          <el-tag
+            v-for="tag in userTags"
+            :key="tag"
+            closable
+            :disable-transitions="false"
+            @close="onRemoveTag(tag)"
+            >{{ tag }}</el-tag
+          >
+          <el-autocomplete
+            class="input-new-tag"
+            v-if="tagInputVisible"
+            v-model="tagInput"
+            ref="saveTagInput"
+            size="mini"
+            @keyup.enter.native="onInputConfirm"
+            @select="onTagSelect"
+            :fetch-suggestions="tagSearch"
+          >
+          </el-autocomplete>
+          <el-button
+            v-else
+            class="button-new-tag"
+            size="small"
+            @click="() => (tagInputVisible = true)"
+            >+ New Tag</el-button
+          >
+        </el-form-item>
+
         <el-form-item label="Last Edited">
           <span>{{ post.updatedAt }}</span>
         </el-form-item>
@@ -70,6 +99,7 @@
 <script>
 import store from '@/store';
 import { mapState, mapMutations, mapActions } from 'vuex';
+import { GET_TAGS } from '@/store/modules/article';
 import {
   INIT,
   ADD_POST,
@@ -80,12 +110,14 @@ import {
   SET_USER_DESC,
   SET_USER_LINK,
   SET_USER_COVER_IMAGE,
+  SET_USER_TAGS,
 } from '@/store/modules/post';
 import { Message, Loading } from 'element-ui';
 import { uploadFile, getFileUrl } from '@/api/upload';
 import asyncHandler from '@/utils/asyncHandler';
 
 export default {
+  data: () => ({ tagInput: '', tagInputVisible: false }),
   computed: {
     ...mapState('post', ['post']),
     ...mapState('post', {
@@ -94,6 +126,7 @@ export default {
       _userDesc: 'userDesc',
       _userLink: 'userLink',
       _userCoverImage: 'userCoverImage',
+      _userTags: 'userTags',
       postId: 'id',
     }),
     userTitle: {
@@ -136,6 +169,14 @@ export default {
         this.setUserCoverImage(v);
       },
     },
+    userTags: {
+      get() {
+        return this._userTags;
+      },
+      set(v) {
+        this.setUserTags(v);
+      },
+    },
     userCoverImageUrl() {
       return getFileUrl(this.userCoverImage);
     },
@@ -152,16 +193,39 @@ export default {
       setUserDesc: SET_USER_DESC,
       setUserLink: SET_USER_LINK,
       setUserCoverImage: SET_USER_COVER_IMAGE,
+      setUserTags: SET_USER_TAGS,
       init: INIT,
       loadPost: LOAD_POST,
     }),
     ...mapActions('post', { addPost: ADD_POST, modifyPost: MODIFY_POST }),
+    ...mapActions('article', { getTags: GET_TAGS }),
+    async tagSearch(keyword, cb) {
+      const tags = await this.getTags(keyword);
+      console.log('tag', tags);
+      cb(tags.map((t) => ({ value: t.tag, count: t.articleCount })));
+    },
     async onSubmit() {
       this.$loading = Loading.service({ fullscreen: true });
       await this.modifyPost();
       Message({ message: 'Post is updated!', type: 'success', duration: 5000 });
       this.$loading.close();
       return null;
+    },
+    onRemoveTag(tag) {
+      this.userTags = this.userTags.filter((t) => t !== tag);
+    },
+    onTagSelect({ value, count }) {
+      this.userTags = [...this.userTags, value];
+      this.tagInput = '';
+      this.tagInputVisible = false;
+    },
+    onInputConfirm() {
+      // replace this with autocomplete later
+      if (this.tagInput !== '') {
+        this.userTags = [...this.userTags, this.tagInput];
+      }
+      this.tagInputVisible = false;
+      this.tagInput = '';
     },
     beforeCoverUpload(file) {}, // return bool for validation
     onRemoveCoverImage() {
@@ -190,3 +254,21 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 130px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+</style>
