@@ -46,6 +46,22 @@
     >
       <i class="el-icon-delete"></i>delete selected
     </el-button>
+    <el-tag
+      closable
+      :disable-transitions="false"
+      @close="onRemoveTag"
+      v-if="!tagInputVisible"
+      >{{ tag }}</el-tag
+    >
+    <el-autocomplete
+      class="input-new-tag"
+      v-if="tagInputVisible"
+      v-model="tagInput"
+      ref="saveTagInput"
+      size="mini"
+      @select="onTagSelect"
+      :fetch-suggestions="tagSearch"
+    />
     <el-pagination
       small
       layout="prev, pager, next"
@@ -67,6 +83,8 @@ import {
   GET_ARTICLES,
   SET_PAGE,
   GET_ARTICLE,
+  GET_TAGS,
+  SET_TAG,
   // REMOVE_ARTICLE,
   REMOVE_ARTICLES,
 } from '@/store/modules/article';
@@ -75,9 +93,11 @@ import { LOAD_POST } from '@/store/modules/post';
 export default {
   data: () => ({
     selectedArticlesId: [],
+    tagInputVisible: true,
+    tagInput: '',
   }),
   computed: {
-    ...mapState('article', ['articles', 'count', 'pageSize', 'page']),
+    ...mapState('article', ['articles', 'count', 'pageSize', 'page', 'tag']),
     ...mapState('article', { _page: 'page' }),
     page: {
       get() {
@@ -91,16 +111,23 @@ export default {
   methods: {
     ...mapMutations('article', {
       setPage: SET_PAGE,
+      setTag: SET_TAG,
     }),
     ...mapActions('article', {
       getArticles: GET_ARTICLES,
       getArticle: GET_ARTICLE,
       // removeArticle: REMOVE_ARTICLE,
       removeArticles: REMOVE_ARTICLES,
+      getTags: GET_TAGS,
     }),
     ...mapActions('post', {
       loadPost: LOAD_POST,
     }),
+    onRemoveTag() {
+      this.tagInputVisible = true;
+      this.tagInput = '';
+      this.setTag('');
+    },
     onSelectionChange(rows) {
       this.selectedArticlesId = rows.map((r) => r.id);
     },
@@ -121,7 +148,6 @@ export default {
       return null;
     },
     onEdit(article) {
-      console.log('onEdit', { article });
       if (article.type === 'POST') {
         this.$router.push({
           name: 'EditPost',
@@ -131,23 +157,40 @@ export default {
       }
       return null;
     },
+    async tagSearch(keyword, cb) {
+      const tags = await this.getTags(keyword);
+      cb(tags.map((t) => ({ value: t.tag, count: t.articleCount })));
+    },
+    onTagSelect({ value, count }) {
+      this.setTag(value);
+      this.tagInput = '';
+      this.tagInputVisible = false;
+      this.$router.push({ query: { tag: value, page: 1 } });
+    },
   },
   async beforeRouteUpdate(to, from, next) {
     const page = Math.round((to.query || {}).page || 1);
+    const tag = (to.query || {}).tag || '';
     if (page >= 1) {
       await store.commit(`article/${SET_PAGE}`, page, {
         root: true,
       });
-      await store.dispatch(`article/${GET_ARTICLES}`, null, { root: true });
     }
+    if (tag !== '') {
+      await store.commit(`article/${SET_TAG}`, tag, { root: true });
+    }
+    await store.dispatch(`article/${GET_ARTICLES}`, null, { root: true });
     next();
   },
   async beforeRouteEnter(to, from, next) {
-    console.log({ to, from, next });
     const page = Math.round((to.query || {}).page || 1);
+    const tag = (to.query || {}).tag || '';
     await store.commit(`article/${SET_PAGE}`, page, {
       root: true,
     });
+    if (tag !== '') {
+      await store.commit(`article/${SET_TAG}`, tag, { root: true });
+    }
     await store.dispatch(`article/${GET_ARTICLES}`, null, { root: true });
     next();
   },

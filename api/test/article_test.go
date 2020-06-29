@@ -1,6 +1,7 @@
 package control
 
 import (
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -67,7 +68,8 @@ func TestGetArticles(t *testing.T) {
 
 	tag := model.Tag{}
 	db.Take(&tag)
-	e.GET(`/articles`).WithQuery("tag", tag.Value).Expect().Status(http.StatusOK)
+	a := e.GET(`/articles`).WithQuery("tag", tag.Value).Expect().Status(http.StatusOK).JSON().Object().Value("list").Array().Raw().([]model.Article)
+	log.Println(a)
 }
 
 func TestDeleteArticle(t *testing.T) {

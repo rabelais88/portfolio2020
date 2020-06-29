@@ -11,25 +11,34 @@ const getDefaultArticleState = () => ({
   count: 0,
   article: {},
   pageSize: 10,
+  tag: '',
   // tags for autocomplete
   // tagKeyword: '',
   // tags: [],
 });
 
+export const INIT = 'INIT';
 export const SET_ARTICLES = 'SET_ARTICLES';
 export const SET_PAGE = 'SET_PAGE';
 export const SET_ARTICLE_ID = 'SET_ARTICLE_ID';
 export const SET_COUNT = 'SET_COUNT';
 export const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
+export const SET_TAG = 'SET_TAG';
 // export const SET_TAG_KEYWORD = 'SET_TAG_KEYWORD';
 // export const SET_TAGS = 'SET_TAGS';
 
 const mutations = {
+  [INIT](state) {
+    Object.entries(getDefaultArticleState()).forEach(([key, value]) => {
+      state[key] = value;
+    });
+  },
   [SET_ARTICLES]: (state, articles) => (state.articles = articles),
   [SET_PAGE]: (state, page) => (state.page = page),
   [SET_ARTICLE_ID]: (state, articleId) => (state.articleId = articleId),
   [SET_COUNT]: (state, count) => (state.count = count),
   [SET_PAGE_SIZE]: (state, pageSize) => (state.pageSize = pageSize),
+  [SET_TAG]: (state, tag) => (state.tag = tag),
   // [SET_TAG_KEYWORD]: (state, keyword) => (state.keyword = keyword),
   // [SET_TAGS]: (state, tags) => (state.tags = tags),
 };
@@ -43,6 +52,7 @@ export const REMOVE_ARTICLES = 'REMOVE_ARTICLES';
 const actions = {
   async [GET_ARTICLES]({ commit, state }) {
     const opt = { page: state.page, size: state.pageSize };
+    if (state.tag !== '') opt.tag = state.tag;
     const req = await asyncHandler(getArticles, opt);
     if (req.error) {
       return req;
