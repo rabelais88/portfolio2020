@@ -19,6 +19,9 @@ SECRET_JWT=...
 ADMIN_GMAIL_ACCOUNT=...
 ALLOWED_ORIGINS=http://localhost:5000,http://localhost:3000 # front-admin, front-www. separate with comma(,)
 FILE_LOCATION=/usr/data/files
+# optional env for testing & development
+DB_MEMORY=true # in-memory DB instead of POSTGRESQL
+FAKE_DATA=true # creates pile of fake data when the server starts
 ```
 
 ```sh

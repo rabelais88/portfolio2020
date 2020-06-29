@@ -66,7 +66,7 @@ func TestModifyPost(t *testing.T) {
 		Desc:       "testDesc",
 		CoverImage: "testCoverImage",
 		Link:       "https://google.com",
-		Tags: []*model.Tag{
+		Tags: []model.Tag{
 			{Value: "testTag1"},
 			{Value: "testTag2"},
 		},

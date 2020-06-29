@@ -39,9 +39,9 @@ func MakeFakeData(db *gorm.DB) {
 	for i := 0; i < 100; i++ {
 		rand.Seed(time.Now().UnixNano())
 
-		var tags []*model.Tag
+		var tags []model.Tag
 		for t := 0; t < rand.Intn(10); t++ {
-			tags = append(tags, &model.Tag{Value: gofakeit.BuzzWord()})
+			tags = append(tags, model.Tag{Value: gofakeit.BuzzWord()})
 		}
 
 		p := &model.Post{

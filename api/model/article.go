@@ -15,7 +15,7 @@ type Article struct {
 	Desc       string `json:"desc"`
 	CoverImage string `json:"coverImage"`
 	Link       string `json:"link"`
-	Tags       []*Tag `gorm:"many2many:article_tags;association_foreignkey:value;foreign_key:iD;" json:"tags"`
+	Tags       []Tag  `gorm:"many2many:article_tags;association_foreignkey:value;foreign_key:iD;" json:"tags"`
 }
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {

@@ -64,6 +64,10 @@ func TestGetArticles(t *testing.T) {
 	})
 
 	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().Value("list").Array().First().Object().ValueEqual("title", "testTitle")
+
+	tag := model.Tag{}
+	db.Take(&tag)
+	e.GET(`/articles`).WithQuery("tag", tag.Value).Expect().Status(http.StatusOK)
 }
 
 func TestDeleteArticle(t *testing.T) {
@@ -93,5 +97,4 @@ func TestDeleteArticle(t *testing.T) {
 	if afterCount >= beforeCount {
 		t.Errorf("count before %d count after %d - record not deleted", beforeCount, afterCount)
 	}
-	e.GET(`/articles`).Expect().Status(http.StatusOK)
 }

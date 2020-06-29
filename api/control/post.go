@@ -56,9 +56,9 @@ func AddPost(c echo.Context) error {
 		return MakeError(http.StatusConflict, "POST_ID_CONFLICT")
 	}
 
-	p.Article.Tags = gubrak.From(strings.Split(b.Tags, ",")).Map(func(tag string) *model.Tag {
-		return &model.Tag{Value: tag}
-	}).Result().([]*model.Tag)
+	p.Article.Tags = gubrak.From(strings.Split(b.Tags, ",")).Map(func(tag string) model.Tag {
+		return model.Tag{Value: tag}
+	}).Result().([]model.Tag)
 
 	cc.Db.Create(&p)
 	cc.Db.Save(&p)
@@ -97,9 +97,9 @@ func ModifyPost(c echo.Context) error {
 	p := &model.Post{ArticleID: b.ID}
 	cc.Db.Preload("Article").Find(&p)
 
-	ts := gubrak.From(strings.Split(b.Tags, ",")).Map(func(tag string) *model.Tag {
-		return &model.Tag{Value: tag}
-	}).Result().([]*model.Tag)
+	ts := gubrak.From(strings.Split(b.Tags, ",")).Map(func(tag string) model.Tag {
+		return model.Tag{Value: tag}
+	}).Result().([]model.Tag)
 
 	p.Article.Title = b.Title
 	p.Article.Link = b.Link

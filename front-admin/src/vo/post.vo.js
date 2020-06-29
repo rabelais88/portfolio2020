@@ -8,6 +8,6 @@ export const mapPost = (post) => {
   p._link = article.link;
   p._coverImage = article.coverImage;
   p._postCreatedAt = article.createdAt;
-  p._tags = p.article.tags.map(p => p.value);
+  p._tags = (p.article.tags || []).map(p => p.value);
   return p;
 };

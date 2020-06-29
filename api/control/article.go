@@ -51,6 +51,9 @@ func GetArticle(c echo.Context) error {
 type ArticlesQuery struct {
 	PagingQuery
 	Type string `query:"type" json:"type" validate:"omitempty,alphanum"`
+	// Tags    string `query:"tags" validate:"omitempty"` // tags separated by comma(,)
+	Tag     string `query:"tag" validate:"omitempty"`
+	Keyword string `query:"keyword" validate:"omitempty,alphanum"`
 }
 
 type ArticlesResponse struct {
@@ -71,6 +74,11 @@ func GetArticles(c echo.Context) error {
 
 	var articles []model.Article
 	articleDb := cc.Db.Order("updated_at desc").Preload("Tags").Model(model.Article{})
+	if q.Tag != "" {
+		targetTag := model.Tag{Value: q.Tag}
+		articleDb = cc.Db.Model(&targetTag).Related(&model.Article{}, "Articles").Preload("Tags")
+	}
+
 	if q.Type != "" {
 		articleDb = articleDb.Where(model.Article{Type: q.Type})
 	}
