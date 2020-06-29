@@ -75,8 +75,10 @@ func GetArticles(c echo.Context) error {
 	var articles []model.Article
 	articleDb := cc.Db.Order("updated_at desc").Preload("Tags").Model(model.Article{})
 	if q.Tag != "" {
-		targetTag := model.Tag{Value: q.Tag}
-		articleDb = cc.Db.Model(&targetTag).Related(&model.Article{}, "Articles").Preload("Tags")
+		log.Println("tag", q.Tag)
+		targetTag := model.Tag{}
+		cc.Db.Where(&model.Tag{Value: q.Tag}).Find(&targetTag)
+		articleDb = cc.Db.Model(&targetTag).Related(&articles, "Articles").Preload("Tags")
 	}
 
 	if q.Type != "" {
