@@ -1,0 +1,27 @@
+# offline dev only
+# environment variables from orchestration would override default environment setup
+version: "3.7"
+services:
+
+  db:
+    image: postgres:13
+    restart: always
+    # deploy:
+    #   restart_policy:
+    #     condition: on-failure
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=portfolio
+    networks:
+      - backend
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+networks:
+  backend:
+    driver: overlay
+volumes:
+  db-data:
