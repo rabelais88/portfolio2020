@@ -4,9 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/novalagung/gubrak/v2"
 	"github.com/rabelais88/portfolio2020/api/env"
-	"github.com/rabelais88/portfolio2020/api/model"
 )
 
 type BrowseTagsQuery struct {
@@ -14,8 +12,8 @@ type BrowseTagsQuery struct {
 }
 
 type BrowseTagsResponseItem struct {
-	Tag          string `json:"tag"`
-	ArticleCount int    `json:"articleCount"`
+	TagValue string `json:"tagValue"`
+	Count    int    `json:"count"` // article count
 }
 
 type BrowseTagsResponse struct {
@@ -29,20 +27,17 @@ func BrowseTags(c echo.Context) error {
 	if err := cc.Bind(b); err != nil {
 		return MakeError(http.StatusBadRequest, "QUERY_NOT_READABLE")
 	}
-	// if err := cc.Validate(b); err != nil {
-	// 	return err
-	// }
 
-	ts := []model.Tag{}
-	if b.Keyword == "" {
-		cc.Db.Preload("Articles").Limit(10).Find(&ts)
-	} else {
-		cc.Db.Preload("Articles").Where("value LIKE ?", b.Keyword+"%").Limit(10).Find(&ts)
+	// SELECT tag_value, COUNT(article_id) FROM public.article_tags GROUP BY tag_value ORDER BY COUNT(article_id) DESC;
+	// method 1 - does work, but the count becomes 0 on in-memory mode.
+	ts := []BrowseTagsResponseItem{}
+	db := cc.Db.Table("article_tags").Select("tag_value, COUNT(article_id)").Group("tag_value").Order("COUNT(article_id) desc").Limit(10)
+	if b.Keyword != "" {
+		db = db.Where("tag_value LIKE ?", b.Keyword+"%")
 	}
-	rts := gubrak.From(ts).Map(func(t model.Tag) BrowseTagsResponseItem {
-		return BrowseTagsResponseItem{Tag: t.Value, ArticleCount: len(t.Articles)}
-	}).Result().([]BrowseTagsResponseItem)
-	err := cc.JSON(http.StatusOK, BrowseTagsResponse{rts})
+	db.Scan(&ts)
+
+	err := cc.JSON(http.StatusOK, BrowseTagsResponse{ts})
 	if err != nil {
 		return MakeError(http.StatusInternalServerError, "FAILED_MAKE_RESPONSE")
 	}

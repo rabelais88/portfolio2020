@@ -36,7 +36,7 @@ func TestAddPost(t *testing.T) {
 	}).Expect().Status(http.StatusOK).JSON().Object().Value("articleId").String().Raw()
 
 	e.GET(`/article`).WithQuery("id", id).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("content", "testing 1234")
-	e.GET(`/tags`).WithQuery("keyword", "tag1").Expect().Status(http.StatusOK).JSON().Object().Value("tags").Array().First().Object().ValueEqual("articleCount", 1)
+	e.GET(`/tags`).WithQuery("keyword", "tag1").Expect().Status(http.StatusOK).JSON().Object().Value("tags").Array().First().Object().ValueEqual("count", 1)
 }
 
 func TestModifyPost(t *testing.T) {

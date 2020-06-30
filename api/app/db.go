@@ -20,7 +20,7 @@ func ConnectDB(config *env.Config) *gorm.DB {
 		dbType = "sqlite3"
 		log.Println("DB on memory for local test")
 	case env.ENVIRONMENTS.DEV:
-		if config.DBMemory == `true` {
+		if config.DBMemory {
 			dbPath = ":memory:"
 			dbType = "sqlite3"
 			log.Println("DB on memory for local test")
@@ -37,6 +37,11 @@ func ConnectDB(config *env.Config) *gorm.DB {
 	}
 
 	db.AutoMigrate(&model.Post{}, &model.Article{}, &model.User{}, &model.Tag{})
+
+	if (config.Env == env.ENVIRONMENTS.TEST || config.Env == env.ENVIRONMENTS.DEV) && config.DBDebug {
+		log.Println("DB logging enabled")
+		db.LogMode(true)
+	}
 
 	// for testing...
 	// db.Create(&model.Post{

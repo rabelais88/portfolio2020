@@ -75,12 +75,9 @@ func GetArticles(c echo.Context) error {
 	var articles []model.Article
 	articleDb := cc.Db.Order("updated_at desc").Preload("Tags").Model(model.Article{})
 	if q.Tag != "" {
-		cc.Db.LogMode(true)
-		log.Println("tag", q.Tag)
-
 		// proper sql statement for fetching articles with specific tag value
 		// SELECT * FROM articles INNER JOIN article_tags ON article_id = articles.id AND tag_value = 'firmware' LIMIT 1000;
-		articleDb = cc.Db.Joins("INNER JOIN article_tags ON article_id = articles.id AND tag_value = ?", q.Tag).Model(model.Article{}).Preload("Tags")
+		articleDb = cc.Db.Joins("INNER JOIN article_tags ON article_id = articles.id AND tag_value = ?", q.Tag).Model(model.Article{}).Preload("Tags").Order("updated_at desc")
 	}
 
 	if q.Type != "" {

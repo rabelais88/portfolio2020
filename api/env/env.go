@@ -50,7 +50,8 @@ type Config struct {
 	DBPort            string
 	DBUser            string
 	DBName            string
-	DBMemory          string // for local test
+	DBMemory          bool // DB in-memory mode
+	DBDebug           bool // GORM DB debug messages
 	DBPassword        string
 	SecretJWT         string
 	GoogleID          string
@@ -88,6 +89,9 @@ func GetConfig() *Config {
 		fileLoc, _ = filepath.Abs(defaultFileLoc)
 	}
 
+	_fakeData := lib.CheckString(os.Getenv(`FAKE_DATA`), `false`)
+	_dbMemory := lib.CheckString(os.Getenv(`DB_MEMORY`), `false`)
+	_dbDebug := lib.CheckString(os.Getenv(`DB_DEBUG`), `false`)
 	_config := Config{
 		Url:               lib.CheckString(os.Getenv(`URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 		Port:              port,
@@ -96,7 +100,8 @@ func GetConfig() *Config {
 		DBPort:            lib.CheckString(os.Getenv(`DB_PORT`), `5432`),
 		DBUser:            os.Getenv(`DB_USER`),
 		DBName:            lib.CheckString(os.Getenv(`DB_NAME`), `portfolio2020`),
-		DBMemory:          lib.CheckString(os.Getenv(`DB_MEMORY`), `false`),
+		DBMemory:          false,
+		DBDebug:           false,
 		DBPassword:        os.Getenv(`DB_PASSWORD`),
 		SecretJWT:         lib.CheckString(os.Getenv(`SECRET_JWT`), gubrak.RandomString(15)),
 		GoogleID:          os.Getenv(`GOOGLE_CLIENT_ID`),
@@ -108,9 +113,14 @@ func GetConfig() *Config {
 		FakeData:          false,
 	}
 
-	fakeData := lib.CheckString(os.Getenv(`FAKE_DATA`), `false`)
-	if fakeData == `true` {
+	if _fakeData == `true` {
 		_config.FakeData = true
+	}
+	if _dbMemory == `true` {
+		_config.DBMemory = true
+	}
+	if _dbDebug == `true` {
+		_config.DBDebug = true
 	}
 
 	return &_config
