@@ -12,6 +12,7 @@ require (
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/ijustfool/docker-secrets v0.0.0-20191021062307-b25ea5007562
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/jinzhu/gorm v1.9.14
 	github.com/joho/godotenv v1.3.0
@@ -21,6 +22,7 @@ require (
 	github.com/lib/pq v1.7.0 // indirect
 	github.com/mattn/go-colorable v0.1.7 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
+	github.com/mitchellh/mapstructure v1.3.2 // indirect
 	github.com/novalagung/gubrak/v2 v2.0.1
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect

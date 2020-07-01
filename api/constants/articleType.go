@@ -20,3 +20,13 @@ var ARTICLES = &_articles{
 	NOTICE: NOTICE,
 	MEDIA:  MEDIA,
 }
+
+func CheckProperType(articleType string) bool {
+	articleMap := map[string]string{
+		WORK:   WORK,
+		POST:   POST,
+		NOTICE: NOTICE,
+		MEDIA:  MEDIA,
+	}
+	return articleMap[articleType] != ""
+}

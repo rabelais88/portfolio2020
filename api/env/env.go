@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	secrets "github.com/ijustfool/docker-secrets"
 	"github.com/joho/godotenv"
 	"github.com/novalagung/gubrak/v2"
 	"github.com/rabelais88/portfolio2020/api/lib"
@@ -127,6 +128,31 @@ func GetConfig() *Config {
 	}
 	if _jaeger == `true` {
 		_config.Jaeger = true
+	}
+
+	dockerSecrets, err := secrets.NewDockerSecrets(os.Getenv("SECRET_PATH"))
+	if err == nil {
+		secrets := dockerSecrets.GetAll()
+		dbPassword := secrets[os.Getenv("DB_PASSWORD_FILE")]
+		if dbPassword != "" {
+			_config.DBPassword = dbPassword
+		}
+		secretJWT := secrets[os.Getenv("SECRET_JWT_FILE")]
+		if secretJWT != "" {
+			_config.SecretJWT = secretJWT
+		}
+		googleId := secrets[os.Getenv("GOOGLE_ID_FILE")]
+		if googleId != "" {
+			_config.GoogleID = secrets["GOOGLE_ID_FILE"]
+		}
+		googleSecret := secrets[os.Getenv("GOOGLE_SECRET_FILE")]
+		if googleSecret != "" {
+			_config.GoogleSecret = googleSecret
+		}
+		adminGmailAccount := secrets[os.Getenv("ADMIN_GMAIL_ACCOUNT")]
+		if adminGmailAccount != "" {
+			_config.AdminGmailAccount = adminGmailAccount
+		}
 	}
 
 	return &_config

@@ -25,6 +25,9 @@ services:
       - REDIRECT_URL=http://localhost:5000/login
       # CORS setting
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5000
+      - JAEGER=true
+      - JAEGER_AGENT_HOST=localhost
+      - JAEGER_AGENT_PORT=6831
       # secrets(will be later provided via file)
       # - SECRET_JWT=
       # - ADMIN_GMAIL_ACCOUNT=
@@ -49,6 +52,23 @@ services:
       - backend
     volumes:
       - db-data:/var/lib/postgresql/data
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.18
+    restart: always
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    ports:
+     # - 5775:5775/udp # legacy client
+     - 6831:6831/udp # accept jaeger.thrift over compact thrift protocol
+     - 6832:6832/udp # accept jaeger.thrift over binary thrift protocol
+     - 5778:5778 # serve configs
+     - 16686:16686 # serve frontend(UI)
+     - 14268:14268 # accept jaeger.thrift directly from clients
+     - 14250:14250 # accept model.proto
+     # - 9411:9411 # Zipkin compatible endpoint (optional)
+    networks:
+      - backend
 
   front-www:
     # image: portfolio2020-front-www:latest

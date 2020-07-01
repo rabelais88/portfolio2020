@@ -52,8 +52,8 @@ type ArticlesQuery struct {
 	PagingQuery
 	Type string `query:"type" json:"type" validate:"omitempty,alphanum"`
 	// Tags    string `query:"tags" validate:"omitempty"` // tags separated by comma(,)
-	Tag     string `query:"tag" validate:"omitempty"`
-	Keyword string `query:"keyword" validate:"omitempty,alphanum"`
+	Tag     string `query:"tag"`
+	Keyword string `query:"keyword"`
 }
 
 type ArticlesResponse struct {
@@ -83,6 +83,11 @@ func GetArticles(c echo.Context) error {
 	if q.Type != "" {
 		articleDb = articleDb.Where(model.Article{Type: q.Type})
 	}
+
+	if q.Keyword != "" {
+		articleDb = articleDb.Where("title LIKE ?", q.Keyword+"%")
+	}
+
 	pageSize := lib.CheckInt(q.Size, 10)
 	p := paginator.New(adapter.NewGORMAdapter(articleDb), pageSize)
 	p.SetPage(q.Page)
@@ -98,8 +103,6 @@ func GetArticles(c echo.Context) error {
 		PagedResponse: PagedResponse{
 			p.Nums(),
 			q.Page,
-			view.Next(),
-			view.Prev(),
 			view.Pages(),
 			pageSize,
 		},

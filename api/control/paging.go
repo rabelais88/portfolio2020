@@ -15,10 +15,10 @@ type PagingQuery struct {
 }
 
 type PagedResponse struct {
-	Count int   `json:"count"`
-	Page  int   `json:"page"`
-	Next  int   `json:"next"`
-	Prev  int   `json:"prev"`
+	Count int `json:"count"`
+	Page  int `json:"page"`
+	// Next  int   `json:"next"`
+	// Prev  int   `json:"prev"`
 	Pages []int `json:"pages"`
 	Size  int   `json:"size"`
 	// add .List here
