@@ -1,20 +1,29 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">
-      name: {{ name }}
-    </div>
+    <div class="dashboard-text">name: {{ name }}</div>
+    <div v-if="loadState === SUCCESS">{{ JSON.stringify(tags) }}</div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
+import { LOAD_DASHBOARD } from '@/store/modules/dashboard';
+import { LOADING, SUCCESS, FAIL } from '@/constants/loadState';
 
 export default {
   name: 'Dashboard',
   computed: {
-    ...mapGetters([
-      'name',
-    ]),
+    LOADING: () => LOADING,
+    SUCCESS: () => SUCCESS,
+    FAIL: () => FAIL,
+    ...mapGetters(['name']),
+    ...mapState('dashboard', ['loadState', 'tags', 'dashboard']),
+  },
+  methods: {
+    ...mapActions('dashboard', { loadDashboard: LOAD_DASHBOARD }),
+  },
+  beforeMount() {
+    this.loadDashboard();
   },
 };
 </script>

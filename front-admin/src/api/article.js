@@ -17,12 +17,13 @@ export function getArticle(articleId) {
   });
 }
 
-export function getTags(keyword) {
-  return request({
+export function getTags(keyword = '') {
+  const opts = {
     url: `/${TAGS}`,
     methods: 'get',
-    params: { keyword },
-  });
+  };
+  if (keyword !== '') opts.params = { keyword };
+  return request(opts);
 }
 
 export function removeArticle(articleId) {

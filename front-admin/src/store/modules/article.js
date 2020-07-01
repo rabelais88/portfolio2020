@@ -72,7 +72,7 @@ const actions = {
     commit(SET_COUNT, req.result.count);
     return req;
   },
-  async [GET_TAGS]({ commit, state }, keyword) {
+  async [GET_TAGS]({ commit, state }, keyword = '') {
     const req = await asyncHandler(getTags, keyword);
     if (req.error) {
       console.error(req.error);

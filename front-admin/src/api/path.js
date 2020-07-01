@@ -7,3 +7,4 @@ export const ASSETS = 'assets';
 export const FILE = 'file';
 export const TAGS = 'tags';
 export const WORK = 'work';
+export const DASHBOARD = 'dashboard';

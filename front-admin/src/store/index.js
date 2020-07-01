@@ -7,6 +7,7 @@ import user from './modules/user';
 import article from './modules/article';
 import post from './modules/post';
 import work from './modules/work';
+import dashboard from './modules/dashboard';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     article,
     post,
     work,
+    dashboard,
   },
   getters,
 });

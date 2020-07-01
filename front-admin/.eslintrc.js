@@ -45,6 +45,7 @@ module.exports = {
     'import/prefer-default-export': 1,
     'vue/html-self-closing': 0,
     'vue/attributes-order': 0,
+    'vue/order-in-components': 0,
     // "vue/max-attributes-per-line": [2, {
     //   "singleline": 10,
     //   "multiline": {
