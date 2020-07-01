@@ -1,13 +1,12 @@
-import { addPost, modifyPost } from '@/api/post';
+import { addWork, modifyWork } from '@/api/work';
 import asyncHandler from '@/utils/asyncHandler';
-import { mapPost } from '@/vo/post.vo';
+import { mapWork } from '@/vo/work.vo';
 import { getArticle } from '@/api/article';
 
 const getDefaultPostState = () => ({
   id: null,
-  post: {},
+  work: {},
   userTitle: '',
-  userContent: '',
   userLink: '',
   userCoverImage: '',
   userDesc: '',
@@ -15,18 +14,17 @@ const getDefaultPostState = () => ({
 });
 
 export const INIT = 'INIT';
-export const SET_POST_ID = 'SET_POST_ID';
-export const SET_POST = 'SET_POST';
+export const SET_WORK_ID = 'SET_WORK_ID';
+export const SET_WORK = 'SET_WORK';
 export const SET_USER_TITLE = 'SET_USER_TITLE';
-export const SET_USER_CONTENT = 'SET_USER_CONTENT';
 export const SET_USER_LINK = 'SET_USER_LINK';
 export const SET_USER_COVER_IMAGE = 'SET_USER_COVER_IMAGE';
 export const SET_USER_DESC = 'SET_USER_DESC';
 export const SET_USER_TAGS = 'SET_USER_TAGS';
 
-export const ADD_POST = 'ADD_POST';
-export const MODIFY_POST = 'MODIFY_POST';
-export const LOAD_POST = 'LOAD_POST';
+export const ADD_WORK = 'ADD_WORK';
+export const MODIFY_WORK = 'MODIFY_WORK';
+export const LOAD_WORK = 'LOAD_WORK';
 
 const mutations = {
   [INIT](state) {
@@ -35,10 +33,9 @@ const mutations = {
       ([key, value]) => (state[key] = value),
     );
   },
-  [SET_POST]: (state, post) => (state.post = post),
-  [SET_POST_ID]: (state, postId) => (state.id = postId),
+  [SET_WORK]: (state, work) => (state.work = work),
+  [SET_WORK_ID]: (state, workId) => (state.id = workId),
   [SET_USER_TITLE]: (state, title) => (state.userTitle = title),
-  [SET_USER_CONTENT]: (state, content) => (state.userContent = content),
   [SET_USER_LINK]: (state, link) => (state.userLink = link),
   [SET_USER_COVER_IMAGE]: (state, coverImage) =>
     (state.userCoverImage = coverImage),
@@ -47,9 +44,9 @@ const mutations = {
 };
 
 const _getters = {
-  // user input transformed into request body
-  userPost(state) {
-    const p = {
+  userWork(state) {
+    // user input transformed into request body
+    const w = {
       title: state.userTitle,
       desc: state.userDesc,
       content: state.userContent,
@@ -57,39 +54,39 @@ const _getters = {
       link: state.userLink,
       tags: state.userTags.join(','),
     };
-    if (state.id) p.id = state.id;
-    return p;
+    if (state.id) w.id = state.id;
+    return w;
   },
 };
 
 const actions = {
-  async [LOAD_POST]({ commit, state }, articleId) {
+  async [LOAD_WORK]({ commit, state }, articleId) {
     const req = await asyncHandler(getArticle, articleId);
     if (req.error) {
       return req;
     }
-    const post = mapPost(req.result);
-    commit(SET_POST_ID, post.articleId);
-    commit(SET_POST, post);
+    const work = mapWork(req.result);
+    console.log('mapped work', {work})
+    commit(SET_WORK_ID, work.id);
+    commit(SET_WORK, work);
 
-    commit(SET_USER_TITLE, state.post._title);
-    commit(SET_USER_CONTENT, state.post.content);
-    commit(SET_USER_LINK, state.post._link);
-    commit(SET_USER_COVER_IMAGE, state.post._coverImage);
-    commit(SET_USER_DESC, state.post._desc);
-    commit(SET_USER_TAGS, state.post._tags);
+    commit(SET_USER_TITLE, state.work.title);
+    commit(SET_USER_LINK, state.work.link);
+    commit(SET_USER_COVER_IMAGE, state.work.coverImage);
+    commit(SET_USER_DESC, state.work.desc);
+    commit(SET_USER_TAGS, state.work.tags);
     return req;
   },
-  async [ADD_POST]({ getters }) {
-    const req = await asyncHandler(addPost, getters.userPost);
+  async [ADD_WORK]({ getters }) {
+    const req = await asyncHandler(addWork, getters.userWork);
     if (req.error) {
       console.error(req.error);
       return req;
     }
     return req;
   },
-  async [MODIFY_POST]({ getters }) {
-    const req = await asyncHandler(modifyPost, getters.userPost);
+  async [MODIFY_WORK]({ getters }) {
+    const req = await asyncHandler(modifyWork, getters.userWork);
     if (req.error) {
       console.error(req.error);
       return req;

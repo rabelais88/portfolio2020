@@ -6,3 +6,4 @@ export const ARTICLE = 'article';
 export const ASSETS = 'assets';
 export const FILE = 'file';
 export const TAGS = 'tags';
+export const WORK = 'work';

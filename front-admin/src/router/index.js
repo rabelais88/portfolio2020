@@ -81,6 +81,29 @@ const post = {
   ],
 };
 
+const work = {
+  path: '/work',
+  component: Layout,
+  name: 'Work',
+  meta: { title: 'work', icon: 'el-icon-document' },
+  redirect: '/work/create',
+  children: [
+    {
+      path: 'create',
+      name: 'CreateWork',
+      component: () => import('@/views/work/Create.vue'),
+      meta: { title: 'Register a Work', icon: 'el-icon-circle-plus' },
+    },
+    {
+      hidden: true,
+      path: 'edit/:articleId',
+      name: 'EditWork',
+      component: () => import('@/views/work/Edit.vue'),
+      meta: { title: 'Edit a Work', icon: 'el-icon-circle-plus' },
+    },
+  ],
+};
+
 const example = {
   path: '/example',
   component: Layout,
@@ -177,6 +200,7 @@ export const constantRoutes = [
   dashboard,
   article,
   post,
+  work,
   example,
 
   {

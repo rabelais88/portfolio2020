@@ -148,14 +148,13 @@ export default {
       return null;
     },
     onEdit(article) {
-      if (article.type === 'POST') {
-        this.$router.push({
-          name: 'EditPost',
-          params: { articleId: article.id },
-        });
-        return null;
-      }
-      return null;
+      const componentNames = {
+        POST: 'EditPost',
+        WORK: 'EditWork',
+      };
+      const compo = componentNames[article.type];
+      if (!compo) return null;
+      this.$router.push({ name: compo, params: { articleId: article.id } });
     },
     async tagSearch(keyword, cb) {
       const tags = await this.getTags(keyword);

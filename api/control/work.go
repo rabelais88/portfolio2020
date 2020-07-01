@@ -15,15 +15,15 @@ import (
 type AddWorkBody struct {
 	Title      string `json:"title" validate:"required"`
 	Desc       string `json:"desc" validate:"max=100"`
-	CoverImage string `json:"coverImage" validate:"omitempty,file|uri"`
+	CoverImage string `json:"coverImage"`
 	Link       string `json:"link" validate:"omitempty,file|uri"`
 	Tags       string `json:"tags"`
 }
 
 func AddWork(c echo.Context) error {
 	cc := c.(*env.CustomContext)
-	if cc.Get("userRole") != constants.USER_ROLE.ADMIN && cc.Config.Env != env.ENVIRONMENTS.TEST {
-		return MakeError(http.StatusUnauthorized, "NOT_AUTHORIZED")
+	if err := RoleAdminOnly(cc); err != nil {
+		return err
 	}
 
 	b := new(AddWorkBody)

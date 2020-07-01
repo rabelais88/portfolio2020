@@ -6,6 +6,7 @@ import settings from './modules/settings';
 import user from './modules/user';
 import article from './modules/article';
 import post from './modules/post';
+import work from './modules/work';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     user,
     article,
     post,
+    work,
   },
   getters,
 });
