@@ -137,10 +137,14 @@ func DeleteArticle(c echo.Context) error {
 	}
 	switch a.Type {
 	case "POST":
-		cc.Db.Where(&model.Post{ArticleID: q.ArticleID}).Delete(&model.Post{})
+		p := model.Post{}
+		cc.Db.Where(&model.Post{ArticleID: q.ArticleID}).Last(&p)
+		cc.Db.Delete(&model.Post{})
 	default:
+		// blank
 	}
-	cc.Db.Where(&model.Article{ID: q.ArticleID}).Delete(&model.Article{})
+	// cc.Db.Where(&model.Article{ID: q.ArticleID}).Delete(&model.Article{})
+	cc.Db.Delete(&a)
 	err := cc.JSON(http.StatusOK, DeleteArticleResponse{Success: true})
 	return err
 }
