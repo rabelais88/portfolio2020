@@ -30,5 +30,5 @@ func TestAddWork(t *testing.T) {
 		Desc:       gofakeit.Sentence(3),
 		CoverImage: gofakeit.ImageURL(340, 240),
 		Link:       gofakeit.URL(),
-	}).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("title", title)
+	}).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("title", title).ValueNotEqual("createdAt", "")
 }
