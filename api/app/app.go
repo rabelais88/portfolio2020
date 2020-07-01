@@ -11,6 +11,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/go-playground/validator"
+	"github.com/labstack/echo-contrib/jaegertracing"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -91,6 +92,12 @@ func Init() (http.Handler, *gorm.DB) {
 	// bails out if it's a test environment.
 	if config.Env == env.TEST {
 		return e, db
+	}
+
+	if config.Jaeger {
+		log.Println("jaeger tracing enabled")
+		c := jaegertracing.New(e, nil)
+		defer c.Close()
 	}
 
 	err := e.Start(_port)

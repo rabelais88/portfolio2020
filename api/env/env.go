@@ -61,6 +61,7 @@ type Config struct {
 	GoogleRedirectUrl string
 	FileLocation      string
 	FakeData          bool
+	Jaeger            bool
 }
 
 func GetConfig() *Config {
@@ -92,6 +93,7 @@ func GetConfig() *Config {
 	_fakeData := lib.CheckString(os.Getenv(`FAKE_DATA`), `false`)
 	_dbMemory := lib.CheckString(os.Getenv(`DB_MEMORY`), `false`)
 	_dbDebug := lib.CheckString(os.Getenv(`DB_DEBUG`), `false`)
+	_jaeger := lib.CheckString(os.Getenv(`JAEGER`), `false`)
 	_config := Config{
 		Url:               lib.CheckString(os.Getenv(`URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 		Port:              port,
@@ -111,6 +113,7 @@ func GetConfig() *Config {
 		GoogleRedirectUrl: lib.CheckString(os.Getenv(`REDIRECT_URL`), fmt.Sprintf(`http://localhost:%s`, port)),
 		FileLocation:      fileLoc,
 		FakeData:          false,
+		Jaeger:            false,
 	}
 
 	if _fakeData == `true` {
@@ -121,6 +124,9 @@ func GetConfig() *Config {
 	}
 	if _dbDebug == `true` {
 		_config.DBDebug = true
+	}
+	if _jaeger == `true` {
+		_config.Jaeger = true
 	}
 
 	return &_config
