@@ -20,24 +20,24 @@ import { mapArticle } from '../vo/article';
 const logger = new Logger('store/articleReducer.ts');
 
 export interface articleReducerDefaultState extends queryPaging {
-  //   articleId?: string;
   articles: article[];
   articleType: ARTICLE_TYPE;
   count: number;
   pages: number[];
   loadState: LOAD_STATE;
-  //   article: Partial<article>;
+  tag: string;
+  keyword: string;
 }
 
 export const getDefaultState = (): articleReducerDefaultState => ({
   articleType: ALL,
-  //   articleId: null,
-  //   article: {},
   articles: [],
   count: 0,
   pages: [],
   loadState: INIT,
   page: 0,
+  tag: '',
+  keyword: '',
 });
 
 const extraReducers = (builder) => {

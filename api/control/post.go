@@ -61,7 +61,7 @@ func AddPost(c echo.Context) error {
 	}).Result().([]model.Tag)
 
 	cc.Db.Create(&p)
-	cc.Db.Save(&p)
+	// cc.Db.Save(&p)
 
 	_p := &model.Post{ArticleID: p.ArticleID}
 	cc.Db.Find(&_p)

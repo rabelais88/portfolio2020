@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import setPosts, { SET_POSTS } from '../actions/setPosts';
-// import getPosts from '../actions/getPosts';
 import Logger from '../lib/logger';
 
 const logger = new Logger('store/postReducer');
