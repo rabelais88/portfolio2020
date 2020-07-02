@@ -132,25 +132,31 @@ func GetConfig() *Config {
 
 	dockerSecrets, err := secrets.NewDockerSecrets(os.Getenv("SECRET_PATH"))
 	if err == nil {
+		log.Println("docker secrets OK")
 		secrets := dockerSecrets.GetAll()
 		dbPassword := secrets[os.Getenv("DB_PASSWORD_FILE")]
 		if dbPassword != "" {
+			log.Println("docker secret has overwritten DB_PASSWORD")
 			_config.DBPassword = dbPassword
 		}
 		secretJWT := secrets[os.Getenv("SECRET_JWT_FILE")]
 		if secretJWT != "" {
+			log.Println("docker secret has overwritten SECRET_JWT")
 			_config.SecretJWT = secretJWT
 		}
 		googleId := secrets[os.Getenv("GOOGLE_ID_FILE")]
 		if googleId != "" {
-			_config.GoogleID = secrets["GOOGLE_ID_FILE"]
+			log.Println("docker secret has overwritten GOOGLE_ID")
+			_config.GoogleID = googleId
 		}
 		googleSecret := secrets[os.Getenv("GOOGLE_SECRET_FILE")]
 		if googleSecret != "" {
+			log.Println("docker secret has overwritten GOOGLE_SECRET")
 			_config.GoogleSecret = googleSecret
 		}
-		adminGmailAccount := secrets[os.Getenv("ADMIN_GMAIL_ACCOUNT")]
+		adminGmailAccount := secrets[os.Getenv("ADMIN_GMAIL_ACCOUNT_FILE")]
 		if adminGmailAccount != "" {
+			log.Println("docker secret has overwritten ADMIN_GMAIL_ACCOUNT")
 			_config.AdminGmailAccount = adminGmailAccount
 		}
 	}

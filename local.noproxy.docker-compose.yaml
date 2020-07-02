@@ -26,17 +26,25 @@ services:
       # CORS setting
       - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5000
       - JAEGER=true
-      - JAEGER_AGENT_HOST=localhost
+      - JAEGER_AGENT_HOST=jaeger
       - JAEGER_AGENT_PORT=6831
-      # secrets(will be later provided via file)
-      # - SECRET_JWT=
-      # - ADMIN_GMAIL_ACCOUNT=
-      # - GOOGLE_CLIENT_ID=
-      # - GOOGLE_CLIENT_SECRET=
+      # check api/env/env.go for more info
+      - SECRET_PATH=/run/secrets
+      - DB_PASSWORD_FILE=portfolio-db-password
+      - SECRET_JWT_FILE=portfolio-secret-jwt
+      - GOOGLE_ID_FILE=portfolio-google-client-id
+      - GOOGLE_SECRET_FILE=portfolio-google-client-secret
+      - ADMIN_GMAIL_ACCOUNT_FILE=portfolio-admin-gmail-account
     ports:
       - 4500:4500
     networks:
       - backend
+    secrets:
+      - portfolio-admin-gmail-account
+      - portfolio-google-client-id
+      - portfolio-google-client-secret
+      - portfolio-secret-jwt
+      - portfolio-db-password
 
   db:
     image: postgres:13
@@ -105,3 +113,15 @@ networks:
     driver: overlay
 volumes:
   db-data:
+secrets:
+  portfolio-admin-gmail-account:
+    # use external: true for production
+    file: ./secret/admin-gmail-account.secret
+  portfolio-google-client-id:
+    file: ./secret/google-client-id.secret
+  portfolio-google-client-secret:
+    file: ./secret/google-client-secret.secret
+  portfolio-secret-jwt:
+    file: ./secret/secret-jwt.secret
+  portfolio-db-password:
+    file: ./secret/db-password.secret

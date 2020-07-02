@@ -27,6 +27,13 @@ DB_DEBUG=true # allows to observe GORM internal debug messages
 # enables Jaeger tracing - this requires extensive env setting
 # https://echo.labstack.com/middleware/jaegertracing
 JAEGER=true
+# for docker secrets
+SECRET_PATH=/run/secrets # docker secret directory
+DB_PASSWORD_FILE=dbpassword.txt # overwrites DB_PASSWORD
+SECRET_JWT_FILE=jwtsecret.txt # overwrites SECRET_JWT
+GOOGLE_ID_FILE=googleid.txt # overwrites GOOGLE_ID
+GOOGLE_SECRET_FILE=googlesecret.txt # overwrites GOOGLE_SECRET
+ADMIN_GMAIL_ACCOUNT_FILE=admin_gmail_account.txt # overwrites ADMIN_GMAIL_ACCOUNT
 ```
 
 ```sh
