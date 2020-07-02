@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import article from '../types/article';
+// import article from '../types/article';
+import { article, articleResponse } from '../types/article';
 import listResponse from '../types/listResponse';
 import { resolvedResult } from '../lib/api';
 import LOAD_STATE, { LOADING, SUCCESS, FAIL } from '../types/loadState';
@@ -22,11 +23,11 @@ export const setArticleLoadState = createAction<LOAD_STATE>(
   'SET_ARTICLE_LOAD_STATE'
 );
 
-export const setArticles = createAction<article[]>('SET_ARTICLES');
+export const setArticles = createAction<articleResponse[]>('SET_ARTICLES');
 export const setArticlePages = createAction<number[]>('SET_PAGES');
 
 export const getArticles = createAsyncThunk<
-  resolvedResult<listResponse<article>>,
+  resolvedResult<listResponse<articleResponse>>,
   getArticlesArg
 >('GET_ARTICLES', async (arg, thunkAPI) => {
   thunkAPI.dispatch(setArticleLoadState(LOADING));
