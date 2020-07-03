@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Logger from '../lib/logger';
-import queryPaging from '../types/queryPaging';
 import LOAD_STATE, { INIT, LOADING, SUCCESS, FAIL } from '../types/loadState';
 import ARTICLE_TYPE, { ALL } from '../types/articleType';
 import {
@@ -14,20 +13,10 @@ import {
 } from '../actions/article';
 import listResponse from '../types/listResponse';
 import { resolvedResult } from '../lib/api';
-import { articleResponse, article, postResponse } from '../types/article';
+import { articleResponse, articleReducerDefaultState } from '../types/article';
 import { mapArticle } from '../vo/article';
 
 const logger = new Logger('store/articleReducer.ts');
-
-export interface articleReducerDefaultState extends queryPaging {
-  articles: article[];
-  articleType: ARTICLE_TYPE;
-  count: number;
-  pages: number[];
-  loadState: LOAD_STATE;
-  tag: string;
-  keyword: string;
-}
 
 export const getDefaultState = (): articleReducerDefaultState => ({
   articleType: ALL,

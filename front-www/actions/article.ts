@@ -6,16 +6,16 @@ import { article, articleResponse } from '../types/article';
 import listResponse from '../types/listResponse';
 import { resolvedResult } from '../lib/api';
 import LOAD_STATE, { LOADING, SUCCESS, FAIL } from '../types/loadState';
-import queryPaging from '../types/queryPaging';
 import Logger from '../lib/logger';
-import { getArticles as getArticlesRequest } from '../services/article';
+import {
+  getArticles as getArticlesRequest,
+  getArticlesRequestArg,
+} from '../services/article';
+import { defaultRootState } from '../types/rootState';
 
 const logger = new Logger('actions/getArticles.ts');
 
 // eslint-disable-next-line
-interface getArticlesArg extends queryPaging {
-  type?: string;
-}
 
 export const setArticleCount = createAction<number>('SET_ARTICLE_COUNT');
 export const setArticlePage = createAction<number>('SET_ARTICLE_PAGE');
@@ -30,23 +30,25 @@ export const getArticles = createAsyncThunk<
   // Return type of the payload creator
   resolvedResult<listResponse<articleResponse>>,
   // First argument to the payload creator
-  getArticlesArg
->('GET_ARTICLES', async (arg = { page: 1 }, thunkAPI) => {
+  getArticlesRequestArg,
+  // thunkAPI
+  { state: defaultRootState }
+>('GET_ARTICLES', async (arg, thunkAPI) => {
   thunkAPI.dispatch(setArticleLoadState(LOADING));
   let req = null;
-  if (Object.keys(arg).filter((a) => a !== 'page').length >= 1) {
-    const state = thunkAPI.getState();
-    const articleStore = state.article;
-    const opts = {
-      page: articleStore.page,
-      size: articleStore.size,
-    };
-    if (articleStore.keyword !== '') opts.keyword = articleStore.keyword;
-    if (articleStore.tag !== '') opts.tag = articleStore.tag;
-    req = await getArticlesRequest(opts);
-  } else {
-    req = await getArticlesRequest(arg);
-  }
+  const state = thunkAPI.getState();
+  const articleStore = state.article;
+  const opts = arg || {
+    type: '',
+    page: articleStore.page,
+    size: articleStore.size,
+    keyword: '',
+    tag: '',
+  };
+  if (articleStore.keyword !== '') opts.keyword = articleStore.keyword;
+  if (articleStore.tag !== '') opts.tag = articleStore.tag;
+  req = await getArticlesRequest(opts);
+
   if (req.error) {
     logger.err(req.error);
     thunkAPI.dispatch(setArticleLoadState(FAIL));

@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import _pickBy from 'lodash/pickBy';
 import { api, joinUrl, asyncResolver, resolvedResult } from '../lib/api';
 import queryPaging from '../types/queryPaging';
 import listResponse from '../types/listResponse';
@@ -11,10 +11,19 @@ const logger = new Logger('services/article.ts');
 export const AUTH = 'auth';
 export const ARTICLES = 'articles';
 
+export interface getArticlesRequestArg extends queryPaging {
+  type?: string;
+  tag?: string;
+}
+
 export async function getArticles(
-  arg?: queryPaging
+  arg?: getArticlesRequestArg
 ): Promise<resolvedResult<listResponse<articleResponse>>> {
-  const url = joinUrl(ARTICLES, arg);
+  const _arg = _pickBy(
+    arg,
+    (key, value) => value !== '' && value !== 0 && value
+  );
+  const url = joinUrl(ARTICLES, _arg);
   const opts = {
     method: 'get',
     url: `/${url}`,

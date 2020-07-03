@@ -14,22 +14,15 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import postReducer, {
-  getDefaultState as getDefaultPostState,
-  postReducerDefaultState,
-} from './postReducer';
+// import postReducer, {
+//   getDefaultState as getDefaultPostState,
+// } from './postReducer';
 import articleReducer, {
   getDefaultState as getDefaultArticleState,
-  articleReducerDefaultState,
 } from './articleReducer';
 
-export interface defaultState {
-  post: postReducerDefaultState;
-  article: articleReducerDefaultState;
-}
-
 const getDefaultStates = () => ({
-  post: getDefaultPostState(),
+  // post: getDefaultPostState(),
   article: getDefaultArticleState(),
 });
 
@@ -41,7 +34,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  post: postReducer,
+  // post: postReducer,
   article: articleReducer,
 });
 

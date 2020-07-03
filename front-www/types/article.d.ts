@@ -1,7 +1,7 @@
 import ARTICLE_TYPE_ENUM from './articleType';
 import tag from './tag';
+import queryPaging from './queryPaging';
 
-// for article and work
 export interface articleResponse {
   id: string;
   type: ARTICLE_TYPE_ENUM;
@@ -15,6 +15,7 @@ export interface articleResponse {
   tags: tag[];
 }
 
+// parsed article
 export interface article {
   id: string;
   type: ARTICLE_TYPE_ENUM;
@@ -28,8 +29,13 @@ export interface article {
   tags: string[];
 }
 
-export interface postResponse {
-  articleId: string;
-  article: articleResponse;
-  content: string;
+export interface articleReducerDefaultState extends queryPaging {
+  articles: article[];
+  articleType: ARTICLE_TYPE;
+  count: number;
+  pages: number[];
+  page: number;
+  loadState: LOAD_STATE;
+  tag: string;
+  keyword: string;
 }

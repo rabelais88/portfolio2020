@@ -1,9 +1,9 @@
 import { shallowEqual, useSelector } from 'react-redux';
-import { defaultState } from '../store/index';
-import { articleReducerDefaultState } from '../store/articleReducer';
+import { defaultRootState } from '../types/rootState';
+import { articleReducerDefaultState } from '../types/article';
 
 const getArticleReducer = (): articleReducerDefaultState =>
-  useSelector<defaultState, articleReducerDefaultState>(
+  useSelector<defaultRootState, articleReducerDefaultState>(
     (state) => state.article,
     shallowEqual
   );
