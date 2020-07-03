@@ -35,12 +35,16 @@ const HomePage: _HomePage = ({ articlesServer }: Props) => {
   );
 };
 
+interface contextQuery {
+  page?: string;
+}
+
 // getStaticProps should be used for fetching ever-fixed article
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const query = ctx.query || {};
+  const query = ctx.query: contextQuery || {};
 
   const props = { articlesServer: [] };
-  const reqArticles = await getArticles({ page: query.page });
+  const reqArticles = await getArticles({ page: Math.round(query.page) });
   if (reqArticles.error) {
     logger.log('request failed for reqArticles', reqArticles.error);
     return { props };
