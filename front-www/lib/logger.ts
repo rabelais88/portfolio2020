@@ -29,8 +29,16 @@ class Logger {
     return this;
   }
 
+  checkBrowser() {
+    return process.browser;
+  }
+
   log(...args: any): null {
-    console.log(`%c${this.filename} ->`, `color:${this.color}`, ...args);
+    if (this.checkBrowser()) {
+      console.log(`%c${this.filename} ->`, `color:${this.color}`, ...args);
+      return null;
+    }
+    console.log(`${this.filename} ->`, ...args);
     return null;
   }
 

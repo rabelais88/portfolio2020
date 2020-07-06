@@ -29,7 +29,7 @@ export interface article {
   tags: string[];
 }
 
-export interface articleReducerDefaultState extends queryPaging {
+export interface defaultStateArticle extends queryPaging {
   articles: article[];
   articleType: ARTICLE_TYPE;
   count: number;

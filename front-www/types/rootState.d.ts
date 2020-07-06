@@ -1,4 +1,4 @@
-export interface defaultRootState {
+export interface defaultStateRoot {
   //   post: postReducerDefaultState;
-  article: articleReducerDefaultState;
+  article: defaultStateArticle;
 }
