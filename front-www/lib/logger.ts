@@ -1,4 +1,5 @@
 import seedrandom from 'seedrandom';
+import { IS_BROWSER } from '../env';
 
 const consoleColors = [
   '#00876c',
@@ -29,8 +30,8 @@ class Logger {
     return this;
   }
 
-  checkBrowser() {
-    return process.browser;
+  checkBrowser(): boolean {
+    return IS_BROWSER;
   }
 
   log(...args: any): null {

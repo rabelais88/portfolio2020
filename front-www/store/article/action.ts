@@ -1,8 +1,8 @@
 import { article } from 'types/article';
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import queryPaging from 'types/queryPaging';
 import { defaultStateRoot } from 'types/rootState';
-import { Action } from 'redux';
+import { AnyAction } from 'redux';
 import { mapArticle } from 'vo/article';
 import { getArticles as getArticlesRequest } from '../../services/article';
 
@@ -24,13 +24,15 @@ export const setArticles = (_articles: article[]): setArticlesType => ({
   payload: _articles,
 });
 
-interface getArticlesArg extends queryPaging {}
+interface getArticlesArg extends queryPaging {
+  tag?: string;
+}
 
 export const getArticles = (
   arg: getArticlesArg
-): ThunkAction<void, defaultStateRoot, unknown, Action<unknown>> => async (
-  dispatch,
-  getState
+): ThunkAction<void, defaultStateRoot, void, AnyAction> => async (
+  dispatch: ThunkDispatch<defaultStateRoot, void, AnyAction>,
+  getState: () => defaultStateRoot
 ) => {
   const req = await getArticlesRequest(arg);
   if (req.error) {

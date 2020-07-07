@@ -5,7 +5,6 @@ import { ParsedUrlQuery } from 'querystring';
 
 import wrapper from '../store/root';
 import getArticleReducer from '../redux-getters/getArticleReducer';
-// import { getArticles } from '../services/article';
 import { getArticles } from '../store/article/action';
 import { article } from '../types/article';
 import Logger from '../lib/logger';
@@ -13,19 +12,11 @@ import checkNum from '../lib/checkNum';
 
 const logger = new Logger('pages/index.tsx');
 
-// interface Props {
-//   articles: article[];
-//   page: number;
-//   size: number;
-//   keyword: string;
-//   tag: string;
-// }
-
 interface _HomePage {
-  (arg: Props): JSX.Element;
+  (): JSX.Element;
 }
 
-const HomePage: _HomePage = ({ }: Props) => {
+const HomePage: _HomePage = () => {
   const dispatch = useDispatch();
   const articleStore = getArticleReducer();
 
@@ -70,7 +61,7 @@ interface contextQuery extends ParsedUrlQuery {
 // };
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store }) => {
+  async ({ store, query }) => {
     await store.dispatch(getArticles({ page: 1 }));
     logger.log(store.getState());
   }
