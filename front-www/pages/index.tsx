@@ -6,7 +6,7 @@ import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 
 import wrapper from '../store/root';
 import getArticleReducer from '../redux-getters/getArticleReducer';
-import { getArticles } from '../store/article/action';
+import { getArticles, setArticlePage } from '../store/article/action';
 import { article } from '../types/article';
 import Logger from '../lib/logger';
 import checkNum from '../lib/checkNum';
@@ -28,13 +28,6 @@ const HomePage: _HomePage = () => {
     </div>
   );
 };
-
-// interface contextQuery extends ParsedUrlQuery {
-//   page?: string | string[];
-//   size?: string | string[];
-//   keyword?: string | string[];
-//   tag?: string | string[];
-// }
 
 // getStaticProps should be used for fetching ever-fixed article
 // export const getServerSideProps: GetServerSideProps<
@@ -63,7 +56,13 @@ const HomePage: _HomePage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ store, query }) => {
-    await store.dispatch(getArticles({ page: 1 }));
+    const state = store.getState();
+    const page = query.page as string;
+    if (state.article.page !== query.page && checkNum(page)) {
+      const _page = parseInt(page, 10);
+      await store.dispatch(setArticlePage(_page));
+    }
+    await store.dispatch(getArticles());
     logger.log(store.getState());
   }
 );

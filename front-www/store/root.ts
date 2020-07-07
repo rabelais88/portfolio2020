@@ -5,7 +5,7 @@ import {
   AnyAction,
 } from 'redux';
 import { MakeStore, createWrapper, Context, HYDRATE } from 'next-redux-wrapper';
-import thunkMiddleware from 'redux-thunk';
+import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 import { defaultStateRoot } from 'types/rootState';
 import articleReducer from './article/reducer';
 
@@ -34,7 +34,7 @@ const rootReducer = (state: defaultStateRoot, action: AnyAction) => {
   return combinedReducer(state, action);
 };
 
-const initStore: MakeStore<defaultStateRoot> = (context: Context) =>
+const makeStore: MakeStore<defaultStateRoot> = (context: Context) =>
   createStore(rootReducer, bindMiddleware([thunkMiddleware]));
 
-export default createWrapper(initStore);
+export default createWrapper(makeStore);

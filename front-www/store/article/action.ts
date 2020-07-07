@@ -6,6 +6,7 @@ import { article } from 'types/article';
 import LOAD_STATE, { SUCCESS, LOADING } from 'types/loadState';
 import { defaultStateRoot } from 'types/rootState';
 import action from 'types/action';
+import thunkAction from 'types/thunkAction';
 
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction, ActionCreator } from 'redux';
@@ -61,23 +62,14 @@ export const setArticleCount = (count: number): setArticleCountType => ({
   payload: count,
 });
 
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  defaultStateRoot,
-  unknown,
-  AnyAction
->;
-
-export const getArticles = (): AppThunk => async (
+export const getArticles = (): thunkAction => async (
   dispatch,
   getState: () => defaultStateRoot
 ) => {
   await dispatch(setArticleLoadState(LOADING));
   const state = getState();
   const targetKeys = ['tag', 'size', 'page', 'keyword'];
-  const _arg = _pickBy(state.article, (v, k) => {
-    return targetKeys.includes(k) && v !== '' && v !== 0;
-  });
+  const _arg = _pickBy(state.article, (v, k) => targetKeys.includes(k));
   if (state.article.articleType !== ALL) _arg.type = state.article.articleType;
   const req = await getArticlesRequest(_arg);
   if (req.error) {
