@@ -33,7 +33,7 @@ module.exports = {
     'lines-between-class-members': 0,
     'react/jsx-one-expression-per-line': 0,
     'import/prefer-default-export': 0,
-
+    'class-methods-use-this': 0,
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   },
