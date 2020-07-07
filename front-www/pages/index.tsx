@@ -29,31 +29,6 @@ const HomePage: _HomePage = () => {
   );
 };
 
-// getStaticProps should be used for fetching ever-fixed article
-// export const getServerSideProps: GetServerSideProps<
-//   Props,
-//   contextQuery
-// > = async (ctx: GetServerSidePropsContext<contextQuery>) => {
-//   const props = { articles: [], page: 1, keyword: '', tag: '', size: 10 };
-//   const query = ctx.query || {};
-//   if (typeof query.page !== 'string' || !checkNum(query.page)) {
-//     ctx.res.statusCode = 302;
-//     ctx.res.setHeader('Location', '/?page=1');
-//     ctx.res.end();
-//     return { props };
-//   }
-
-//   const qry = { page: parseInt(query.page, 10) };
-
-//   const reqArticles = await getArticles(qry);
-//   if (reqArticles.error) {
-//     logger.log('request failed for reqArticles', reqArticles.error);
-//     return { props };
-//   }
-//   props.articles = reqArticles.result.list.map(mapArticle);
-//   return { props };
-// };
-
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ store, query }) => {
     const state = store.getState();
