@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, connect } from 'react-redux';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
+import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 
 import wrapper from '../store/root';
 import getArticleReducer from '../redux-getters/getArticleReducer';
@@ -28,12 +29,12 @@ const HomePage: _HomePage = () => {
   );
 };
 
-interface contextQuery extends ParsedUrlQuery {
-  page?: string | string[];
-  size?: string | string[];
-  keyword?: string | string[];
-  tag?: string | string[];
-}
+// interface contextQuery extends ParsedUrlQuery {
+//   page?: string | string[];
+//   size?: string | string[];
+//   keyword?: string | string[];
+//   tag?: string | string[];
+// }
 
 // getStaticProps should be used for fetching ever-fixed article
 // export const getServerSideProps: GetServerSideProps<
