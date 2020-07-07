@@ -1,10 +1,14 @@
 import { defaultStateArticle } from 'types/article';
 import { ALL } from 'types/articleType';
 import { INIT } from 'types/loadState';
-import { AnyAction } from 'redux';
-import { defaultStateRoot } from 'types/rootState';
-import { SET_ARTICLES, SET_ARTICLE_PAGE, articleActionTypes } from './action';
-// import { HYDRATE } from 'next-redux-wrapper';
+import {
+  SET_ARTICLES,
+  SET_ARTICLE_PAGE,
+  articleActionTypes,
+  SET_ARTICLE_TYPE,
+  SET_ARTICLE_LOAD_STATE,
+  SET_ARTICLE_COUNT,
+} from './action';
 
 export const getDefaultState = (): defaultStateArticle => ({
   articles: [],
@@ -15,6 +19,7 @@ export const getDefaultState = (): defaultStateArticle => ({
   pages: [],
   loadState: INIT,
   tag: '',
+  size: 20,
 });
 
 function reducer(
@@ -27,6 +32,12 @@ function reducer(
       return { ...state, articles: action.payload };
     case SET_ARTICLE_PAGE:
       return { ...state, page: action.payload };
+    case SET_ARTICLE_TYPE:
+      return { ...state, articleType: action.payload };
+    case SET_ARTICLE_LOAD_STATE:
+      return { ...state, loadState: action.payload };
+    case SET_ARTICLE_COUNT:
+      return { ...state, count: action.payload };
     default:
       return state;
   }

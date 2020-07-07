@@ -1,5 +1,0 @@
-{
-  "devDependencies": {
-    "@types/redux-thunk": "^2.1.0"
-  }
-}
