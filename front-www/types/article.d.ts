@@ -1,6 +1,21 @@
 import ARTICLE_TYPE_ENUM from './articleType';
-import tag from './tag';
 import queryPaging from './queryPaging';
+
+export interface tagResponse {
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  value: string;
+  // articles should be extended
+  // to avoid circular dependency
+}
+
+interface tag {
+  createdAt: number;
+  updatedAt: number;
+  deletedAt: number;
+  value: string;
+}
 
 export interface articleResponse {
   id: string;

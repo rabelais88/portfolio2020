@@ -1,6 +1,5 @@
 import _cloneDeep from 'lodash/cloneDeep';
-import { article, articleResponse } from '../types/article';
-import { tagResponse } from '../types/tag';
+import { article, articleResponse, tagResponse } from '../types/article';
 
 export function mapArticle(__article: articleResponse): article {
   const _article = _cloneDeep(__article);

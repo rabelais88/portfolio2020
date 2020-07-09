@@ -1,13 +1,14 @@
-export interface tagResponse {
-  createdAt?: string;
-  updatedAt?: string;
-  value: string;
-  // articles should be extended
-  // to avoid circular dependency
+import LOAD_STATE from 'types/loadState';
+
+// tag as article-independent datum
+export interface tag {
+  tag: string;
+  articleCount: number;
 }
 
-export interface tag {
-  createdAt: number;
-  updatedAt: number;
-  value: string;
+export interface defaultStateTag {
+  tags: tag[];
+  keyword: string;
+  limit: number;
+  loadState: LOAD_STATE;
 }

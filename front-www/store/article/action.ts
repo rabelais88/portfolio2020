@@ -8,8 +8,6 @@ import { defaultStateRoot } from 'types/rootState';
 import action from 'types/action';
 import thunkAction from 'types/thunkAction';
 
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction, ActionCreator } from 'redux';
 import { mapArticle } from 'vo/article';
 import { getArticles as getArticlesRequest } from '../../services/article';
 
