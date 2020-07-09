@@ -7,10 +7,10 @@ import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import wrapper from '../store/root';
-// import { store, persistor } from '../store';
-import { VERSION, NODE_ENV } from '../env';
-import Logger from '../lib/logger';
+import wrapper from 'store/root';
+import { VERSION, NODE_ENV } from 'env';
+import Logger from 'lib/logger';
+import ChakraProvider from 'components/ChakraProvider';
 
 const logger = new Logger('pages/_app.js');
 
@@ -19,10 +19,10 @@ const MyApp = ({ Component, pageProps }): JSX.Element => {
     logger.log(`${NODE_ENV} v${VERSION}`);
   }, []);
   return (
-    <>
+    <ChakraProvider>
       <Component {...pageProps} />
       <ToastContainer />
-    </>
+    </ChakraProvider>
   );
 };
 
