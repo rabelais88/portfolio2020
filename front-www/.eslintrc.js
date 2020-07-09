@@ -35,6 +35,7 @@ module.exports = {
     'import/prefer-default-export': 0,
     'class-methods-use-this': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
+    'import/no-named-as-default': 0,
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   },

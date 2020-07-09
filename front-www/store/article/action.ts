@@ -22,6 +22,7 @@ export const SET_ARTICLE_PAGE = 'SET_ARTICLE_PAGE';
 export const SET_ARTICLE_TYPE = 'SET_ARTICLE_TYPE';
 export const SET_ARTICLE_LOAD_STATE = 'SET_ARTICLE_LOAD_STATE';
 export const SET_ARTICLE_COUNT = 'SET_ARTICLE_COUNT';
+export const SET_TAGS = 'SET_TAGS';
 
 export const GET_ARTICLES = 'GET_ARTICLES';
 
@@ -75,7 +76,7 @@ export const getArticles = (): thunkAction => async (
   if (req.error) {
     return null;
   }
-  logger.log(req.result.list);
+  // logger.log(req.result.list);
   await dispatch(setArticles(req.result.list.map(mapArticle)));
   await dispatch(setArticleCount(req.result.count));
   await dispatch(setArticleLoadState(SUCCESS));

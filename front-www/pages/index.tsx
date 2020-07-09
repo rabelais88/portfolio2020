@@ -11,6 +11,7 @@ import { article } from 'types/article';
 import Logger from 'lib/logger';
 import checkNum from 'lib/checkNum';
 import ArticleItem from 'components/ArticleItem';
+import Layout from 'components/Layout';
 
 const logger = new Logger('pages/index.tsx');
 
@@ -28,25 +29,23 @@ const HomePage: _HomePage = () => {
   ));
 
   return (
-    <div>
-      Welcome to Next.js!
-      <div>store data: {JSON.stringify(articleStore)}</div>
+    <Layout>
+      {/* <div>store data: {JSON.stringify(articleStore)}</div> */}
       {articleList}
-    </div>
+    </Layout>
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store, query }) => {
-    const state = store.getState();
-    const page = query.page as string;
-    if (state.article.page !== query.page && checkNum(page)) {
-      const _page = parseInt(page, 10);
-      await store.dispatch(setArticlePage(_page));
-    }
-    await store.dispatch(getArticles());
-    logger.log(store.getState());
+export const getServerSideProps = wrapper.getServerSideProps(async (props) => {
+  const { query, store } = props;
+  const state = store.getState();
+  const page = query.page as string;
+  if (state.article.page !== query.page && checkNum(page)) {
+    const _page = parseInt(page, 10);
+    await store.dispatch(setArticlePage(_page));
   }
-);
+  await store.dispatch(getArticles());
+  logger.log(store.getState());
+});
 
 export default connect(null, null)(HomePage);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Image, Tag, TagLabel, Stack, Text } from '@chakra-ui/core';
+import { Box, Tag, TagLabel, Stack, PseudoBox } from '@chakra-ui/core';
 import { article } from 'types/article';
 
 type ArticleItemProps = article;
@@ -24,18 +24,30 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
     </Tag>
   ));
 
+  const imageUrl = `url(${coverImage})`;
   return (
-    <Box display="flex" p={4}>
-      <Box maxW="sm" maxH="sm" overflow="hidden">
-        <Image src="https://via.placeholder.com/150" />
-      </Box>
-      <Box p={4}>
-        <Box fontSize="md" fontWeight="semiBold" as="h4">
-          {title}
+    <Box py="2">
+      <Box
+        bgImage={imageUrl}
+        bgPos="center"
+        backgroundRepeat="no-repeat"
+        bgSize="cover"
+        rounded="lg"
+        borderWidth="1px"
+      >
+        <Box
+          fontSize="md"
+          fontWeight="bold"
+          as="h4"
+          backgroundColor="white"
+          p={4}
+        >
+          [{type}]{title}
+          <Stack spacing={4} isInline overflowX="hidden">
+            {tagList}
+          </Stack>
         </Box>
-        <Stack spacing={4} isInline>
-          {tagList}
-        </Stack>
+        <Box height="40px" />
       </Box>
     </Box>
   );
