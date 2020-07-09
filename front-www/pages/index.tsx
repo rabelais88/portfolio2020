@@ -23,13 +23,15 @@ const HomePage: _HomePage = () => {
   const articleStore = getArticleReducer();
   const { articles } = articleStore;
 
+  const articleList = articles.map((_article) => (
+    <ArticleItem {..._article} key={_article.id} />
+  ));
+
   return (
     <div>
       Welcome to Next.js!
       <div>store data: {JSON.stringify(articleStore)}</div>
-      {articles.map((_article) => (
-        <ArticleItem {..._article} key={_article.id} />
-      ))}
+      {articleList}
     </div>
   );
 };

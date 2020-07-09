@@ -17,6 +17,13 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
     deletedAt,
     tags,
   } = props;
+
+  const tagList = tags.map((tag) => (
+    <Tag size="sm" key={tag}>
+      <TagLabel>{tag}</TagLabel>
+    </Tag>
+  ));
+
   return (
     <Box display="flex" p={4}>
       <Box maxW="sm" maxH="sm" overflow="hidden">
@@ -27,11 +34,7 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
           {title}
         </Box>
         <Stack spacing={4} isInline>
-          {tags.map((tag) => (
-            <Tag size="sm" key={tag}>
-              <TagLabel>{tag}</TagLabel>
-            </Tag>
-          ))}
+          {tagList}
         </Stack>
       </Box>
     </Box>
