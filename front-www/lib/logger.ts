@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import { IS_BROWSER } from '../env';
+import checkClient from 'lib/checkClient';
 
 const consoleColors = [
   '#00876c',
@@ -30,12 +30,9 @@ class Logger {
     return this;
   }
 
-  checkBrowser(): boolean {
-    return IS_BROWSER;
-  }
-
+  // https://github.com/vercel/next.js/issues/5354
   log(...args: any): null {
-    if (this.checkBrowser()) {
+    if (checkClient()) {
       console.log(`%c${this.filename} ->`, `color:${this.color}`, ...args);
       return null;
     }

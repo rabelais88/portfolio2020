@@ -5,10 +5,11 @@ import {
   AnyAction,
 } from 'redux';
 import { MakeStore, createWrapper, Context, HYDRATE } from 'next-redux-wrapper';
-import thunkMiddleware, { ThunkAction } from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
 import { defaultStateRoot } from 'types/rootState';
 import articleReducer from './article/reducer';
 import tagReducer from './tag/reducer';
+import uiReducer from './ui/reducer';
 
 const bindMiddleware = (middleware) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -22,6 +23,7 @@ const bindMiddleware = (middleware) => {
 const combinedReducer = combineReducers({
   article: articleReducer,
   tag: tagReducer,
+  ui: uiReducer,
 });
 
 const rootReducer = (state: defaultStateRoot, action: AnyAction) => {
