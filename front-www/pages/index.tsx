@@ -12,6 +12,7 @@ import Logger from 'lib/logger';
 import checkNum from 'lib/checkNum';
 import ArticleItem from 'components/ArticleItem';
 import Layout from 'components/Layout';
+import Paginator from 'components/Paginator';
 
 const logger = new Logger('pages/index.tsx');
 
@@ -22,16 +23,25 @@ interface _HomePage {
 const HomePage: _HomePage = () => {
   const dispatch = useDispatch();
   const articleStore = getArticleReducer();
-  const { articles } = articleStore;
+  const { articles, count, size, page } = articleStore;
 
   const articleList = articles.map((_article) => (
     <ArticleItem {..._article} key={_article.id} />
   ));
 
+  function onPageClick(pageNum) {
+    window.location.href = `/?page=${pageNum}`;
+  }
+
   return (
     <Layout>
-      {/* <div>store data: {JSON.stringify(articleStore)}</div> */}
       {articleList}
+      <Paginator
+        count={count}
+        size={size}
+        page={page}
+        onPageClick={onPageClick}
+      />
     </Layout>
   );
 };

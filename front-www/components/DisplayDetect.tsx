@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import getUiStore from 'redux-getters/getUiReducer';
 import { setViewWidth, setViewHeight } from 'store/ui/action';
 import { useDispatch } from 'react-redux';
@@ -33,6 +33,9 @@ const DisplayDetect: React.FunctionComponent<unknown> = () => {
 
   if (isMounted && isClient) {
     window.addEventListener('resize', onResizeDebounced);
+    useEffect(() => {
+      onResizeDebounced();
+    }, []);
   }
 
   return (

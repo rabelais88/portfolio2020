@@ -19,7 +19,7 @@ export const getDefaultState = (): defaultStateArticle => ({
   pages: [],
   loadState: INIT,
   tag: '',
-  size: 20,
+  size: 10,
 });
 
 function reducer(

@@ -7,7 +7,7 @@ function useIsMounted(): { current: boolean } {
     () => () => {
       componentIsMounted.current = false;
     },
-    []
+    [componentIsMounted.current]
   );
   return componentIsMounted;
 }
