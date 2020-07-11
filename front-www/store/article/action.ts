@@ -1,4 +1,5 @@
 import _pickBy from 'lodash/pickBy';
+import _debounce from 'lodash/debounce';
 
 // types
 import ARTICLE_TYPE, { ALL } from 'types/articleType';
@@ -20,8 +21,7 @@ export const SET_ARTICLE_PAGE = 'SET_ARTICLE_PAGE';
 export const SET_ARTICLE_TYPE = 'SET_ARTICLE_TYPE';
 export const SET_ARTICLE_LOAD_STATE = 'SET_ARTICLE_LOAD_STATE';
 export const SET_ARTICLE_COUNT = 'SET_ARTICLE_COUNT';
-export const SET_TAGS = 'SET_TAGS';
-
+export const SET_ARTICLE_KEYWORD = 'SET_ARTICLE_KEYWORD';
 export const GET_ARTICLES = 'GET_ARTICLES';
 
 type setArticlesType = action<typeof SET_ARTICLES, article[]>;
@@ -61,6 +61,12 @@ export const setArticleCount = (count: number): setArticleCountType => ({
   payload: count,
 });
 
+type setArticleKeywordType = action<typeof SET_ARTICLE_KEYWORD, string>;
+export const setArticleKeyword = (keyword: string): setArticleKeywordType => ({
+  type: SET_ARTICLE_KEYWORD,
+  payload: keyword,
+});
+
 export const getArticles = (): thunkAction => async (
   dispatch,
   getState: () => defaultStateRoot
@@ -81,9 +87,27 @@ export const getArticles = (): thunkAction => async (
   return null;
 };
 
+const getArticlesDebounced = _debounce(
+  function (dispatch) {
+    dispatch(getArticles());
+  },
+  200,
+  { trailing: true }
+);
+
+export const changeKeyword = (keyword: string): thunkAction => async (
+  dispatch,
+  getState: () => defaultStateRoot
+) => {
+  const state = getState();
+  await dispatch(setArticleKeyword(keyword));
+  getArticlesDebounced(dispatch);
+};
+
 export type articleActionTypes =
   | setArticlesType
   | setArticlePageType
   | setArticleTypeType
   | setArticleLoadStateType
-  | setArticleCountType;
+  | setArticleCountType
+  | setArticleKeywordType;

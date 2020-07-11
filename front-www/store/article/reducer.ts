@@ -8,6 +8,7 @@ import {
   SET_ARTICLE_TYPE,
   SET_ARTICLE_LOAD_STATE,
   SET_ARTICLE_COUNT,
+  SET_ARTICLE_KEYWORD,
 } from './action';
 
 export const getDefaultState = (): defaultStateArticle => ({
@@ -38,6 +39,8 @@ function reducer(
       return { ...state, loadState: action.payload };
     case SET_ARTICLE_COUNT:
       return { ...state, count: action.payload };
+    case SET_ARTICLE_KEYWORD:
+      return { ...state, keyword: action.payload };
     default:
       return state;
   }
