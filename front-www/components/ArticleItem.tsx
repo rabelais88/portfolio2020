@@ -1,14 +1,34 @@
 import React from 'react';
-import { Box, Tag, TagLabel, Stack, Badge, Flex, Text } from '@chakra-ui/core';
+import {
+  Box,
+  Tag,
+  TagLabel,
+  Stack,
+  Badge,
+  Flex,
+  Link,
+  Text,
+} from '@chakra-ui/core';
 import { article } from 'types/article';
 import getUiStore from 'redux-getters/getUiReducer';
+import { POST } from 'types/articleType';
 
 type ArticleItemProps = article;
+
+const getUrlByType = {
+  DEFAULT: (props: ArticleItemProps) => props.link,
+  [POST]: (props: ArticleItemProps) => `/post?id=${props.id}`,
+};
+
+const getUrl = (props: ArticleItemProps) => {
+  if (!getUrlByType[props.type]) return getUrlByType.DEFAULT(props);
+  return getUrlByType[props.type](props);
+};
 
 const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
   const {
     id,
-    type,
+    type: _type,
     title,
     desc,
     coverImage,
@@ -33,23 +53,31 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
   ));
 
   const imageUrl = `url(${coverImage})`;
+  const url = getUrl(props);
+
   return (
-    <Flex rounded="lg" borderWidth="1px" overflowY="hidden">
+    <Flex rounded="lg" borderWidth="1px" overflowY="hidden" marginY="2">
       <Box
         bgImage={imageUrl}
         bgPos="center"
         backgroundRepeat="no-repeat"
         bgSize="cover"
-        width="100px"
-        height="100px"
+        width={['80px', '110px']}
+        height={['90px', '110px']}
       >
-        <Badge variant="solid">{type}</Badge>
+        <Badge variant="solid">{_type}</Badge>
       </Box>
-      <Box p={4}>
+      <Box p={[2, 4]}>
         <Box paddingBottom={2}>
-          <Text fontSize="md" fontWeight="bold" backgroundColor="white" as="h4">
+          <Link
+            fontSize="md"
+            fontWeight="bold"
+            backgroundColor="white"
+            href={url}
+          >
             {title}
-          </Text>
+          </Link>
+          <Text fontSize="xs">{desc}</Text>
         </Box>
         <Stack spacing={4} isInline overflowX="hidden">
           {tagList}

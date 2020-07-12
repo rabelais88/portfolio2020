@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
-import { useDispatch, connect } from 'react-redux';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { ParsedUrlQuery } from 'querystring';
-import { ThunkDispatch, ThunkAction } from 'redux-thunk';
+import React from 'react';
+import { connect } from 'react-redux';
 
 import wrapper from 'store/root';
 import getArticleReducer from 'redux-getters/getArticleReducer';
 import { getArticles, setArticlePage } from 'store/article/action';
-import { article } from 'types/article';
 import Logger from 'lib/logger';
 import checkNum from 'lib/checkNum';
 import ArticleItem from 'components/ArticleItem';
@@ -21,7 +17,6 @@ interface _HomePage {
 }
 
 const HomePage: _HomePage = () => {
-  const dispatch = useDispatch();
   const articleStore = getArticleReducer();
   const { articles, count, size, page } = articleStore;
 

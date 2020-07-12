@@ -3,11 +3,8 @@ package app
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
-	"time"
 
-	"github.com/brianvoe/gofakeit/v5"
 	"github.com/jinzhu/gorm"
 
 	"github.com/go-playground/validator"
@@ -16,7 +13,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/rabelais88/portfolio2020/api/env"
-	"github.com/rabelais88/portfolio2020/api/model"
 )
 
 type CustomValidator struct {
@@ -34,33 +30,6 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 		return echo.NewHTTPError(http.StatusBadRequest, ValidationErrorResponse{err.Error(), "VALIDATION_FAILED"})
 	}
 	return err
-}
-
-func MakeFakeData(db *gorm.DB) {
-	for i := 0; i < 100; i++ {
-		rand.Seed(time.Now().UnixNano())
-
-		var tags []model.Tag
-		for t := 0; t < rand.Intn(10); t++ {
-			tags = append(tags, model.Tag{Value: gofakeit.BuzzWord()})
-		}
-
-		p := &model.Post{
-			Article: &model.Article{
-				Type:       "POST",
-				Title:      gofakeit.Sentence(2),
-				Desc:       gofakeit.Sentence(3),
-				CoverImage: gofakeit.ImageURL(340, 240),
-				Link:       gofakeit.URL(),
-				Tags:       tags,
-			},
-			Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
-		}
-		db.Create(p)
-	}
-	var ps []model.Post
-	db.Find(&ps)
-	log.Println("fake db created")
 }
 
 func Init() (http.Handler, *gorm.DB) {
