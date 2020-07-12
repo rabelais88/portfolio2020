@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import getTagReducer from 'redux-getters/getTagReducer';
 
@@ -9,6 +9,7 @@ import { Heading, Box, Flex, Text, Spinner } from '@chakra-ui/core';
 import { SUCCESS, LOADING } from 'types/loadState';
 
 import { getTags } from 'store/tag/action';
+import TagViz from 'components/TagViz';
 
 const logger = new Logger('pages/about.tsx');
 
@@ -20,6 +21,7 @@ const HomePage: _HomePage = () => {
   const dispatch = useDispatch();
   const tagStore = getTagReducer();
   const { loadState, tags } = tagStore;
+  const tagVizContainerRef = useRef(null);
   useEffect(() => {
     dispatch(getTags());
   }, []);
@@ -49,7 +51,7 @@ const HomePage: _HomePage = () => {
           size="xl"
         />
       )}
-      {loadState === SUCCESS && <Text>{JSON.stringify(tags)}</Text>}
+      {loadState === SUCCESS && <TagViz tags={tags} />}
     </Layout>
   );
 };
