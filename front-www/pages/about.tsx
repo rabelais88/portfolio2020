@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import getTagReducer from 'redux-getters/getTagReducer';
+import getUiReducer from 'redux-getters/getUiReducer';
 
 import wrapper from 'store/root';
 import Logger from 'lib/logger';
@@ -20,8 +21,8 @@ interface _HomePage {
 const HomePage: _HomePage = () => {
   const dispatch = useDispatch();
   const tagStore = getTagReducer();
+  const uiStore = getUiReducer();
   const { loadState, tags } = tagStore;
-  const tagVizContainerRef = useRef(null);
   useEffect(() => {
     dispatch(getTags());
   }, []);

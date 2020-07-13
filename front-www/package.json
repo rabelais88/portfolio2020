@@ -6,6 +6,7 @@
     "@emotion/styled": "^10.0.27",
     "axios": "^0.19.2",
     "d3": "^5.16.0",
+    "d3-quicktool": "^0.4.2",
     "emotion-theming": "^10.0.27",
     "lodash": "^4.17.15",
     "next": "^9.4.2",
