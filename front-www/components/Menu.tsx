@@ -42,7 +42,18 @@ const Menu: React.FunctionComponent<unknown> = (props) => {
   );
 
   return (
-    <Grid templateColumns="1fr 6fr 1fr" gap="10px" width="100%" p={3}>
+    <Grid
+      backgroundColor="white"
+      templateColumns="1fr 6fr 1fr"
+      gap="10px"
+      width="100%"
+      p={3}
+      position="fixed"
+      top="0"
+      left="0"
+      right="0"
+      height="60px"
+    >
       {router.pathname !== '/about' && (
         <Flex align="center" justify="center">
           <Link href="/about">About</Link>

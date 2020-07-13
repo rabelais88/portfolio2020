@@ -9,7 +9,9 @@ export const Layout: React.FunctionComponent<unknown> = (props) => {
     <Box width="100%" minH="100%">
       <DisplayDetect />
       <Menu />
-      <Box p={[3, 6]}>{children}</Box>
+      <Box p={[3, 6]} marginY="30px">
+        {children}
+      </Box>
     </Box>
   );
 };

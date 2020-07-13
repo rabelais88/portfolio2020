@@ -56,7 +56,7 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
   const url = getUrl(props);
 
   return (
-    <Flex rounded="lg" borderWidth="1px" overflowY="hidden" marginY="2">
+    <Flex overflowY="hidden" borderTopWidth="1px">
       <Box
         bgImage={imageUrl}
         bgPos="center"
