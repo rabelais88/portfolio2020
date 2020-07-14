@@ -8,4 +8,3 @@ import sampleTags from './sampleTags.json';
 export default { title: 'TagViz', decorators: [withKnobs] };
 
 export const defaultData = () => <TagViz tags={sampleTags} />;
-f

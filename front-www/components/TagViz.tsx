@@ -1,11 +1,8 @@
-import Logger from 'lib/logger';
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { setSize, move } from 'd3-quicktool';
 import { tag } from 'types/tag';
-import checkClient from 'lib/checkClient';
-
-const logger = new Logger('components/TagViz.tsx');
+import checkClient from '../lib/checkClient';
 
 interface TagVizProps {
   tags: tag[];
@@ -58,7 +55,6 @@ const TagViz: React.FunctionComponent<TagVizProps> = (props) => {
 
   useEffect(() => {
     const handleResize = () => {
-      logger.log(containerRef.current.offsetWidth);
       setViewWidth(containerRef.current.offsetWidth);
     };
     if (checkClient() && svgRef.current && containerRef.current) {
@@ -74,7 +70,6 @@ const TagViz: React.FunctionComponent<TagVizProps> = (props) => {
     });
     // when component is mounted
     const svg = d3.select(elContainer);
-    logger.log('updating', { width: config.width });
     const _tags = tags.sort((a, b) => b.articleCount - a.articleCount);
     const countMax = d3.max(tags, (d) => d.articleCount);
     const countMin = d3.min(tags, (d) => d.articleCount);
@@ -103,7 +98,7 @@ const TagViz: React.FunctionComponent<TagVizProps> = (props) => {
         .append('rect')
         .call(updateLargeDataCoord);
 
-    const dotRadius = scaleY.step();
+    const dotRadius = scaleY.bandwidth();
     const forSmallData = (el) =>
       el.filter((d) => d.articleCount < threshold).each(drawDot(dotRadius));
 
@@ -119,10 +114,7 @@ const TagViz: React.FunctionComponent<TagVizProps> = (props) => {
       el
         .filter((d) => d.articleCount >= threshold)
         .select('rect')
-        .call(updateLargeDataCoord)
-        .attr('data-test', (d, i, e) => {
-          logger.log(e);
-        });
+        .call(updateLargeDataCoord);
 
     const exitData = (el) => el.remove();
 
