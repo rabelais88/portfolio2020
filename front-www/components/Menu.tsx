@@ -15,17 +15,23 @@ import { changeKeyword } from 'store/article/action';
 import { useDispatch } from 'react-redux';
 import Logger from 'lib/logger';
 // import _debounce from 'lodash/debounce';
+import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 
 const logger = new Logger('components/Menu.tsx');
 
 const Menu: React.FunctionComponent<unknown> = (props) => {
   const router = useRouter();
   const { keyword, tag } = useArticleStore();
+  const [scroll, setScroll] = useState(0);
   const dispatch = useDispatch();
 
   function onKeywordChange(event) {
     dispatch(changeKeyword(event.target.value));
   }
+
+  useScrollPosition(({ prevPos, currPos }) => {
+    if (currPos.y !== prevPos.y) setScroll(currPos.y);
+  });
 
   const articleSearchBox = (
     <InputGroup size="sm" width="100%" maxW="500px">
@@ -41,6 +47,9 @@ const Menu: React.FunctionComponent<unknown> = (props) => {
     </InputGroup>
   );
 
+  const opts: { boxShadow?: 'md' } = {};
+  if (scroll < 0) opts.boxShadow = 'md';
+
   return (
     <Grid
       backgroundColor="white"
@@ -53,6 +62,7 @@ const Menu: React.FunctionComponent<unknown> = (props) => {
       left="0"
       right="0"
       height="60px"
+      {...opts}
     >
       {router.pathname !== '/about' && (
         <Flex align="center" justify="center">

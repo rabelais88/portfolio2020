@@ -23,6 +23,7 @@ export const SET_ARTICLE_LOAD_STATE = 'SET_ARTICLE_LOAD_STATE';
 export const SET_ARTICLE_COUNT = 'SET_ARTICLE_COUNT';
 export const SET_ARTICLE_KEYWORD = 'SET_ARTICLE_KEYWORD';
 export const GET_ARTICLES = 'GET_ARTICLES';
+export const SET_ARTICLE_TAG = 'SET_ARTICLE_TAG';
 
 type setArticlesType = action<typeof SET_ARTICLES, article[]>;
 export const setArticles = (_articles: article[]): setArticlesType => ({
@@ -65,6 +66,12 @@ type setArticleKeywordType = action<typeof SET_ARTICLE_KEYWORD, string>;
 export const setArticleKeyword = (keyword: string): setArticleKeywordType => ({
   type: SET_ARTICLE_KEYWORD,
   payload: keyword,
+});
+
+type setArticleTagType = action<typeof SET_ARTICLE_TAG, string>;
+export const setArticleTag = (tag: string): setArticleTagType => ({
+  type: SET_ARTICLE_TAG,
+  payload: tag,
 });
 
 export const getArticles = (): thunkAction => async (
@@ -110,4 +117,5 @@ export type articleActionTypes =
   | setArticleTypeType
   | setArticleLoadStateType
   | setArticleCountType
-  | setArticleKeywordType;
+  | setArticleKeywordType
+  | setArticleTagType;

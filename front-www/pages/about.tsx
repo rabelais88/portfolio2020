@@ -3,6 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import getTagReducer from 'redux-getters/getTagReducer';
 import getUiReducer from 'redux-getters/getUiReducer';
 
+import { tag } from 'types/tag';
 import wrapper from 'store/root';
 import Logger from 'lib/logger';
 import Layout from 'components/Layout';
@@ -27,6 +28,10 @@ const HomePage: _HomePage = () => {
     dispatch(getTags());
   }, []);
 
+  const onTagClick = (tagData: tag) => {
+    window.location.href = `/?tag=${tagData.tag}`;
+  };
+
   return (
     <Layout>
       <Flex align="center" justify="center" py="10">
@@ -43,16 +48,30 @@ const HomePage: _HomePage = () => {
         brief showcase, this page has been specifically made more
         data-visualization focused.
       </Text>
-      {loadState === LOADING && (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      )}
-      {loadState === SUCCESS && <TagViz tags={tags} />}
+      <Box p="4">
+        <Heading
+          as="h3"
+          size="md"
+          textAlign="center"
+          marginTop="10"
+          marginBottom="10"
+        >
+          Tags sorted by frequency
+        </Heading>
+        <Text>*click to see all articles related with the tags</Text>
+        {loadState === LOADING && (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        )}
+        {loadState === SUCCESS && (
+          <TagViz tags={tags} onMouseClick={onTagClick} />
+        )}
+      </Box>
     </Layout>
   );
 };

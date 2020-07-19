@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 
 import wrapper from 'store/root';
 import getArticleReducer from 'redux-getters/getArticleReducer';
-import { getArticles, setArticlePage } from 'store/article/action';
+import {
+  getArticles,
+  setArticlePage,
+  setArticleTag,
+} from 'store/article/action';
 import Logger from 'lib/logger';
 import checkNum from 'lib/checkNum';
 import ArticleItem from 'components/ArticleItem';
@@ -45,9 +49,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (props) => {
   const { query, store } = props;
   const state = store.getState();
   const page = query.page as string;
-  if (state.article.page !== query.page && checkNum(page)) {
+  if (`${state.article.page}` !== query.page && checkNum(page)) {
     const _page = parseInt(page, 10);
     await store.dispatch(setArticlePage(_page));
+  }
+  const qtag = query.tag as string;
+  if (state.article.tag !== qtag && qtag) {
+    await store.dispatch(setArticleTag(qtag));
   }
   await store.dispatch(getArticles());
   logger.log(store.getState());

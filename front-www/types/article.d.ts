@@ -54,3 +54,20 @@ export interface defaultStateArticle extends queryPaging {
   tag: string;
   keyword: string;
 }
+
+export interface postResponse {
+  createdAt: string;
+  updatedAt: string;
+  articleId: string;
+  article: articleResponse;
+  content: string;
+}
+
+export interface post {
+  content: string;
+  title: string;
+  articleId: string;
+  createdAt: string;
+  updatedAt: string;
+  tags: tag[];
+}
