@@ -12,6 +12,7 @@ import {
 import { article } from 'types/article';
 import getUiStore from 'redux-getters/getUiReducer';
 import { POST } from 'types/articleType';
+import getImageUrl from 'lib/getImageUrl';
 
 type ArticleItemProps = article;
 
@@ -54,7 +55,7 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
     </Link>
   ));
 
-  const imageUrl = `url(${coverImage})`;
+  const imageUrl = `url(${getImageUrl(coverImage)})`;
   const url = getUrl(props);
 
   return (

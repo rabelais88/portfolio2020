@@ -17,6 +17,7 @@ export const PORT = process.env.PORT;
 export const NODE_ENV = process.env.NODE_ENV;
 export const VERSION = pkg.version;
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 export const IS_BROWSER = _process.browser;
 
 export default {
@@ -24,5 +25,6 @@ export default {
   PORT,
   VERSION,
   API_URL,
+  IMAGE_URL,
   IS_BROWSER,
 };
