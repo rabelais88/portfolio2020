@@ -6,6 +6,7 @@ import { NextPageContext } from 'next';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import 'katex/dist/katex.min.css';
 
 import wrapper from 'store/root';
 import { VERSION, NODE_ENV } from 'env';

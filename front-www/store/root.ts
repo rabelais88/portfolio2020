@@ -10,6 +10,7 @@ import { defaultStateRoot } from 'types/rootState';
 import articleReducer from './article/reducer';
 import tagReducer from './tag/reducer';
 import uiReducer from './ui/reducer';
+import postReducer from './post/reducer';
 
 const bindMiddleware = (middleware) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -24,6 +25,7 @@ const combinedReducer = combineReducers({
   article: articleReducer,
   tag: tagReducer,
   ui: uiReducer,
+  post: postReducer,
 });
 
 const rootReducer = (state: defaultStateRoot, action: AnyAction) => {

@@ -4,7 +4,7 @@ import _debounce from 'lodash/debounce';
 // types
 import ARTICLE_TYPE, { ALL } from 'types/articleType';
 import { article } from 'types/article';
-import LOAD_STATE, { SUCCESS, LOADING } from 'types/loadState';
+import LOAD_STATE, { SUCCESS, LOADING, FAIL } from 'types/loadState';
 import { defaultStateRoot } from 'types/rootState';
 import action from 'types/action';
 import thunkAction from 'types/thunkAction';
@@ -85,6 +85,7 @@ export const getArticles = (): thunkAction => async (
   if (state.article.articleType !== ALL) _arg.type = state.article.articleType;
   const req = await getArticlesRequest(_arg);
   if (req.error) {
+    await dispatch(setArticleLoadState(FAIL));
     return null;
   }
   // logger.log(req.result.list);

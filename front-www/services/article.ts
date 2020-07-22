@@ -4,7 +4,8 @@ import queryPaging from '../types/queryPaging';
 import listResponse from '../types/listResponse';
 // import article from '../types/article';
 import Logger from '../lib/logger';
-import { articleResponse, postResponse } from '../types/article';
+import { articleResponse } from '../types/article';
+import { postResponse } from '../types/postStore';
 
 const logger = new Logger('services/article.ts');
 

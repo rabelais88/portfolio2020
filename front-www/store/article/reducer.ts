@@ -1,4 +1,4 @@
-import { defaultStateArticle } from 'types/article';
+import { defaultStateArticle, article } from 'types/article';
 import { ALL } from 'types/articleType';
 import { INIT } from 'types/loadState';
 import {

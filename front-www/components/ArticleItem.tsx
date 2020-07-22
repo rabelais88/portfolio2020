@@ -47,9 +47,11 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
     if (tags.length > tagLimit) _tags.push(`+${tags.length - tagLimit}`);
   }
   const tagList = _tags.map((tag) => (
-    <Tag size="sm" key={tag}>
-      <TagLabel>{tag}</TagLabel>
-    </Tag>
+    <Link key={tag} href={`/?tag=${tag}`}>
+      <Tag size="sm">
+        <TagLabel>{tag}</TagLabel>
+      </Tag>
+    </Link>
   ));
 
   const imageUrl = `url(${coverImage})`;
