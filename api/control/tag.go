@@ -59,3 +59,13 @@ func BrowseTags(c echo.Context) error {
 	}
 	return err
 }
+
+type BrowseTagsByFrequency struct {
+	tagsFrequency map[string]map[string]int // key is tag, row is { date: frequency }
+}
+
+// // browse tags by its frequency
+// func BrowseTagsByFrequency(c echo.Context) error {
+// 	cc := c.(*env.CustomContext)
+
+// }

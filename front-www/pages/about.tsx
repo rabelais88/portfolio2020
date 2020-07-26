@@ -43,10 +43,10 @@ const HomePage: _HomePage = () => {
         </Box>
       </Flex>
       <Text>
-        I am a frontend web developer specialized in data visualization. Both
-        scientific and visually compelling stuffs attract my attention. As a
-        brief showcase, this page has been specifically made more
-        data-visualization focused.
+        I am a <b>frontend web developer</b> specialized in&nbsp;
+        <b>data visualization.</b> Anything that&apos;s scientific or visually
+        compelling stuffs attract my attention. As a brief showcase, this page
+        has been specifically made more data-visualization focused.
       </Text>
       <Box p="4">
         <Heading

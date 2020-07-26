@@ -13,7 +13,12 @@ import (
 func MakeFakeTags() []model.Tag {
 	var tags []model.Tag
 	for t := 0; t < rand.Intn(10); t++ {
-		tags = append(tags, model.Tag{Value: gofakeit.BuzzWord()})
+		tags = append(tags, model.Tag{
+			Value: gofakeit.BuzzWord(),
+			NewGormModel: model.NewGormModel{
+				CreatedAt: gofakeit.Date(),
+			},
+		})
 	}
 	return tags
 }
@@ -27,6 +32,9 @@ func MakeFakePost(db *gorm.DB) {
 			CoverImage: gofakeit.ImageURL(340, 240),
 			Link:       gofakeit.URL(),
 			Tags:       MakeFakeTags(),
+			NewGormModel: model.NewGormModel{
+				CreatedAt: gofakeit.Date(),
+			},
 		},
 		Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
 	}
@@ -41,6 +49,9 @@ func MakeFakeWork(db *gorm.DB) {
 		CoverImage: gofakeit.ImageURL(340, 240),
 		Link:       gofakeit.URL(),
 		Tags:       MakeFakeTags(),
+		NewGormModel: model.NewGormModel{
+			CreatedAt: gofakeit.Date(),
+		},
 	}
 	db.Create(w)
 }
