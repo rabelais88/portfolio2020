@@ -16,6 +16,7 @@ func ConnectRouter(e *echo.Echo, config *env.Config) {
 	// provides $JWT_TOKEN
 	e.GET("/login-cred", control.GetLoginToken)
 	e.GET("/tags", control.BrowseTags)
+	e.GET("/tags-freq", control.BrowseTagsByFrequency)
 	e.GET("/dashboard", control.GetDashboard)
 
 	// r == restricted to admin

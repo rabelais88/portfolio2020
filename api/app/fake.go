@@ -10,13 +10,22 @@ import (
 	"github.com/rabelais88/portfolio2020/api/model"
 )
 
+func getAYearAgo() time.Time {
+	_now := time.Now()
+	return _now.AddDate(-1, 0, 0)
+}
+
+func getRandomizedDate() time.Time {
+	return gofakeit.DateRange(getAYearAgo(), time.Now())
+}
+
 func MakeFakeTags() []model.Tag {
 	var tags []model.Tag
 	for t := 0; t < rand.Intn(10); t++ {
 		tags = append(tags, model.Tag{
 			Value: gofakeit.BuzzWord(),
 			NewGormModel: model.NewGormModel{
-				CreatedAt: gofakeit.Date(),
+				CreatedAt: getRandomizedDate(),
 			},
 		})
 	}
@@ -33,7 +42,7 @@ func MakeFakePost(db *gorm.DB) {
 			Link:       gofakeit.URL(),
 			Tags:       MakeFakeTags(),
 			NewGormModel: model.NewGormModel{
-				CreatedAt: gofakeit.Date(),
+				CreatedAt: getRandomizedDate(),
 			},
 		},
 		Content: gofakeit.Paragraph(3, 2, 5, "<br />"),
@@ -50,13 +59,20 @@ func MakeFakeWork(db *gorm.DB) {
 		Link:       gofakeit.URL(),
 		Tags:       MakeFakeTags(),
 		NewGormModel: model.NewGormModel{
-			CreatedAt: gofakeit.Date(),
+			CreatedAt: getRandomizedDate(),
 		},
 	}
 	db.Create(w)
 }
 
 func MakeFakeData(db *gorm.DB) {
+	var articles []model.Article
+	var count int
+	db.Find(&articles).Count(&count)
+	if count >= 100 {
+		log.Println("enough data already presents. fake db is not created")
+		return
+	}
 	for i := 0; i < 100; i++ {
 		rand.Seed(time.Now().UnixNano())
 

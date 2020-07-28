@@ -60,12 +60,30 @@ func BrowseTags(c echo.Context) error {
 	return err
 }
 
-type BrowseTagsByFrequency struct {
-	tagsFrequency map[string]map[string]int // key is tag, row is { date: frequency }
+// to figure out dates
+// SELECT article_tags.tag_value, DATE(articles.created_at) AS created_date, COUNT(*) as count FROM public.article_tags
+// INNER JOIN public.articles ON public.article_tags.article_id = public.articles.id
+// GROUP BY article_tags.tag_value, DATE(articles.created_at)
+
+type BrowseTagsByFrequencyResponse map[string]map[string]int // key is tag, row is { date: frequency }
+
+// browse tags by its frequency
+func BrowseTagsByFrequency(c echo.Context) error {
+	cc := c.(*env.CustomContext)
+	var res BrowseTagsByFrequencyResponse = make(BrowseTagsByFrequencyResponse)
+	var results []struct {
+		TagValue    string
+		CreatedDate string
+		Count       int
+	}
+	db := cc.Db.Table("article_tags").Select("tag_value, date(articles.created_at) as created_date, count(*) as count").Joins("join articles on article_tags.article_id = articles.id").Group("article_tags.tag_value, date(articles.created_at)")
+	db.Scan(&results)
+	for _, v := range results {
+		if res[v.TagValue] == nil {
+			res[v.TagValue] = make(map[string]int)
+		}
+		res[v.TagValue][v.CreatedDate] = v.Count
+	}
+	err := cc.JSON(http.StatusOK, res)
+	return err
 }
-
-// // browse tags by its frequency
-// func BrowseTagsByFrequency(c echo.Context) error {
-// 	cc := c.(*env.CustomContext)
-
-// }

@@ -37,6 +37,16 @@ services:
     networks:
       - backend
   
+  pgAdmin:
+    image: dpage/pgadmin4
+    ports:
+     - 5050:80
+    environment:
+     - PGADMIN_DEFAULT_EMAIL=aaa@bbb.com
+     - PGADMIN_DEFAULT_PASSWORD=1234
+    networks: # backbone access requires internal network
+      - backend
+  
 networks:
   backend:
     driver: overlay
