@@ -42,11 +42,9 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
 
   const tagLimit = 2;
   const uiStore = getUiStore();
+  const isTagOmitted = uiStore.viewWidth <= 700 && tags.length > tagLimit;
   let _tags = tags;
-  if (uiStore.viewWidth <= 700) {
-    _tags = tags.slice(0, tagLimit);
-    if (tags.length > tagLimit) _tags.push(`+${tags.length - tagLimit}`);
-  }
+  if (uiStore.viewWidth <= 700) _tags = tags.slice(0, tagLimit);
   const tagList = _tags.map((tag) => (
     <Link key={tag} href={`/?tag=${tag}`}>
       <Tag size="sm">
@@ -58,18 +56,22 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
   const imageUrl = `url(${getImageUrl(coverImage)})`;
   const url = getUrl(props);
 
+  const _coverImage = (
+    <Box
+      bgImage={imageUrl}
+      bgPos="center"
+      backgroundRepeat="no-repeat"
+      bgSize="cover"
+      minW={['80px', '110px']}
+      height={['90px', '110px']}
+    >
+      <Badge variant="solid">{_type}</Badge>
+    </Box>
+  );
+
   return (
-    <Flex overflowY="hidden" borderTopWidth="1px">
-      <Box
-        bgImage={imageUrl}
-        bgPos="center"
-        backgroundRepeat="no-repeat"
-        bgSize="cover"
-        width={['80px', '110px']}
-        height={['90px', '110px']}
-      >
-        <Badge variant="solid">{_type}</Badge>
-      </Box>
+    <Flex overflowY="hidden" borderTopWidth="1px" overflowX="hidden">
+      {coverImage !== '' && _coverImage}
       <Box p={[2, 4]}>
         <Box paddingBottom={2}>
           <Link
@@ -84,6 +86,11 @@ const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
         </Box>
         <Stack spacing={4} isInline overflowX="hidden">
           {tagList}
+          {isTagOmitted && (
+            <Tag size="sm">
+              <TagLabel>{`+${tags.length - tagLimit}`}</TagLabel>
+            </Tag>
+          )}
         </Stack>
       </Box>
     </Flex>

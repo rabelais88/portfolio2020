@@ -93,6 +93,24 @@ const TagViz: React.FunctionComponent<TagVizProps> = (props) => {
     // changing config triggers redrawing
     svg.call(setSize, config.width, config.height);
 
+    const _onMouseEnter = (d, i, e) => {
+      svg
+        .select(`g[data-tag="${d.tag}"]`)
+        .call((txt) => txt.select('text').attr('font-weight', 'bold'))
+        .call((bar) => bar.select('rect').attr('fill', 'teal'))
+        .call((circle) => circle.selectAll('circle').attr('fill', 'teal'));
+      onMouseEnter(d);
+    };
+
+    const _onMouseLeave = (d, i, e) => {
+      svg
+        .select(`g[data-tag="${d.tag}"]`)
+        .call((txt) => txt.select('text').attr('font-weight', 'normal'))
+        .call((bar) => bar.select('rect').attr('fill', 'gray'))
+        .call((circle) => circle.selectAll('circle').attr('fill', 'gray'));
+      onMouseLeave(d);
+    };
+
     const updateLargeDataCoord = (el) =>
       el
         .attr('width', (d) => scaleX(d.articleCount))
@@ -125,8 +143,8 @@ const TagViz: React.FunctionComponent<TagVizProps> = (props) => {
         .attr('opacity', 0)
         .attr('height', () => scaleY.bandwidth())
         .attr('width', () => scaleX(countMax))
-        .on('mouseenter', onMouseEnter)
-        .on('mouseleave', onMouseLeave)
+        .on('mouseenter', _onMouseEnter)
+        .on('mouseleave', _onMouseLeave)
         .on('click', onMouseClick);
 
     const enterData = (el) =>

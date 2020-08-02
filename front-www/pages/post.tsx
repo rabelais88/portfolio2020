@@ -9,6 +9,8 @@ import Markdown from 'components/Markdown';
 import { getPost } from 'store/post/action';
 import getPostStore from 'redux-getters/getPostReducer';
 import { SUCCESS } from 'types/loadState';
+import { Heading, Box, Text } from '@chakra-ui/core';
+import getImageUrl from 'lib/getImageUrl';
 
 const logger = new Logger('pages/post.tsx');
 
@@ -20,8 +22,34 @@ const PostPage: _PostPage = () => {
   const postStore = getPostStore();
   const { loadState, post } = postStore;
 
+  const imageUrl = `url(${getImageUrl(post.coverImage)})`;
+
   return (
     <Layout>
+      {post.coverImage === '' && (
+        <>
+          <Heading>{post.title}</Heading>
+          <Text textShadow="sm" color="white" p="5">
+            {post.desc}
+          </Text>
+        </>
+      )}
+      {post.coverImage !== '' && (
+        <Box
+          bgImage={imageUrl}
+          bgPos="center"
+          backgroundRepeat="no-repeat"
+          bgSize="cover"
+          height="200px"
+        >
+          <Heading color="white" textShadow="sm" p="5">
+            {post.title}
+          </Heading>
+          <Text textShadow="sm" color="white" px="5">
+            {post.desc}
+          </Text>
+        </Box>
+      )}
       <Markdown>{post.content}</Markdown>
     </Layout>
   );

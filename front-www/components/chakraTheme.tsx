@@ -14,6 +14,10 @@ const theme = {
   },
   fonts,
   breakpoints,
+  shadows: {
+    ...chakraTheme.shadows,
+    sm: '2px 2px 2px #000',
+  },
   icons: {
     ...chakraTheme.icons,
     logo: {
