@@ -22,7 +22,13 @@
           rules="required|min:1"
         >
           <el-form-item label="Content" :error="errors[0]">
-            <mavon-editor v-model="userContent" language="en" />
+            <mavon-editor
+              v-model="userContent"
+              language="en"
+              ref="mdEditor"
+              @imgAdd="onImageAdd"
+              @imgDel="onImageDel"
+            />
           </el-form-item>
         </validation-provider>
 
@@ -39,7 +45,7 @@
             :multiple="false"
             :show-file-list="false"
             :before-upload="beforeCoverUpload"
-            :http-request="onHttpRequest"
+            :http-request="onCoverImageRequest"
             :file-list="fileList"
             :limit="1"
             ref="coverUploader"
@@ -230,7 +236,7 @@ export default {
     onRemoveCoverImage() {
       this.userCoverImage = '';
     },
-    async onHttpRequest(ev) {
+    async onCoverImageRequest(ev) {
       const req = await asyncHandler(uploadFile, ev.file);
       if (req.error) {
         this.$refs.uploadFile.abort();
@@ -239,6 +245,19 @@ export default {
       const [imageUrl] = req.result.urls;
       this.userCoverImage = imageUrl;
       return req;
+    },
+    async onImageAdd(pos, $file) {
+      const req = await asyncHandler(uploadFile, $file);
+      if (req.error) {
+        // handle error
+        return null;
+      }
+      const [imageUrl] = req.result.urls;
+      this.$refs.mdEditor.$img2Url(pos, getFileUrl(imageUrl));
+      return req;
+    },
+    async onImageDel() {
+      // handle deletion
     },
   },
   async beforeRouteEnter(to, from, next) {
