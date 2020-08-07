@@ -22,7 +22,7 @@ export function mapArticle(__article: articleResponse): article {
     createdAt,
     updatedAt,
     deletedAt,
-    tags: _article.tags.map((t: tagResponse) => t.value),
+    tags: _article.tags.map((t) => t.value),
   };
 
   return a;
