@@ -2,7 +2,7 @@
 # environment variables from orchestration would override default environment setup
 version: "3.7"
 services:
-  api:
+  backend:
     # image: portfolio2020-api:latest
     # restart: always
     # deploy:
@@ -90,6 +90,8 @@ services:
       # -> environment variable is precompiled
     ports:
       - 3000:3000
+    networks:
+      - backend
 
   # https://hub.docker.com/_/nginx
   front-admin:

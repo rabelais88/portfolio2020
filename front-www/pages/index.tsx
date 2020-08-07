@@ -10,11 +10,9 @@ import {
   setArticleKeyword,
   setArticleType,
 } from 'store/article/action';
-import Logger from 'lib/logger';
-import checkNum from 'lib/checkNum';
-import ArticleItem from 'components/ArticleItem';
-import Layout from 'components/Layout';
-import Paginator from 'components/Paginator';
+import { Logger, checkNum } from 'lib';
+import { ArticleItem, Layout, Paginator } from 'components';
+import { INIT, LOADING, SUCCESS, FAIL } from 'types/loadState';
 import { Text, IconButton, Flex } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 import ARTICLE_TYPE, { ALL } from 'types/articleType';
@@ -27,7 +25,7 @@ interface _HomePage {
 
 const HomePage: _HomePage = () => {
   const articleStore = getArticleReducer();
-  const { articles, count, size, page, tag } = articleStore;
+  const { articles, count, size, page, tag, loadState } = articleStore;
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -63,7 +61,8 @@ const HomePage: _HomePage = () => {
           </Text>
         </Flex>
       )}
-      {articleList}
+      {loadState === SUCCESS && articleList}
+      {loadState === FAIL && <p>could not load the data</p>}
       <Paginator
         count={count}
         size={size}

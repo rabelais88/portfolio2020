@@ -9,13 +9,12 @@ import { defaultStateRoot } from 'types/rootState';
 import action from 'types/action';
 import thunkAction from 'types/thunkAction';
 
+import { Logger } from 'lib';
 import { mapArticle } from 'vo/article';
 import {
   getArticles as getArticlesRequest,
   getArticlesRequestArg,
 } from '../../services/article';
-
-import Logger from '../../lib/logger';
 
 const logger = new Logger('store/article/action');
 
@@ -90,6 +89,7 @@ export const getArticles = (): thunkAction => async (
   if (state.article.articleType !== ALL) _arg.type = state.article.articleType;
   const req = await getArticlesRequest(_arg);
   if (req.error) {
+    logger.log('error while fetching article', req.error, req.errorCode);
     await dispatch(setArticleLoadState(FAIL));
     return null;
   }

@@ -5,6 +5,8 @@ COPY yarn.lock yarn.lock
 RUN yarn install
 COPY . .
 ENV NEXT_PUBLIC_API_URL=http://localhost:4500
+ENV NEXT_PUBLIC_SERVER_API_URL=http://backend:4500
+ENV NEXT_PUBLIC_IMAGE_URL=http://localhost:4500/assets
 RUN yarn build
 
 FROM node:14.4.0-alpine

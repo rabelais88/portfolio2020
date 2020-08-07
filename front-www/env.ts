@@ -16,15 +16,20 @@ const _process = <processType>process;
 export const PORT = process.env.PORT;
 export const NODE_ENV = process.env.NODE_ENV;
 export const VERSION = pkg.version;
+// browser url by default
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const SERVER_API_URL = process.env.NEXT_PUBLIC_SERVER_API_URL;
 export const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 export const IS_BROWSER = _process.browser;
+export const IS_SERVER = !IS_BROWSER;
 
 export default {
   NODE_ENV,
   PORT,
   VERSION,
   API_URL,
+  SERVER_API_URL,
   IMAGE_URL,
   IS_BROWSER,
+  IS_SERVER,
 };

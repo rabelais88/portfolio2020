@@ -1,9 +1,9 @@
 import _pickBy from 'lodash/pickBy';
-import { api, joinUrl, asyncResolver, resolvedResult } from '../lib/api';
+import { api, asyncResolver, resolvedResult } from '../lib/api';
 import queryPaging from '../types/queryPaging';
 import listResponse from '../types/listResponse';
 // import article from '../types/article';
-import Logger from '../lib/logger';
+import { Logger, joinUrl } from '../lib';
 import { articleResponse } from '../types/article';
 import { postResponse } from '../types/postStore';
 
@@ -23,7 +23,7 @@ export async function getArticles(
 ): Promise<resolvedResult<listResponse<articleResponse>>> {
   const _arg = _pickBy(
     arg,
-    (value, key) => value !== '' && value !== 0 && value
+    (value, key) => value !== '' && value !== -1 && value
   );
   const url = joinUrl(ARTICLES, _arg);
   const opts = {
