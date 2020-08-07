@@ -1,6 +1,6 @@
 import _pickBy from 'lodash/pickBy';
-import { api, joinUrl, asyncResolver, resolvedResult } from 'lib/api';
-import Logger from 'lib/logger';
+import { api, asyncResolver, resolvedResult } from 'lib/api';
+import { Logger, joinUrl } from 'lib';
 import { tag } from 'types/tag';
 
 const logger = new Logger('services/article.ts');
@@ -21,7 +21,7 @@ export async function getTags(
 ): Promise<resolvedResult<tagsResponse>> {
   const _arg = _pickBy(
     arg,
-    (key, value) => value !== '' && value !== 0 && value
+    (value, key) => value !== '' && value !== 0 && value
   );
   const url = joinUrl(TAGS, _arg);
   const opts = {

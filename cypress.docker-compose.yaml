@@ -1,7 +1,17 @@
-# offline dev only
-# environment variables from orchestration would override default environment setup
 version: "3.7"
 services:
+  e2e-chrome:
+    image: cypress/included:4.1.0
+    command: "--browser chrome"
+    volumes:
+      - ./cypress:/cypress
+      - ./cypress.json:/cypress.json
+    environment:
+      # must start with http:// or https://
+      - CYPRESS_baseUrl=http://front-www:3000
+    networks:
+      - backend
+# below is copied from local.noproxy.docker-compose.yaml
   backend:
     # image: portfolio2020-api:latest
     # restart: always

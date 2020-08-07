@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types */
 import axios from 'axios';
-import qs from 'qs';
-import { API_URL } from '../env';
+import { API_URL, SERVER_API_URL, IS_SERVER } from '../env';
 import Logger from './logger';
 
 const logger = new Logger('api.ts');
@@ -53,27 +52,13 @@ export const asyncResolver: resolverFunc = (_func, ..._args) => {
   });
 };
 
-/**
- * @function joinUrl
- * @example
- * const url = joinUrl(['api', 'post'], {page: 1, pageSize: 10});
- * url === 'api/post?page=1&pageSize=10';
- * const urlB = joinUrl('myUrl', { service: 'aaa' });
- * urlB === 'myUrl?service=aaa';
- * const urlC = joinUrl(['abc','def']);
- * urlC === 'abc/def';
- */
-// eslint-disable-next-line
-export function joinUrl(urls: string[] | string, query?: any): string {
-  const url = typeof urls === 'string' ? urls : urls.join('/');
-  if (!query) return url;
-  const _query = qs.stringify(query);
-  return `${url}?${_query}`;
-}
-
-logger.log({ API_URL, processEnv: process.env.NEXT_PUBLIC_API_URL });
-export const api = axios.create({
-  baseURL: API_URL,
+const baseURL = IS_SERVER && SERVER_API_URL ? SERVER_API_URL : API_URL;
+logger.log('api initialized', {
+  API_URL,
+  SERVER_API_URL,
+  baseURL,
+  processEnv: process.env.NEXT_PUBLIC_API_URL,
 });
+export const api = axios.create({ baseURL });
 
 export default api;

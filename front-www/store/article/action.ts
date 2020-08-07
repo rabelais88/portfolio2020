@@ -9,10 +9,12 @@ import { defaultStateRoot } from 'types/rootState';
 import action from 'types/action';
 import thunkAction from 'types/thunkAction';
 
+import { Logger } from 'lib';
 import { mapArticle } from 'vo/article';
-import { getArticles as getArticlesRequest } from '../../services/article';
-
-import Logger from '../../lib/logger';
+import {
+  getArticles as getArticlesRequest,
+  getArticlesRequestArg,
+} from '../../services/article';
 
 const logger = new Logger('store/article/action');
 
@@ -81,10 +83,13 @@ export const getArticles = (): thunkAction => async (
   await dispatch(setArticleLoadState(LOADING));
   const state = getState();
   const targetKeys = ['tag', 'size', 'page', 'keyword'];
-  const _arg = _pickBy(state.article, (v, k) => targetKeys.includes(k));
+  const _arg = _pickBy<getArticlesRequestArg>(state.article, (v, k) =>
+    targetKeys.includes(k)
+  );
   if (state.article.articleType !== ALL) _arg.type = state.article.articleType;
   const req = await getArticlesRequest(_arg);
   if (req.error) {
+    logger.log('error while fetching article', req.error, req.errorCode);
     await dispatch(setArticleLoadState(FAIL));
     return null;
   }
@@ -98,6 +103,7 @@ export const getArticles = (): thunkAction => async (
 const getArticlesDebounced = _debounce(
   function (dispatch) {
     dispatch(getArticles());
+    return null;
   },
   200,
   { trailing: true }

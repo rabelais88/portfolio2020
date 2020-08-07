@@ -14,7 +14,7 @@ import {
 
 export const getDefaultState = (): defaultStateArticle => ({
   articles: [],
-  page: 1,
+  page: 0,
   count: 0,
   keyword: '',
   articleType: ALL,

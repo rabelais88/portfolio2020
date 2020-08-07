@@ -16,7 +16,7 @@ const DisplayDetect: React.FunctionComponent<unknown> = () => {
   const isClient = checkClient();
 
   const [onResizeDebounced] = useState(() =>
-    _debounce(
+    _debounce<() => void>(
       function () {
         const width =
           window.innerWidth || document.documentElement.clientWidth || 0;
