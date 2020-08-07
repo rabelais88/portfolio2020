@@ -9,9 +9,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/disintegration/imaging"
 	"github.com/labstack/echo/v4"
 	"github.com/rabelais88/portfolio2020/api/env"
 )
+
+const thumbWidth = 200
+const thumbHeight = 200
 
 type UploadFileResponse struct {
 	Urls []string `json:"urls"`
@@ -50,7 +54,9 @@ func UploadFile(c echo.Context) error {
 
 		now := time.Now()
 		filename := fmt.Sprintf("%d-%s", now.UnixNano(), filepath.Clean(file.Filename))
+		resizedFilename := fmt.Sprintf("preview-%s", filename)
 		fileLoc := filepath.Join(cc.Config.FileLocation, filename)
+		resizedFileloc := filepath.Join(cc.Config.FileLocation, resizedFilename)
 
 		// Destination
 		dst, err := os.Create(fileLoc)
@@ -62,6 +68,17 @@ func UploadFile(c echo.Context) error {
 		// Copy
 		if _, err = io.Copy(dst, src); err != nil {
 			return err
+		}
+
+		// Create resized image
+		resized, err := imaging.Open(fileLoc)
+		if err != nil {
+			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_OPENING_RESIZE_TARGET")
+		}
+
+		resized = imaging.Resize(resized, thumbWidth, thumbHeight, imaging.Lanczos)
+		if err := imaging.Save(resized, resizedFileloc); err != nil {
+			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_SAVING_RESIZED_IMAGE")
 		}
 
 		urls = append(urls, filename)
