@@ -10,7 +10,10 @@ import action from 'types/action';
 import thunkAction from 'types/thunkAction';
 
 import { mapArticle } from 'vo/article';
-import { getArticles as getArticlesRequest } from '../../services/article';
+import {
+  getArticles as getArticlesRequest,
+  getArticlesRequestArg,
+} from '../../services/article';
 
 import Logger from '../../lib/logger';
 
@@ -81,7 +84,9 @@ export const getArticles = (): thunkAction => async (
   await dispatch(setArticleLoadState(LOADING));
   const state = getState();
   const targetKeys = ['tag', 'size', 'page', 'keyword'];
-  const _arg = _pickBy(state.article, (v, k) => targetKeys.includes(k));
+  const _arg = _pickBy<getArticlesRequestArg>(state.article, (v, k) =>
+    targetKeys.includes(k)
+  );
   if (state.article.articleType !== ALL) _arg.type = state.article.articleType;
   const req = await getArticlesRequest(_arg);
   if (req.error) {
@@ -98,6 +103,7 @@ export const getArticles = (): thunkAction => async (
 const getArticlesDebounced = _debounce(
   function (dispatch) {
     dispatch(getArticles());
+    return null;
   },
   200,
   { trailing: true }

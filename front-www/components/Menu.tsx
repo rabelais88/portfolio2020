@@ -115,6 +115,7 @@ const Menu: React.FunctionComponent<unknown> = (props) => {
     const query = { type: articleType, page: 1 };
     if (articleType === ALL) delete query.type;
     router.push({ pathname: '/', query });
+    return null;
   }
 
   const DrawerItem = ({ text, articleType }) => (

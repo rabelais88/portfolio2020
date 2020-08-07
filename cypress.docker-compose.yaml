@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  e2e-chrome:
+    image: cypress/included:4.1.0
+    command: "--browser chrome"
+    volumes:
+      - ./cypress:/cypress
+      - ./cypress.json:/cypress.json
+    environment: 
+      - CYPRESS_baseUrl=localhost:3000

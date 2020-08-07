@@ -23,7 +23,7 @@ export async function getArticles(
 ): Promise<resolvedResult<listResponse<articleResponse>>> {
   const _arg = _pickBy(
     arg,
-    (key, value) => value !== '' && value !== 0 && value
+    (value, key) => value !== '' && value !== 0 && value
   );
   const url = joinUrl(ARTICLES, _arg);
   const opts = {

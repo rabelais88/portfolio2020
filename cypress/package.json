@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "cypress-failed-log": "^2.7.0"
+  }
+}
