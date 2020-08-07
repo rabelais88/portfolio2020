@@ -89,10 +89,10 @@
         </el-form-item>
 
         <el-form-item label="Last Edited">
-          <span>{{ post.updatedAt }}</span>
+          <span>{{ post.updatedAt | fullDate }}</span>
         </el-form-item>
         <el-form-item label="Created">
-          <span>{{ post.createdAt }}</span>
+          <span>{{ post.createdAt | fullDate }}</span>
         </el-form-item>
         <el-form-item>
           <el-button @click="handleSubmit(onSubmit)">submit</el-button>

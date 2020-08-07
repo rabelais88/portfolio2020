@@ -13,9 +13,9 @@
       <el-table-column label="Last Edited" width="150">
         <template slot-scope="scope">
           <span v-if="scope.row._updatedAt > scope.row._createdAt">{{
-            scope.row._updatedAt
+            scope.row._updatedAt | fullDate
           }}</span>
-          <span v-else>{{ scope.row._createdAt }}</span>
+          <span v-else>{{ scope.row._createdAt | fullDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Tag" width="130">

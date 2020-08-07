@@ -20,6 +20,7 @@ import store from './store';
 import router from './router';
 
 import setValidateRules from './validateRules';
+import AddFilters from './filters/AddFilters';
 
 /**
  * If you don't want to use mock-server
@@ -39,6 +40,7 @@ Vue.use(ElementUI, { locale });
 
 setValidateRules();
 Vue.use(MavonEditor);
+Vue.use(AddFilters);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('FormMargin', FormMargin);
