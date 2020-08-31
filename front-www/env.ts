@@ -1,7 +1,9 @@
 /* eslint-disable prefer-destructuring */
 import processType from 'types/process';
 import pkg from './package.json';
-
+/**
+ * DO NOT STORE SECRET! THE IMAGE WILL BE UPLOADED TO PUBLIC REPO
+ */
 /**
  * @description DO NOT destruct process.env
  * @example
