@@ -1,4 +1,4 @@
-if ![ -z $DOCKER_PASSWORD ]
+if [ -z $DOCKER_PASSWORD ]
 then
   echo "skipping relogin because DOCKER_PASSWORD does not exist"
 else
