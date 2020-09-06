@@ -41,7 +41,6 @@ resource "digitalocean_droplet" "swarm_manager" {
 
   provisioner "remote-exec" {
     inline = [
-      # "sh /srv/docker-install.sh",
       "cloud-init status --wait",
       "sh /srv/start-swarm.sh",
       "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
@@ -83,7 +82,6 @@ resource "digitalocean_droplet" "swarm_worker" {
 
   provisioner "remote-exec" {
     inline = [
-      # "sh /srv/docker-install.sh",
       "cloud-init status --wait",
       "docker swarm join --token ${trimspace(file("${path.cwd}/token.txt"))} ${digitalocean_droplet.swarm_manager.ipv4_address_private}:2377"
     ]
