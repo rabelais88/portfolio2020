@@ -37,7 +37,7 @@ services:
       # - SSL_CERT=
       # - SSL_KEY=
     ports:
-      - 4500:4500
+      - 80:4500
     secrets:
       - portfolio-admin-gmail-account
       - portfolio-google-client-id
@@ -61,14 +61,15 @@ services:
     restart: always
     image: rabelais/portfolio_front_www:latest
     labels:
-      - traefik.http.routers.portfolio-front-www.rule=Host(`sungryeol.com`)
+      - traefik.http.routers.portfolio-front-www.rule=Host(`www.sungryeol.com`)
       - traefik.http.routers.portfolio-front-www.entrypoints=web
       - traefik.enable=true
     environment:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=http://api.sungryeol.com
     ports:
-      - 3000:3000
+      # listen to 3000 and out to 80
+      - 80:3000
 
   # https://hub.docker.com/_/nginx
   front-admin:
@@ -80,8 +81,7 @@ services:
       # API_URL is provided via dockerfile
       # -> environment variable is precompiled
     ports:
-      # listen to 80 and out to 5000
-      - 5000:80
+      - 80:80
 
   reverse-proxy:
     image: traefik:v2.2
