@@ -6,11 +6,13 @@ services:
     # container_name is ignored in swarm mode
     # can't use *-api as router name.
     image: rabelais/portfolio_api:latest
-    labels:
-      - traefik.http.routers.portfolio-apiserver.rule=Host(`api.sungryeol.com`)
-      - traefik.http.routers.portfolio-apiserver.entrypoints=web
-      - traefik.enable=true
-    restart: always
+    deploy:
+      labels:
+        - traefik.http.routers.portfolio-apiserver.rule=Host(`api.sungryeol.com`)
+        - traefik.http.routers.portfolio-apiserver.entrypoints=web
+        # https://docs.traefik.io/providers/docker/#port-detection
+        # - traefik.http.services.<service_name>.loadbalancer.server.port=
+        - traefik.enable=true
     environment:
       - ENV=production
       - PORT=4500
@@ -37,7 +39,7 @@ services:
       # - SSL_CERT=
       # - SSL_KEY=
     ports:
-      - 80:4500
+      - 4500:4500
     secrets:
       - portfolio-admin-gmail-account
       - portfolio-google-client-id
@@ -47,7 +49,6 @@ services:
 
   db:
     image: postgres:13
-    restart: always
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD_FILE=/run/secrets/portfolio-db-password
@@ -58,37 +59,39 @@ services:
       - portfolio-db-password
 
   front-www:
-    restart: always
     image: rabelais/portfolio_front_www:latest
-    labels:
-      - traefik.http.routers.portfolio-front-www.rule=Host(`www.sungryeol.com`)
-      - traefik.http.routers.portfolio-front-www.entrypoints=web
-      - traefik.enable=true
+    deploy:
+      labels:
+        - traefik.http.routers.portfolio-front-www.rule=Host(`sungryeol.com`)
+        - traefik.http.routers.portfolio-front-www.entrypoints=web
+        - traefik.enable=true
     environment:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=http://api.sungryeol.com
     ports:
-      # listen to 3000 and out to 80
-      - 80:3000
+      - 3000:3000
 
   # https://hub.docker.com/_/nginx
   front-admin:
     image: rabelais/portfolio_front_admin:latest
-    labels:
-      - traefik.http.routers.portfolio-front-admin.rule=Host(`admin.sungryeol.com`)
-      - traefik.http.routers.portfolio-front-admin.entrypoints=web
-      - traefik.enable=true
-      # API_URL is provided via dockerfile
-      # -> environment variable is precompiled
+    deploy:
+      labels:
+        - traefik.http.routers.portfolio-front-admin.rule=Host(`admin.sungryeol.com`)
+        - traefik.http.routers.portfolio-front-admin.entrypoints=web
+        - traefik.enable=true
+        # API_URL is provided via dockerfile
+        # -> environment variable is precompiled
     ports:
-      - 80:80
+      # listen to 80 and out to 5000
+      - 5000:80
 
   reverse-proxy:
     image: traefik:v2.2
-    labels:
-      - traefik.http.routers.traefik.rule=Host(`traefik.sungryeol.com`)
-      - traefik.http.routers.traefik.entrypoints=web
-      - traefik.enable=true
+    deploy:
+      labels:
+        - traefik.http.routers.traefik.rule=Host(`traefik.sungryeol.com`)
+        - traefik.http.routers.traefik.entrypoints=web
+        - traefik.enable=true
     ports:
       - 80:80
       # web ui(--api.insecure=true)
