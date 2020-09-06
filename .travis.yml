@@ -9,8 +9,8 @@ matrix:
       script: go test -v ./...
       services:
         - docker
-      before_deploy:
-        - cd api
+      # before_deploy:
+      #   - cd api
       deploy:
         provider: script
         script: bash build-n-push.sh
@@ -25,8 +25,8 @@ matrix:
       before_script:
         - cd front-www
       script: echo "test is skipped for front-www"
-      before_deploy:
-        - cd front-www
+      # before_deploy:
+      #   - cd front-www
       deploy:
         provider: script
         script: bash build-n-push.sh
@@ -41,8 +41,8 @@ matrix:
       before_script:
         - cd front-admin
       script: echo "test is skipped for front-www"
-      before_deploy:
-        - cd front-admin
+      # before_deploy:
+      #   - cd front-admin
       deploy:
         provider: script
         script: bash build-n-push.sh

@@ -4,7 +4,7 @@ else
   echo $DOCKER_PASSWORD | docker login --username rabelais --password-stdin
 fi
 
-VERSION="test"
+VERSION="0.1"
 IMAGE_NAME="rabelais/portfolio_api" # private repo!
 TAG_FIXED="${IMAGE_NAME}:${VERSION}"
 TAG_LATEST="${IMAGE_NAME}:latest"
