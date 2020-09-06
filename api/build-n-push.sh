@@ -6,7 +6,7 @@ else
 fi
 
 VERSION="0.11"
-IMAGE_NAME="rabelais/portfolio_front_www" # public repo!
+IMAGE_NAME="rabelais/portfolio_api" # private repo!
 TAG_FIXED="${IMAGE_NAME}:${VERSION}"
 TAG_LATEST="${IMAGE_NAME}:latest"
 docker build -f prod.dockerfile -t $TAG_FIXED .
