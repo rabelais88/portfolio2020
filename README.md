@@ -31,6 +31,37 @@ docker-compose -f local.proxy.docker-compose.yaml down
 kubectl apply -f local.k8.yaml
 ```
 
+# deployment in production environment
+
+```sh
+cd terraform-prod
+# variable file(.tfvars) and sshkey file are necessary for deployment
+# create terraform variable file(.tfvars) with secrets
+vi terraform.tfvars
+# create sshkey
+sshkey -f mykey
+
+terraform init
+
+# check if file is valid
+terraform validate
+terraform plan
+
+# deploy
+terraform apply
+```
+
+```sh
+# terraform-prod/terraform.tfvars
+# digital ocean secret key
+do_token = "..."
+public_ssh_key_location = "./mykey.pub"
+private_ssh_key_location = "./mykey"
+# docker id for accessing private repository
+docker_id = "..."
+docker_password = "..."
+```
+
 # caveat
 
 - api frontend must be served in accordance with [vue history mode configuration](https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations)
