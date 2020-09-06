@@ -1,0 +1,11 @@
+language: go
+go:
+  - "1.14"
+script: go test -v ./...
+services:
+  - docker
+deploy:
+  provider: script
+  script: bash build-n-push.sh
+  on:
+    branch: master
