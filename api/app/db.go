@@ -32,8 +32,11 @@ func ConnectDB(config *env.Config) *gorm.DB {
 	case env.ENVIRONMENTS.PROD:
 		if config.SSLMode == "disable" {
 			dbPath += " sslmode=disable"
+			log.Println("SSL mode disabled")
 		} else {
-			dbPath += fmt.Sprintf(" sslmode=%s sslrootcert=% sslcert=%s sslkey=%s", config.SSLMode, config.SSLRootCert, config.SSLCert, config.SSLKey)
+			strSSL := fmt.Sprintf(" sslmode=%s sslrootcert=% sslcert=%s sslkey=%s", config.SSLMode, config.SSLRootCert, config.SSLCert, config.SSLKey)
+			log.Println(strSSL)
+			dbPath += strSSL
 		}
 	}
 
