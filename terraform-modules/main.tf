@@ -30,11 +30,6 @@ resource "digitalocean_droplet" "swarm_manager" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/docker-install.sh"
-    destination = "/srv/docker-install.sh"
-  }
-
-  provisioner "file" {
     source      = "${path.module}/scripts/start-swarm.sh"
     destination = "/srv/start-swarm.sh"
   }
@@ -73,11 +68,6 @@ resource "digitalocean_droplet" "swarm_worker" {
     type        = "ssh"
     host        = self.ipv4_address
     private_key = var.private_key
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/scripts/docker-install.sh"
-    destination = "/srv/docker-install.sh"
   }
 
   provisioner "remote-exec" {
