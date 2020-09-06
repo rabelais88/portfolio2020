@@ -1,3 +1,9 @@
+if [ -z $DOCKER_PASSWORD ]; then
+  # ...
+else
+  echo $DOCKER_PASSWORD | docker login --username rabelais --password-stdin
+fi
+
 VERSION="test"
 IMAGE_NAME="rabelais/portfolio_front_admin" # public repo!
 TAG_FIXED="${IMAGE_NAME}:${VERSION}"

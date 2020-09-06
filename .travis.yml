@@ -15,5 +15,29 @@ matrix:
         script: bash build-n-push.sh
         on:
           branch: master
+    - langauge: node
+      node:
+        - "14.4.0"
+      services:
+        - docker
+      before_deploy:
+        - cd front-www
+      deploy:
+        provider: script
+        script: bash build-n-push.sh
+        on:
+          branch: master
+    - langauge: node
+      node:
+        - "14.4.0"
+      services:
+        - docker
+      before_deploy:
+        - cd front-admin
+      deploy:
+        provider: script
+        script: bash build-n-push.sh
+        on:
+          branch: master
     # multiple CIs are allowed
     # - language: ...
