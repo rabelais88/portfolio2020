@@ -23,6 +23,7 @@ require (
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
+	github.com/novalagung/gubrak v1.0.0
 	github.com/novalagung/gubrak/v2 v2.0.1
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

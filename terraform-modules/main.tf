@@ -36,6 +36,11 @@ resource "digitalocean_droplet" "swarm_manager" {
   provisioner "remote-exec" {
     inline = [
       "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
+      "printf ${var.admin_gmail_account} | docker secret create portfolio-admin-gmail-account -",
+      "printf ${var.google_client_id} | docker secret create portfolio-google-client-id",
+      "printf ${var.google_client_secret} | docker secret create portfolio-google-client-secret",
+      "printf ${var.secret_jwt} | docker secret create portfolio-secret-jwt",
+      "printf ${var.db_password} | docker secret create portfolio-db-password",
       "sh /srv/docker-install.sh",
       "sh /srv/start-swarm.sh",
     ]
@@ -61,7 +66,7 @@ resource "digitalocean_droplet" "swarm_worker" {
     private_key = var.private_key
   }
 
-    provisioner "file" {
+  provisioner "file" {
     source      = "${path.module}/scripts/docker-install.sh"
     destination = "/srv/docker-install.sh"
   }

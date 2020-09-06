@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/rabelais88/portfolio2020/api/constants"
+
 	"github.com/rabelais88/portfolio2020/api/app"
 
 	"github.com/gavv/httpexpect/v2"
@@ -48,14 +50,16 @@ func TestGetArticles(t *testing.T) {
 		},
 	})
 	app.MakeFakeData(db)
-	ps := []model.Post{}
-	db.Find(&ps)
+	ps := []model.Article{}
+	db.Where(&model.Article{Type: constants.ARTICLES.POST}).Find(&ps)
+	as := []model.Article{}
+	db.Find(&as)
 
 	e.GET(`/articles`).Expect().Status(http.StatusOK)
 	e.GET(`/articles`).WithQuery("sort", "abce1234").Expect().Status(http.StatusOK)
 	e.GET(`/articles`).WithQuery("order", "asc").Expect().Status(http.StatusOK)
 	e.GET(`/articles`).WithQuery("order", "wrongorder").Expect().Status(http.StatusBadRequest)
-	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
+	e.GET(`/articles`).Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(as))
 	e.GET(`/articles`).WithQuery("type", "POST").Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", len(ps))
 	e.GET(`/articles`).WithQuery("type", "MEDIA").Expect().Status(http.StatusOK).JSON().Object().ValueEqual("count", 0)
 
