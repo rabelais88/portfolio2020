@@ -10,6 +10,7 @@ resource "digitalocean_droplet" "swarm_manager" {
   size               = "s-1vcpu-1gb"
   private_networking = true
   ssh_keys           = [digitalocean_ssh_key.default.fingerprint]
+  user_data          = file("${path.module}/scripts/init.cfg")
 
   connection {
     user        = "root"
@@ -40,14 +41,15 @@ resource "digitalocean_droplet" "swarm_manager" {
 
   provisioner "remote-exec" {
     inline = [
-      "sh /srv/docker-install.sh",
+      # "sh /srv/docker-install.sh",
+      "cloud-init status --wait",
+      "sh /srv/start-swarm.sh",
       "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
       "echo ${var.admin_gmail_account} | docker secret create portfolio-admin-gmail-account -",
       "echo ${var.google_client_id} | docker secret create portfolio-google-client-id -",
       "echo ${var.google_client_secret} | docker secret create portfolio-google-client-secret -",
       "echo ${var.secret_jwt} | docker secret create portfolio-secret-jwt -",
       "echo ${var.db_password} | docker secret create portfolio-db-password -",
-      "sh /srv/start-swarm.sh",
     ]
   }
 
@@ -63,6 +65,9 @@ resource "digitalocean_droplet" "swarm_worker" {
   size               = "s-1vcpu-1gb"
   private_networking = true
   ssh_keys           = [digitalocean_ssh_key.default.fingerprint]
+  user_data          = file("${path.module}/scripts/init.cfg")
+
+  depends_on = [digitalocean_droplet.swarm_manager]
 
   connection {
     user        = "root"
@@ -78,7 +83,8 @@ resource "digitalocean_droplet" "swarm_worker" {
 
   provisioner "remote-exec" {
     inline = [
-      "sh /srv/docker-install.sh",
+      # "sh /srv/docker-install.sh",
+      "cloud-init status --wait",
       "docker swarm join --token ${trimspace(file("${path.cwd}/token.txt"))} ${digitalocean_droplet.swarm_manager.ipv4_address_private}:2377"
     ]
   }

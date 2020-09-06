@@ -31,6 +31,11 @@ services:
       - GOOGLE_ID_FILE=portfolio-google-client-id
       - GOOGLE_SECRET_FILE=portfolio-google-client-secret
       - ADMIN_GMAIL_ACCOUNT_FILE=portfolio-admin-gmail-account
+      - SSL_MODE=disable
+      # - SSL_MODE=verify-ca
+      # - SSL_ROOT_CERT=
+      # - SSL_CERT=
+      # - SSL_KEY=
     ports:
       - 4500:4500
     secrets:
