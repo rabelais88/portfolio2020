@@ -29,10 +29,10 @@ func ConnectDB(config *env.Config) *gorm.DB {
 			log.Println(dbPath)
 			log.Println("connecting to DB...")
 		}
-	case env.ENVIRONMENTS.PROD:
+	default:
 		if config.SSLMode == "disable" {
 			dbPath += " sslmode=disable"
-			log.Println("SSL mode disabled")
+			log.Println("DB SSL disabled")
 		} else {
 			strSSL := fmt.Sprintf(" sslmode=%s sslrootcert=% sslcert=%s sslkey=%s", config.SSLMode, config.SSLRootCert, config.SSLCert, config.SSLKey)
 			log.Println(strSSL)

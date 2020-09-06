@@ -51,6 +51,9 @@ terraform plan
 
 # deploy
 terraform apply
+
+# accessing ssh
+ssh -i mykey root@${SWARM_MANAGER_IP}
 ```
 
 ```sh
