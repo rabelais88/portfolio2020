@@ -1,0 +1,202 @@
+# backend-api
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Unique key of the Deployment instance
+  # avoid 'api' in the name, because traefik has a problem with it
+  name: portfolio-back
+spec:
+  # 3 Pods should exist at all times.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio-back
+  template:
+    metadata:
+      labels:
+        # Apply this label to pods and default
+        # the Deployment label selector to this value
+        app: portfolio-back
+    spec:
+      containers:
+      - name: portfolio-back-cont
+        image: rabelais/portfolio_api:latest
+        imagePullPolicy: Never
+        env:
+        - name: DB_HOST
+          value: "portfolio-db"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: "admin"
+        - name: DB_NAME
+          value: "portfolio"
+        - name: URL
+          value: "https://api.sungryeol.com"
+        - name: REDIRECT_URL
+          value: "https://admin.sungryeol.com/login"
+        - name: ALLOWED_ORIGIN
+          value: "https://admin.sungryeol.com,https://sungryeol.com"
+        - name: JAEGER
+          value: "false"
+        # DB_PASSWORD should use secret instead
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: portfolio-db-password
+        secret:
+          secretName: portfolio-db-password
+      - name: portfolio-admin-gmail-account
+        secret:
+          secretName: portfolio-admin-gmail-account
+      - name: portfolio-google-client-id
+        secret:
+          secretName: portfolio-google-client-id
+
+---
+# backend expose
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: portfolio-back
+  name: portfolio-back
+spec:
+  ports:
+  - port: 4500
+    protocol: TCP
+    targetPort: 4500
+  selector:
+    app: portfolio-back
+  type: ClusterIP
+---
+# backend-db
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: portfolio-db
+  name: portfolio-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio-db
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: portfolio-db
+    spec:
+      containers:
+      - image: postgres:13
+        name: postgres
+        resources: {}
+---
+# backend-db expose
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: portfolio-db
+  name: portfolio-db
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: portfolio-db
+  # sessionAffinity: None
+  type: ClusterIP
+---
+# front-admin
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: portfolio-front-admin
+  name: portfolio-front-admin
+spec:
+  selector:
+    matchLabels:
+      app: portfolio-front-admin
+  template:
+    metadata:
+      labels:
+        app: portfolio-front-admin
+    spec:
+      containers:
+      - image: rabelais/portfolio-front-admin
+        imagePullPolicy: Always
+        name: portfolio-front-admin
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+# front-admin expose
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: portfolio-front-admin
+  name: portfolio-front-admin
+spec:
+  # clusterIP: 10.97.75.196
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 31186 # exposed to outside world
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: portfolio-front-admin
+  sessionAffinity: None
+  type: NodePort
+---
+# front-www
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: portfolio-front-www
+  name: portfolio-front-www
+spec:
+  selector:
+    matchLabels:
+      app: portfolio-front-www
+  template:
+    metadata:
+      labels:
+        app: portfolio-front-www
+    spec:
+      containers:
+      - image: rabelais/portfolio-front-www
+        imagePullPolicy: Always
+        name: portfolio-front-www
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: portfolio-front-www
+  name: portfolio-front-www
+  namespace: default
+spec:
+  # clusterIP: 10.105.99.161
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 31021 # exposed to outside world
+    port: 3500
+    protocol: TCP
+    targetPort: 3500
+  selector:
+    app: portfolio-front-www
+  sessionAffinity: None
+  type: NodePort

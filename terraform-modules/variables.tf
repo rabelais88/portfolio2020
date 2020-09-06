@@ -1,9 +1,7 @@
+variable "do_token" {}
+variable "public_key" {}
+variable "private_key" {}
+variable "private_ssh_key_location" {}
 variable "do_region" {}
-variable "do_spaces_access_id" {}
-variable "cluster_name" {}
-variable "cluster_version" {}
-variable "cluster_tags" {}
-variable "cluster_default_node_size" {}
-variable "cluster_default_node_count" {}
-variable "cluster_default_node_tags" {}
-variable "kubeconfig_path" {}
+variable "docker_id" {}
+variable "docker_password" {}

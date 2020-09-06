@@ -5,7 +5,7 @@ COPY yarn.lock yarn.lock
 RUN yarn install
 COPY . .
 ENV NEXT_PUBLIC_API_URL=https://api.sungryeol.com
-ENV NEXT_PUBLIC_SERVER_API_URL=http://backend:4500
+ENV NEXT_PUBLIC_SERVER_API_URL=http://portfolio-back:4500
 ENV NEXT_PUBLIC_IMAGE_URL=https://api.sungryeol.com/assets
 RUN yarn build
 
