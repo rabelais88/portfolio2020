@@ -36,6 +36,8 @@ kubectl apply -f local.k8.yaml
 ```sh
 cd terraform-prod
 # variable file(.tfvars) and sshkey file are necessary for deployment
+# make emtpy token.txt file for later use
+touch token.txt
 # create terraform variable file(.tfvars) with secrets
 vi terraform.tfvars
 # create sshkey
