@@ -1,11 +1,10 @@
-# offline dev only
+# production grade
 # environment variables from orchestration would override default environment setup
 version: "3.7"
 services:
   apiserver:
     # container_name is ignored in swarm mode
     # can't use *-api as router name.
-    container_name: portfolio-apiserver
     image: rabelais/portfolio_api:latest
     labels:
       - traefik.http.routers.portfolio-apiserver.rule=Host(`api.sungryeol.com`)
@@ -55,8 +54,7 @@ services:
 
   front-www:
     restart: always
-    container_name: portfolio-front-www
-    image: portfolio_front_www
+    image: rabelais/portfolio_front_www:latest
     labels:
       - traefik.http.routers.portfolio-front-www.rule=Host(`sungryeol.com`)
       - traefik.http.routers.portfolio-front-www.entrypoints=web
@@ -69,8 +67,7 @@ services:
 
   # https://hub.docker.com/_/nginx
   front-admin:
-    container_name: portfolio-front-admin
-    image: portfolio_front_admin
+    image: rabelais/portfolio_front_admin:latest
     labels:
       - traefik.http.routers.portfolio-front-admin.rule=Host(`admin.sungryeol.com`)
       - traefik.http.routers.portfolio-front-admin.entrypoints=web
@@ -83,7 +80,6 @@ services:
 
   reverse-proxy:
     image: traefik:v2.2
-    container_name: traefik
     labels:
       - traefik.http.routers.traefik.rule=Host(`traefik.sungryeol.com`)
       - traefik.http.routers.traefik.entrypoints=web
@@ -93,7 +89,7 @@ services:
       # web ui(--api.insecure=true)
       - 8080:8080
     volumes:
-      - ./traefik-local.yaml:/etc/traefik/traefik.yaml
+      - /srv/traefik.yaml:/etc/traefik/traefik.yaml
       - /var/run/docker.sock:/var/run/docker.sock
 
 networks:

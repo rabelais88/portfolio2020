@@ -1,0 +1,20 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: true
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+log:
+  level: DEBUG
+# insecure option should be disabled in production
+api:
+  debug: true
+  insecure: true
+ping: {}
+# must provide endpoint for swarm mode. 'providers.docker:{}' is local only.
+# https://docs.traefik.io/providers/docker/
+providers:
+  docker:
+    endpoint: "unix://var/run/docker.sock"

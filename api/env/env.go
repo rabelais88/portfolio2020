@@ -63,6 +63,10 @@ type Config struct {
 	FileLocation      string
 	FakeData          bool
 	Jaeger            bool
+	SSLMode           string
+	SSLCert           string
+	SSLKey            string
+	SSLRootCert       string
 }
 
 func GetConfig() *Config {
@@ -115,6 +119,10 @@ func GetConfig() *Config {
 		FileLocation:      fileLoc,
 		FakeData:          false,
 		Jaeger:            false,
+		SSLMode:           lib.CheckString(os.Getenv(`SSL_MODE`), `verify-ca`),
+		SSLRootCert:       os.Getenv(`SSL_ROOT_CERT`),
+		SSLCert:           os.Getenv(`SSL_CERT`),
+		SSLKey:            os.Getenv(`SSL_KEY`),
 	}
 
 	if _fakeData == `true` {

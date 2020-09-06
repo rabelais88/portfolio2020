@@ -24,6 +24,11 @@ resource "digitalocean_droplet" "swarm_manager" {
   }
 
   provisioner "file" {
+    source      = "../traefik.yaml"
+    destination = "/srv/traefik.yaml"
+  }
+
+  provisioner "file" {
     source      = "${path.module}/scripts/docker-install.sh"
     destination = "/srv/docker-install.sh"
   }
@@ -35,13 +40,13 @@ resource "digitalocean_droplet" "swarm_manager" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
-      "printf ${var.admin_gmail_account} | docker secret create portfolio-admin-gmail-account -",
-      "printf ${var.google_client_id} | docker secret create portfolio-google-client-id",
-      "printf ${var.google_client_secret} | docker secret create portfolio-google-client-secret",
-      "printf ${var.secret_jwt} | docker secret create portfolio-secret-jwt",
-      "printf ${var.db_password} | docker secret create portfolio-db-password",
       "sh /srv/docker-install.sh",
+      "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
+      "echo ${var.admin_gmail_account} | docker secret create portfolio-admin-gmail-account -",
+      "echo ${var.google_client_id} | docker secret create portfolio-google-client-id -",
+      "echo ${var.google_client_secret} | docker secret create portfolio-google-client-secret -",
+      "echo ${var.secret_jwt} | docker secret create portfolio-secret-jwt -",
+      "echo ${var.db_password} | docker secret create portfolio-db-password -",
       "sh /srv/start-swarm.sh",
     ]
   }
@@ -79,7 +84,7 @@ resource "digitalocean_droplet" "swarm_worker" {
   }
 
   provisioner "local-exec" {
-    command = "ssh -i ${var.private_ssh_key_location} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${digitalocean_droplet.swarm_manager.ipv4_address} 'cd /srv && docker stack deploy --compose-file docker-compose.yaml testapp'"
+    command = "ssh -i ${var.private_ssh_key_location} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${digitalocean_droplet.swarm_manager.ipv4_address} 'cd /srv && docker stack deploy --with-registry-auth --compose-file docker-compose.yaml portfolio'"
   }
 }
 

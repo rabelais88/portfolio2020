@@ -5,3 +5,8 @@ variable "private_ssh_key_location" {}
 variable "do_region" {}
 variable "docker_id" {}
 variable "docker_password" {}
+variable "admin_gmail_account" {}
+variable "google_client_id" {}
+variable "google_client_secret" {}
+variable "secret_jwt" {}
+variable "db_password" {}
