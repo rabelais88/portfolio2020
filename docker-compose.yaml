@@ -13,13 +13,12 @@ services:
       - traefik.enable=true
     restart: always
     environment:
-      - ENV=development
+      - ENV=production
       - PORT=4500
       # equivalent to postgres://db:5432
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=admin
-      - DB_PASSWORD=1234
       - DB_NAME=portfolio
       - URL=http://api.sungryeol.com
       # must include /login
@@ -47,10 +46,12 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=1234
+      - POSTGRES_PASSWORD_FILE=/run/secrets/portfolio-db-password
       - POSTGRES_DB=portfolio
     volumes:
       - db-data:/var/lib/postgresql/data
+    secrets:
+      - portfolio-db-password
 
   front-www:
     restart: always
@@ -102,13 +103,12 @@ volumes:
   db-data:
 secrets:
   portfolio-admin-gmail-account:
-    # use external: true for production
-    file: ./admin-gmail-account.secret
+    external: true
   portfolio-google-client-id:
-    file: ./google-client-id.secret
+    external: true
   portfolio-google-client-secret:
-    file: ./google-client-secret.secret
+    external: true
   portfolio-secret-jwt:
-    file: ./secret-jwt.secret
+    external: true
   portfolio-db-password:
-    file: ./db-password.secret
+    external: true
