@@ -1,5 +1,7 @@
 import seedrandom from 'seedrandom';
 import checkClient from 'lib/checkClient';
+import { NODE_ENV } from 'env';
+import { ENV_PROD } from 'constants/nodeEnvs';
 
 const consoleColors = [
   '#00876c',
@@ -32,6 +34,7 @@ class Logger {
 
   // https://github.com/vercel/next.js/issues/5354
   log(...args: any): null {
+    if (NODE_ENV === ENV_PROD) return null;
     if (checkClient()) {
       console.log(`%c${this.filename} ->`, `color:${this.color}`, ...args);
       return null;
