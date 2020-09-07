@@ -83,3 +83,6 @@ docker_password = "..."
 - `Google OAuth` redirection regex is ridiculous. It seems the regex differentiates subdomain(`xxx.abcd.efg`) and top-level(`abcd.xxx`) domain by the numbers of dots! due to this, subdomain can't be tested in local environment.
 - `next.js` doesn't fully support `redux` on server side. There are tricks to make it work but it's hackish and the support seems very filmsy on that.
 - [on GORM joins](https://kaviraj.me/go-gorm-using-joins/)
+- traefik has some missing instructions on their documents
+  - must add internal overlay network on each service
+  - all the networks must be explicitly registered on traefik label: `traefik.docker.network=my_network`
