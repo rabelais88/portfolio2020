@@ -11,10 +11,13 @@ log:
 # insecure option should be disabled in production
 api:
   debug: true
-  insecure: true
+  # insecure: true
 ping: {}
-# must provide endpoint for swarm mode. 'providers.docker:{}' is local only.
 # https://docs.traefik.io/providers/docker/
 providers:
   docker:
+    exposedByDefault: false
     endpoint: "unix://var/run/docker.sock"
+    swarmMode: true
+    watch: true
+    # swarmModeRefreshSeconds: 30

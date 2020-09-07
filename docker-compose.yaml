@@ -1,16 +1,20 @@
 # production grade
 # environment variables from orchestration would override default environment setup
+# Docker Swarm does not provide any port detection information to Traefik.
+# Therefore you must specify the port to use
 version: "3.7"
 services:
   apiserver:
     # container_name is ignored in swarm mode
     # can't use *-api as router name.
     image: rabelais/portfolio_api:latest
-    labels:
-      - traefik.http.routers.portfolio-apiserver.rule=Host(`api.sungryeol.com`)
-      - traefik.http.routers.portfolio-apiserver.entrypoints=web
-      - traefik.enable=true
-    restart: always
+    deploy:
+      labels:
+        - traefik.http.routers.portfolio_apiserver.rule=Host(`api.sungryeol.com`)
+        - traefik.http.routers.portfolio_apiserver.entrypoints=web
+        - traefik.http.services.portfolio_apiserver.loadbalancer.server.port=4500
+        - traefik.enable=true
+        - traefik.docker.network=traefik
     environment:
       - ENV=production
       - PORT=4500
@@ -37,69 +41,95 @@ services:
       # - SSL_CERT=
       # - SSL_KEY=
     ports:
-      - 80:4500
+      - 4500:4500
     secrets:
       - portfolio-admin-gmail-account
       - portfolio-google-client-id
       - portfolio-google-client-secret
       - portfolio-secret-jwt
       - portfolio-db-password
+    networks:
+      - traefik
 
   db:
     image: postgres:13
-    restart: always
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD_FILE=/run/secrets/portfolio-db-password
       - POSTGRES_DB=portfolio
+    deploy:
+      labels:
+        - traefik.enable=false
     volumes:
       - db-data:/var/lib/postgresql/data
     secrets:
       - portfolio-db-password
+    networks:
+      - traefik
 
   front-www:
-    restart: always
     image: rabelais/portfolio_front_www:latest
-    labels:
-      - traefik.http.routers.portfolio-front-www.rule=Host(`www.sungryeol.com`)
-      - traefik.http.routers.portfolio-front-www.entrypoints=web
-      - traefik.enable=true
+    deploy:
+      labels:
+        - traefik.http.routers.portfolio_front-www.rule=Host(`sungryeol.com`,`www.sungryeol.com`)
+        - traefik.http.routers.portfolio_front-www.entrypoints=web
+        - traefik.http.services.portfolio_front-www.loadbalancer.server.port=3000
+        - traefik.enable=true
+        - traefik.docker.network=traefik
     environment:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=http://api.sungryeol.com
     ports:
-      # listen to 3000 and out to 80
-      - 80:3000
+      - 3000:3000
+    networks:
+      - traefik
 
   # https://hub.docker.com/_/nginx
   front-admin:
     image: rabelais/portfolio_front_admin:latest
-    labels:
-      - traefik.http.routers.portfolio-front-admin.rule=Host(`admin.sungryeol.com`)
-      - traefik.http.routers.portfolio-front-admin.entrypoints=web
-      - traefik.enable=true
-      # API_URL is provided via dockerfile
-      # -> environment variable is precompiled
+    deploy:
+      labels:
+        - traefik.http.routers.portfolio_front-admin.rule=Host(`admin.sungryeol.com`)
+        - traefik.http.routers.portfolio_front-admin.entrypoints=web
+        - traefik.http.services.portfolio_front-admin.loadbalancer.server.port=80
+        - traefik.enable=true
+        - traefik.docker.network=traefik
+        # API_URL is provided via dockerfile
+        # -> environment variable is precompiled
     ports:
-      - 80:80
+      # listen to 80 and out to 5000
+      - 5000:80
+    networks:
+      - traefik
 
   reverse-proxy:
     image: traefik:v2.2
-    labels:
-      - traefik.http.routers.traefik.rule=Host(`traefik.sungryeol.com`)
-      - traefik.http.routers.traefik.entrypoints=web
-      - traefik.enable=true
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.http.routers.portfolio_reverse-proxy.rule=Host(`traefik.sungryeol.com`)
+        - traefik.http.routers.portfolio_reverse-proxy.entrypoints=web
+        - traefik.http.services.portfolio_reverse-proxy.loadbalancer.server.port=8080
+        - traefik.enable=true
+        - traefik.docker.network=traefik
     ports:
       - 80:80
+      - 443:443
       # web ui(--api.insecure=true)
       - 8080:8080
     volumes:
       - /srv/traefik.yaml:/etc/traefik/traefik.yaml
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
 
 networks:
-  backend:
+  traefik:
     driver: overlay
+    attachable: true
+    name: traefik
 volumes:
   db-data:
 secrets:
