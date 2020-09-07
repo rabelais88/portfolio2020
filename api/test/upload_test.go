@@ -19,6 +19,9 @@ func fileExists(filename string) bool {
 }
 
 func TestUploadFile(t *testing.T) {
+	if os.Getenv(`TRAVIS`) == `true` || os.Getenv(`CI`) == `true` {
+		t.Skip("test is skipped for travis")
+	}
 	handler, db := mountTestApp()
 	server := httptest.NewServer(handler)
 	defer server.Close()
