@@ -152,7 +152,7 @@ const Menu: React.FunctionComponent<unknown> = (props) => {
     <>
       <DrawerMenu />
       <Grid
-        backgroundColor="white"
+        backgroundColor="rgba(255,255,255,.76)"
         templateColumns="1fr 6fr 1fr"
         gap="10px"
         width="100%"
@@ -162,6 +162,7 @@ const Menu: React.FunctionComponent<unknown> = (props) => {
         left="0"
         right="0"
         height="60px"
+        style={{ backdropFilter: 'saturate(180%) blur(20px)' }}
         {...opts}
       >
         {router.pathname !== '/about' && (
