@@ -73,6 +73,7 @@ resource "digitalocean_droplet" "swarm_worker" {
   provisioner "remote-exec" {
     inline = [
       "cloud-init status --wait",
+      "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
       "docker swarm join --token ${trimspace(file("${path.cwd}/token.txt"))} ${digitalocean_droplet.swarm_manager.ipv4_address_private}:2377"
     ]
   }
