@@ -40,7 +40,7 @@ matrix:
         - docker
       before_script:
         - cd front-admin
-      script: echo "test is skipped for front-www"
+      script: echo "test is skipped for front-admin"
       # before_deploy:
       #   - cd front-admin
       deploy:

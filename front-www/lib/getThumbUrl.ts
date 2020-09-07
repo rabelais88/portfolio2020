@@ -1,8 +1,8 @@
 import getImageUrl from './getImageUrl';
 
 const getThumbUrl = (filename) => {
-  const url = getImageUrl(filename);
-  return `preview-${url}`;
+  const url = getImageUrl(`preview-${filename}`);
+  return url;
 };
 
 export default getThumbUrl;
