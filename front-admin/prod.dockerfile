@@ -9,4 +9,4 @@ RUN yarn build:prod
 FROM nginx:1.19.0-alpine
 WORKDIR /usr/share/nginx/html
 COPY --from=build /home/node/app/dist .
-COPY ./nginx/prod.default.conf /etc/nginx/templates/default.conf
+COPY ./nginx/prod.default.conf /etc/nginx/conf.d/default.conf

@@ -5,7 +5,7 @@ else
   echo $DOCKER_PASSWORD | docker login --username rabelais --password-stdin
 fi
 
-VERSION="0.12"
+VERSION="0.13"
 IMAGE_NAME="rabelais/portfolio_front_admin" # public repo!
 TAG_FIXED="${IMAGE_NAME}:${VERSION}"
 TAG_LATEST="${IMAGE_NAME}:latest"
