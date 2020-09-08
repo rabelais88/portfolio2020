@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import checkClient from 'lib/checkClient';
+import { checkClient } from 'lib';
 import { NODE_ENV } from 'env';
 import { ENV_PROD } from 'constants/nodeEnvs';
 

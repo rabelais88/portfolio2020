@@ -3,8 +3,7 @@ import getUiStore from 'redux-getters/getUiReducer';
 import { setViewWidth, setViewHeight } from 'store/ui/action';
 import { useDispatch } from 'react-redux';
 import _debounce from 'lodash/debounce';
-import useIsMounted from 'lib/useIsMounted';
-import checkClient from 'lib/checkClient';
+import { useIsMounted, checkClient } from 'lib';
 import Logger from 'lib/logger';
 
 const logger = new Logger('components/DisplayDetect.tsx');
