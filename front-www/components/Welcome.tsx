@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, PseudoBox, Text, Flex, Heading, Image } from '@chakra-ui/core';
 import theme from 'components/chakraTheme';
 import { checkClient, Logger } from 'lib';
-import { motion, useSpring } from 'framer-motion';
+// import FollowingLogo from './FollowingLogo';
 
 const logger = new Logger('components/Welcome.tsx');
 
@@ -31,19 +31,6 @@ const TitleHeading = (props) => (
 
 const Welcome = () => {
   const isClient = checkClient();
-  const [mouse, setMouse] = useState([0, 0, false]);
-  const [mx, my, isActive] = mouse;
-  const logoX = useSpring(0);
-  const logoY = useSpring(0);
-  useEffect(() => {
-    logoX.set(mx);
-    logoY.set(my);
-  }, [mx, my]);
-  const logoStyle = {
-    x: logoX,
-    y: logoY,
-  };
-  if (isActive) logoStyle.position = 'fixed';
 
   return (
     <>
@@ -80,22 +67,7 @@ const Welcome = () => {
         <Flex h={['30%', '20%']} justifyContent="center" w="100%">
           <TitleHeading />
         </Flex>
-        <Flex
-          style={{ justifyContent: 'center', height: '20%' }}
-          onMouseMove={(e) => {
-            const { offsetTop, offsetLeft } = e.currentTarget;
-            setMouse([e.pageX - offsetLeft, e.pageY - offsetTop, true]);
-          }}
-          onMouseEnter={() => setMouse([mx, my, true])}
-          onMouseLeave={() => setMouse([0, 0, false])}
-        >
-          <motion.img
-            src="/memoji2.png"
-            height="200px"
-            width="200px"
-            style={logoStyle}
-          />
-        </Flex>
+        {/* <FollowingLogo /> */}
         <Flex h="auto" justifyContent="center">
           <Text>I make beautiful web stuff.</Text>
         </Flex>

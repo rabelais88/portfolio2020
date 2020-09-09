@@ -16,6 +16,7 @@ require (
 	github.com/ijustfool/docker-secrets v0.0.0-20191021062307-b25ea5007562
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/jinzhu/gorm v1.9.16
+	github.com/jinzhu/now v1.1.1 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo-contrib v0.9.0
 	github.com/labstack/echo/v4 v4.1.17
@@ -23,11 +24,11 @@ require (
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
-	github.com/novalagung/gubrak v1.0.0
 	github.com/novalagung/gubrak/v2 v2.0.1
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
+	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 	github.com/valyala/fasthttp v1.13.1 // indirect
 	github.com/vcraescu/go-paginator v0.0.0-20200304054438-86d84f27c0b3
