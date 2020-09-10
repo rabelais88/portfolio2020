@@ -1,5 +1,4 @@
 import seedrandom from 'seedrandom';
-import { checkClient } from 'lib';
 import { NODE_ENV } from 'env';
 import { ENV_PROD } from 'constants/nodeEnvs';
 
@@ -23,19 +22,21 @@ const consoleColors = [
 class Logger {
   private filename: string;
   private color: string;
+  private isClient: boolean;
 
   constructor(_filename: string) {
     if (!_filename || _filename === '') throw Error('must specify filename');
     this.filename = _filename;
     const colorKey = Math.floor(seedrandom(_filename)() * consoleColors.length);
     this.color = consoleColors[colorKey];
+    this.isClient = typeof window === 'object';
     return this;
   }
 
   // https://github.com/vercel/next.js/issues/5354
   log(...args: any): null {
     if (NODE_ENV === ENV_PROD) return null;
-    if (checkClient()) {
+    if (this.isClient) {
       console.log(`%c${this.filename} ->`, `color:${this.color}`, ...args);
       return null;
     }

@@ -9,7 +9,7 @@ type PaginatorProps = {
   onPageClick: (page: number) => void;
 };
 
-const Paginator: React.FunctionComponent<PaginatorProps> = (props) => {
+const Paginator: React.FC<PaginatorProps> = (props) => {
   const { count, size, page, onPageClick } = props;
   if (count < 0) throw Error('props.count is smaller than 0');
   const pageLength = Math.round(count / size);

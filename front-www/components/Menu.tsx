@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Image, Box, Heading, Icon, Flex } from '@chakra-ui/core';
 import { Z_MENU } from 'constants/zIndex';
+import AnimatedLogo from 'components/AnimatedLogo'
 
 const Menu: React.FC = (props) => {
   return (
@@ -22,7 +23,8 @@ const Menu: React.FC = (props) => {
         justifyContent="center"
         gridColumn={['span 2', 'span 1']}
       >
-        <Image
+        <AnimatedLogo width="45px" height="45px" />
+        {/* <Image
           src="/memoji1.png"
           alt="memoji icon"
           w="45px"
@@ -31,7 +33,7 @@ const Menu: React.FC = (props) => {
             WebkitFilter: 'drop-shadow(5px 5px 5px #222)',
             filter: 'drop-shadow(5px 5px 5px #222)',
           }}
-        />
+        /> */}
       </Flex>
       <Flex
         w="100%"

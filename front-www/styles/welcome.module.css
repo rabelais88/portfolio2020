@@ -1,0 +1,11 @@
+.welcomebottom::after {
+  position: absolute;
+  font-family: 'Noto Sans KR', 'sans serif';
+  content: 'I make beautiful web stuff.';
+  width: 100%;
+  text-align: center;
+  top: 50%;
+  z-index: 1;
+  pointer-events: none;
+  display: block;
+}

@@ -16,6 +16,8 @@ const theme = {
     ...chakraTheme.colors,
     black: '#3B4658',
     white: '#ffffff',
+    disabled: '#757575',
+    placeholder: '#CACACA',
   },
   fonts,
   breakpoints,
