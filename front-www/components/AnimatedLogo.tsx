@@ -14,8 +14,6 @@ interface memojiProp {
   height?: number | string;
 }
 
-const getRandom = (max) => Math.round(Math.random() * max);
-
 const AnimatedLogo: React.FC<memojiProp> = ({ width, height }) => {
   const [url, nextCycle] = useCycle(...memojis);
 

@@ -1,9 +1,12 @@
 import React from 'react';
-import { Grid, Image, Box, Heading, Icon, Flex } from '@chakra-ui/core';
+import { Grid, Image, Box, Heading, Icon, Flex, Link } from '@chakra-ui/core';
 import { Z_MENU } from 'constants/zIndex';
-import AnimatedLogo from 'components/AnimatedLogo'
+import AnimatedLogo from 'components/AnimatedLogo';
+import { useRouter } from 'next/router';
 
 const Menu: React.FC = (props) => {
+  const router = useRouter();
+  const isIndex = router.pathname === '/';
   return (
     <Grid
       h="63px"
@@ -16,6 +19,8 @@ const Menu: React.FC = (props) => {
       left="0"
       right="0"
       position="fixed"
+      backgroundColor={isIndex ? 'transparent' : 'rgba(255,255,255,.5)'}
+      style={{ backdropFilter: 'blur(50px) saturate(180%)' }}
     >
       <Flex
         w="100%"
@@ -41,9 +46,15 @@ const Menu: React.FC = (props) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Heading fontSize="sm" color="white" textShadow="sm">
-          Sungryeol
-        </Heading>
+        <Link href="/">
+          <Heading
+            fontSize="sm"
+            color={isIndex ? 'white' : 'black'}
+            textShadow="sm"
+          >
+            Sungryeol
+          </Heading>
+        </Link>
       </Flex>
       <Flex
         w="100%"

@@ -8,6 +8,7 @@ import {
   Image,
   Tag,
   Stack,
+  Link,
 } from '@chakra-ui/core';
 import { BrowserView, MobileView } from 'react-device-detect';
 import theme from 'components/chakraTheme';
@@ -113,7 +114,7 @@ const Cover = () => (
 const ArticleItem: React.FC<{ _article: article }> = (props) => {
   const { _article, ..._props } = props;
   return (
-    <Box {...props}>
+    <Link {...props} href={`/article/${_article.id}`}>
       <Heading fontSize="lg">
         <Text as="span" paddingRight="3">
           {_article.type}
@@ -124,7 +125,7 @@ const ArticleItem: React.FC<{ _article: article }> = (props) => {
       </Heading>
       {_article.desc !== '' && <Text>{_article.desc}</Text>}
       <Text color="placeholder">{date.formatPastDate(_article.updatedAt)}</Text>
-    </Box>
+    </Link>
   );
 };
 
