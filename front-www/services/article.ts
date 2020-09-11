@@ -16,6 +16,8 @@ export const ARTICLE = 'article';
 export interface getArticlesRequestArg extends queryPaging {
   type?: string;
   tag?: string;
+  size?: number;
+  keyword?: string;
 }
 
 export async function getArticles(

@@ -36,6 +36,8 @@ module.exports = {
     'class-methods-use-this': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     'import/no-named-as-default': 0,
+    'react/button-has-type': 0,
+    'react/destructuring-assignment': 0,
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   },

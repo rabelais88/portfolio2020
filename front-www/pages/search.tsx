@@ -16,7 +16,6 @@ import { INIT, LOADING, SUCCESS, FAIL } from 'types/loadState';
 import { Text, IconButton, Flex } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 import ARTICLE_TYPE, { ALL } from 'types/articleType';
-import Welcome from 'components/Welcome';
 
 const logger = new Logger('pages/index.tsx');
 
@@ -34,9 +33,42 @@ const HomePage: _HomePage = () => {
     <ArticleItem {..._article} key={_article.id} />
   ));
 
+  function onPageClick(pageNum) {
+    window.location.href = `/?page=${pageNum}`;
+  }
+
+  async function onRemoveTag() {
+    await dispatch(setArticleTag(''));
+    await dispatch(getArticles());
+    const query = { ...router.query };
+    delete query.tag;
+    router.push({ pathname: '/', query });
+  }
+
   return (
     <Layout>
-      <Welcome />
+      {tag !== '' && (
+        <Flex align="center">
+          <IconButton
+            size="sm"
+            icon="small-close"
+            onClick={onRemoveTag}
+            aria-label="reset tag"
+            variant="unstyled"
+          />
+          <Text>
+            articles with <b>{tag}</b> tag({count})
+          </Text>
+        </Flex>
+      )}
+      {loadState === SUCCESS && articleList}
+      {loadState === FAIL && <p>could not load the data</p>}
+      <Paginator
+        count={count}
+        size={size}
+        page={page}
+        onPageClick={onPageClick}
+      />
     </Layout>
   );
 };

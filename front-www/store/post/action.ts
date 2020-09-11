@@ -36,6 +36,7 @@ export const getPost = (articleId: string): thunkAction => async (
     await dispatch(setPostLoadState(FAIL));
     return null;
   }
+  logger.log(req.result)
   await dispatch(setPost(mapPost(req.result)));
   await dispatch(setPostLoadState(SUCCESS));
   return null;

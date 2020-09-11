@@ -2,7 +2,11 @@
 import React from 'react';
 import { theme as chakraTheme } from '@chakra-ui/core';
 
-const fonts = { ...chakraTheme.fonts, mono: `'Menlo', monospace` };
+const fonts = {
+  ...chakraTheme.fonts,
+  heading: `Roboto Slab, serif`,
+  mono: `Menlo, monospace`,
+};
 
 const breakpoints = ['40em', '52em', '64em'];
 
@@ -10,13 +14,16 @@ const theme = {
   ...chakraTheme,
   colors: {
     ...chakraTheme.colors,
-    black: '#16161D',
+    black: '#3B4658',
+    white: '#ffffff',
+    disabled: '#757575',
+    placeholder: '#CACACA',
   },
   fonts,
   breakpoints,
   shadows: {
     ...chakraTheme.shadows,
-    sm: '2px 2px 2px #000',
+    sm: '0px 4px 4px rgba(0,0,0,.25)',
   },
   icons: {
     ...chakraTheme.icons,

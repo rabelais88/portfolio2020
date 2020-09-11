@@ -53,9 +53,13 @@ export const asyncResolver: resolverFunc = (_func, ..._args) => {
 };
 
 const baseURL = IS_SERVER && SERVER_API_URL ? SERVER_API_URL : API_URL;
+if (IS_SERVER && !SERVER_API_URL)
+  logger.log(
+    'missing SERVER_API_URL, falls back to default client API_URL for SERVER_API_URL'
+  );
 logger.log('api initialized', {
   API_URL,
-  SERVER_API_URL,
+  SERVER_API_URL: baseURL,
   baseURL,
   processEnv: process.env.NEXT_PUBLIC_API_URL,
 });

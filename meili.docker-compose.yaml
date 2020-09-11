@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  meili:
+    image: getmeili/meilisearch:v0.14.1
+    ports:
+      - 7700:7700
+    volumes:
+      - meilidata:/data.ms
+    environment:
+      - MEILI_MASTER_KEY=testingMeili
+
+# try below after bootup
+# curl -H "X-Meili-API-Key: testingMeili" -X GET 'http://localhost:7700/keys'
+
+
+volumes:
+  meilidata:
