@@ -17,12 +17,20 @@ export function mapPost(_postResponse: postResponse): post {
 
   const { article } = p;
   const _p = {
+    // merge with article
+    id: article.id,
+    title: article.title,
+    desc: article.desc,
+    coverImage: article.coverImage,
+    tags: article.tags,
+    link: article.link,
+
     type: POST,
-    ...article,
     content: p.content,
     createdAt,
     updatedAt,
     deletedAt,
   };
+
   return _p;
 }

@@ -46,9 +46,10 @@ func Init() (http.Handler, *gorm.DB) {
 	e.Static("/assets", config.FileLocation)
 
 	db := ConnectDB(&config)
+	s3w := ConnectS3Worker(&config)
 
 	// extend default context
-	e.Use(env.ExtendContext(config, db))
+	e.Use(env.ExtendContext(config, db, s3w))
 	e.Validator = &CustomValidator{validator: validator.New()}
 
 	ConnectRouter(e, &config)

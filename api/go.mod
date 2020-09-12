@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	cloud.google.com/go v0.65.0 // indirect
+	github.com/aws/aws-sdk-go v1.34.22
 	github.com/brianvoe/gofakeit/v5 v5.9.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/disintegration/imaging v1.6.2

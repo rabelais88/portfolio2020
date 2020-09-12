@@ -1,6 +1,6 @@
 import request from '@/utils/request';
-import { API_URL } from '@/env';
-import { AUTH_REQUIRED, FILE, ASSETS } from './path';
+import { IMAGE_URL } from '@/env';
+import { AUTH_REQUIRED, FILE } from './path';
 
 export function uploadFile(fileData) {
   const url = [AUTH_REQUIRED, FILE].join('/');
@@ -19,5 +19,5 @@ export function uploadFile(fileData) {
 export function getFileUrl(fileName) {
   const isFullUrl = new RegExp('^(http|https)://', 'ig').test(fileName);
   if (isFullUrl) return fileName;
-  return [API_URL, ASSETS, fileName].join('/');
+  return [IMAGE_URL, fileName].join('/');
 }

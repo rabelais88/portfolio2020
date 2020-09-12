@@ -81,6 +81,10 @@ func UploadFile(c echo.Context) error {
 		}
 		if extIndex == -1 {
 			// do not resize for non-resizable extensions
+			_, err := cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)
+			if err != nil {
+				log.Fatal(`error while uploading`, fileLoc)
+			}
 			urls = append(urls, filename)
 			continue
 		}
@@ -96,6 +100,14 @@ func UploadFile(c echo.Context) error {
 			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_SAVING_RESIZED_IMAGE")
 		}
 
+		_, err = cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)
+		if err != nil {
+			log.Fatal(`error while uploading`, fileLoc)
+		}
+		_, err = cc.S3W.UploadFile(cc.Config.S3ImageBucket, resizedFileloc)
+		if err != nil {
+			log.Fatal(`error while uploading`, resizedFileloc)
+		}
 		urls = append(urls, filename)
 	}
 
