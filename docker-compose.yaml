@@ -85,6 +85,8 @@ services:
     environment:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=http://api.sungryeol.com
+      - NEXT_PUBLIC_IMAGE_URL=https://d3cj1qm2zjlx16.cloudfront.net
+      # - NEXT_PUBLIC_ASSET_URL=https://d2sqdns711i0ti.cloudfront.net/assets
     ports:
       - 3000:3000
     networks:

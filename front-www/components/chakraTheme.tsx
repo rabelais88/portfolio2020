@@ -18,6 +18,7 @@ const theme = {
     white: '#ffffff',
     disabled: '#757575',
     placeholder: '#CACACA',
+    point_teal: '#52D1DF',
   },
   fonts,
   breakpoints,

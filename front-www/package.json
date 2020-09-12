@@ -32,7 +32,7 @@
     "seedrandom": "^3.0.5"
   },
   "scripts": {
-    "devLocal": "NEXT_PUBLIC_API_URL=http://localhost:4500 NEXT_PUBLIC_IMAGE_URL=https://sr-portfolio-dev.s3.ap-northeast-2.amazonaws.com next",
+    "devLocal": "NEXT_PUBLIC_API_URL=http://localhost:4500 NEXT_PUBLIC_IMAGE_URL=https://d2sqdns711i0ti.cloudfront.net next",
     "dev": "next",
     "build": "next build",
     "start": "next start",

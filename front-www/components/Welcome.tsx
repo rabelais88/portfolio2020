@@ -19,9 +19,13 @@ import wrapper from 'store/root';
 import { getArticles } from 'store/article/action';
 import { article } from 'types/article';
 
+import { WORK, POST } from 'types/articleType';
 import FollowingLogo from './FollowingLogo';
 
 const logger = new Logger('components/Welcome.tsx');
+
+// move to production cloudfront later
+const bgUrl = 'https://d2sqdns711i0ti.cloudfront.net/assets/seoul.jpg';
 
 const TitleHeading = (props) => (
   <Box w="280px">
@@ -67,9 +71,10 @@ const Cover = () => (
         zIndex={-2}
       />
       <PseudoBox
-        bgImage="url('https://bit.ly/2jYM25F')"
+        bgImage={`url(${bgUrl})`}
         backgroundPosition="center"
         backgroundRepeat="no-repeat"
+        backgroundSize="cover"
         w="full"
         h="full"
         position="absolute"
@@ -113,20 +118,68 @@ const Cover = () => (
 
 const ArticleItem: React.FC<{ _article: article }> = (props) => {
   const { _article, ..._props } = props;
-  return (
-    <Link {...props} href={`/article/${_article.id}`}>
-      <Heading fontSize="lg">
-        <Text as="span" paddingRight="3">
-          {_article.type}
+  if (_article.type === POST)
+    return (
+      <Box paddingBottom="10">
+        <PseudoBox
+          as="a"
+          {...{ href: `/article/${_article.id}` }}
+          role="group"
+          fontSize="lg"
+          fontStyle="heading"
+          _hover={{ textDecor: 'none' }}
+        >
+          <PseudoBox
+            as="h2"
+            _groupHover={{ color: theme.colors.point_teal }}
+            transition=".2s"
+          >
+            <Text as="span" paddingRight="3" fontWeight="bolder">
+              {_article.type}
+            </Text>
+            <Text as="span" fontWeight="normal">
+              {_article.title}
+            </Text>
+          </PseudoBox>
+        </PseudoBox>
+        {_article.desc !== '' && <Text>{_article.desc}</Text>}
+        <Text color="placeholder">
+          {date.formatPastDate(_article.updatedAt)}
         </Text>
-        <Text as="span" fontWeight="lighter">
-          {_article.title}
+      </Box>
+    );
+
+  if (_article.type === WORK)
+    return (
+      <Box paddingBottom="10">
+        <PseudoBox
+          as="a"
+          {...{ href: _article.link }}
+          role="group"
+          fontSize="lg"
+          fontStyle="heading"
+          _hover={{ textDecor: 'none' }}
+        >
+          <PseudoBox
+            as="h2"
+            _groupHover={{ color: theme.colors.point_teal }}
+            transition=".2s"
+          >
+            <Text as="span" paddingRight="3" fontWeight="bolder">
+              {_article.type}
+            </Text>
+            <Text as="span" fontWeight="normal">
+              {_article.title}
+            </Text>
+          </PseudoBox>
+        </PseudoBox>
+        {_article.desc !== '' && <Text>{_article.desc}</Text>}
+        <Text color="placeholder">
+          {date.formatPastDate(_article.updatedAt)}
         </Text>
-      </Heading>
-      {_article.desc !== '' && <Text>{_article.desc}</Text>}
-      <Text color="placeholder">{date.formatPastDate(_article.updatedAt)}</Text>
-    </Link>
-  );
+      </Box>
+    );
+  return <Heading>unknown type</Heading>;
 };
 
 const Welcome = () => {
@@ -139,11 +192,18 @@ const Welcome = () => {
       <Cover />
       <Box position="relative" top="100vh">
         <Heading as="h1">Recent Post</Heading>
-        <Stack spacing={10} paddingTop={10}>
+        <Box h={10} />
+        <Stack spacing={10}>
           {articles.map((a) => (
             <ArticleItem key={a.id} _article={a} />
           ))}
         </Stack>
+        <Text>Search more articles</Text>
+        <Box h={10} />
+        <Box>
+          <Heading as="h1">Contact</Heading>
+          <Text>email: sungryeolp@gmail.com</Text>
+        </Box>
       </Box>
     </>
   );
