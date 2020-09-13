@@ -5,8 +5,11 @@ matrix:
       go:
         - "1.14"
       before_script:
+        - docker-compose -f meili-docker-compose.yaml up
         - cd api
-      script: go test -v ./...
+        - wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+        - chmod +x wait-for-it.sh
+      script: ../wait-for-it.sh http://localhost:7700 -- go test -v ./...
       services:
         - docker
       # before_deploy:

@@ -5,13 +5,16 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jinzhu/gorm"
+	"github.com/meilisearch/meilisearch-go"
+
+	"gorm.io/gorm"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo-contrib/jaegertracing"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"github.com/rabelais88/portfolio2020/api/controller"
 	"github.com/rabelais88/portfolio2020/api/env"
 )
 
@@ -32,7 +35,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 	return err
 }
 
-func Init() (http.Handler, *gorm.DB) {
+func Init() (http.Handler, *gorm.DB, *meilisearch.Client) {
 	config := *env.GetConfig()
 
 	log.Println("app initialized")
@@ -45,23 +48,26 @@ func Init() (http.Handler, *gorm.DB) {
 	}))
 	e.Static("/assets", config.FileLocation)
 
-	db := ConnectDB(&config)
+	_controller, err := controller.NewController(&config, e)
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
 	s3w := ConnectS3Worker(&config)
 
 	// extend default context
-	e.Use(env.ExtendContext(config, db, s3w))
+	e.Use(controller.ExtendContext(&config, _controller, s3w))
 	e.Validator = &CustomValidator{validator: validator.New()}
 
 	ConnectRouter(e, &config)
 	_port := fmt.Sprintf(":%s", config.Port)
 
-	if config.Env != env.PROD && config.FakeData {
-		MakeFakeData(db)
-	}
+	// if config.Env != env.PROD && config.FakeData {
+	// make fake data
+	// }
 
 	// bails out if it's a test environment.
 	if config.Env == env.TEST {
-		return e, db
+		return e, _controller.DB, _controller.Meili
 	}
 
 	if config.Jaeger {
@@ -70,9 +76,9 @@ func Init() (http.Handler, *gorm.DB) {
 		defer c.Close()
 	}
 
-	err := e.Start(_port)
+	err = e.Start(_port)
 	if err != nil {
 		e.Logger.Fatal(err)
 	}
-	return e, db
+	return e, _controller.DB, _controller.Meili
 }

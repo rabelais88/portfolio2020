@@ -9,10 +9,10 @@ import (
 )
 
 func TestPing(t *testing.T) {
-	handler, db := mountTestApp()
+	handler, _, _ := mountTestApp()
 	server := httptest.NewServer(handler)
 	defer server.Close()
-	defer db.Close()
+	// defer db.Close()
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		BaseURL:  server.URL,
@@ -22,5 +22,5 @@ func TestPing(t *testing.T) {
 		},
 	})
 
-	e.GET(`/ping`).Expect().Status(http.StatusOK)
+	e.GET(`/`).Expect().Status(http.StatusOK)
 }

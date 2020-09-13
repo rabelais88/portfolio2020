@@ -71,6 +71,8 @@ type Config struct {
 	S3AccessID        string
 	S3AccessSecret    string
 	S3ImageBucket     string
+	MeiliHost         string
+	MeiliSecret       string
 }
 
 func GetConfig() *Config {
@@ -131,6 +133,8 @@ func GetConfig() *Config {
 		S3AccessID:        os.Getenv(`S3_ACCESS_ID`),
 		S3AccessSecret:    os.Getenv(`S3_ACCESS_SECRET`),
 		S3ImageBucket:     os.Getenv(`S3_IMAGE_BUCKET`),
+		MeiliHost:         os.Getenv(`MEILI_HOST`),
+		MeiliSecret:       os.Getenv(`MEILI_SECRET`),
 	}
 
 	if _fakeData == `true` {
@@ -186,6 +190,12 @@ func GetConfig() *Config {
 		if s3AccessSecret != "" {
 			log.Println("docker secret has ovewritten S3_ACCESS_SECRET_FILE")
 			_config.S3AccessSecret = s3AccessSecret
+		}
+
+		meiliSecret := secrets[os.Getenv("MEILI_SECRET_FILE")]
+		if meiliSecret != "" {
+			log.Println("docker secret has overwritten MELI_SECRET_FILE")
+			_config.MeiliSecret = meiliSecret
 		}
 	}
 

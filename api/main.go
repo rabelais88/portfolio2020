@@ -5,6 +5,9 @@ import (
 )
 
 func main() {
-	_, db := app.Init()
-	defer db.Close()
+	// _, db := app.Init()
+	// defer db.Close
+
+	// .Close() is not implemented yet?
+	app.Init()
 }

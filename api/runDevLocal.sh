@@ -1,1 +1,1 @@
-ENV=development DB_MEMORY=true FAKE_DATA=true go run main.go
+ENV=development DB_MEMORY=true FAKE_DATA=true MEILI_HOST="" go run main.go

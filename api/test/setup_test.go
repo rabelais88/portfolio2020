@@ -4,13 +4,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jinzhu/gorm"
+	"github.com/meilisearch/meilisearch-go"
+
 	"github.com/rabelais88/portfolio2020/api/app"
 	"github.com/rabelais88/portfolio2020/api/env"
+	"gorm.io/gorm"
 )
 
-func mountTestApp() (http.Handler, *gorm.DB) {
+func mountTestApp() (http.Handler, *gorm.DB, *meilisearch.Client) {
 	os.Setenv(`ENV`, env.TEST)
-	e, db := app.Init()
-	return e, db
+	e, db, ms := app.Init()
+	return e, db, ms
 }

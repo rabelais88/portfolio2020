@@ -1,1 +1,1 @@
-go test ./... -v
+MEILI_HOST=http://localhost:7700 MEILI_SECRET=testingMeili go test ./... -v

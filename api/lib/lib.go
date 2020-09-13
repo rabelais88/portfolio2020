@@ -1,5 +1,7 @@
 package lib
 
+import "strconv"
+
 func CheckString(target string, fallback string) string {
 	if target == `` {
 		return fallback
@@ -12,4 +14,15 @@ func CheckInt(target int, fallback int) int {
 		return fallback
 	}
 	return target
+}
+
+func StringToInt64(target string, fallback int64) int64 {
+	if target == "" {
+		return fallback
+	}
+	n, err := strconv.ParseInt(target, 10, 64)
+	if err != nil {
+		return fallback
+	}
+	return n
 }

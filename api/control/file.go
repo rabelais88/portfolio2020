@@ -12,7 +12,7 @@ import (
 	"github.com/disintegration/imaging"
 	"github.com/labstack/echo/v4"
 	"github.com/novalagung/gubrak/v2"
-	"github.com/rabelais88/portfolio2020/api/env"
+	"github.com/rabelais88/portfolio2020/api/controller"
 )
 
 const thumbWidth = 200
@@ -25,15 +25,15 @@ type UploadFileResponse struct {
 }
 
 func UploadFile(c echo.Context) error {
-	cc := c.(*env.CustomContext)
+	cc := c.(*controller.CustomContext)
 
-	if err := RoleAdminOnly(cc); err != nil {
-		return err
-	}
+	// if err := RoleAdminOnly(cc); err != nil {
+	// 	return err
+	// }
 
 	form, err := cc.MultipartForm()
 	if err != nil {
-		return MakeError(http.StatusBadRequest, "BAD_MULTIPART_FORM")
+		return controller.MakeError(http.StatusBadRequest, "BAD_MULTIPART_FORM")
 	}
 
 	if _, err := os.Stat(cc.Config.FileLocation); os.IsNotExist(err) {
@@ -77,7 +77,7 @@ func UploadFile(c echo.Context) error {
 		fileExt := filepath.Ext(fileLoc)
 		extIndex, err := gubrak.From(resizableExts).IndexOf(fileExt).ResultAndError()
 		if err != nil {
-			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_PARSING_FILE_EXTENSION")
+			return controller.MakeError(http.StatusInternalServerError, "ERROR_WHILE_PARSING_FILE_EXTENSION")
 		}
 		if extIndex == -1 {
 			// do not resize for non-resizable extensions
@@ -92,12 +92,12 @@ func UploadFile(c echo.Context) error {
 		// Create resized image
 		resized, err := imaging.Open(fileLoc)
 		if err != nil {
-			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_OPENING_RESIZE_TARGET")
+			return controller.MakeError(http.StatusInternalServerError, "ERROR_WHILE_OPENING_RESIZE_TARGET")
 		}
 
 		resized = imaging.Resize(resized, thumbWidth, thumbHeight, imaging.Lanczos)
 		if err := imaging.Save(resized, resizedFileloc); err != nil {
-			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_SAVING_RESIZED_IMAGE")
+			return controller.MakeError(http.StatusInternalServerError, "ERROR_WHILE_SAVING_RESIZED_IMAGE")
 		}
 
 		_, err = cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)
@@ -114,7 +114,7 @@ func UploadFile(c echo.Context) error {
 	errRes := cc.JSON(http.StatusOK, UploadFileResponse{urls})
 
 	if errRes != nil {
-		return MakeError(http.StatusInternalServerError, "ERROR_WHILE_CREATING_RESPONSE")
+		return controller.MakeError(http.StatusInternalServerError, "ERROR_WHILE_CREATING_RESPONSE")
 	}
 	return errRes
 
