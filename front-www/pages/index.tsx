@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect, useDispatch } from 'react-redux';
+import Head from 'next/head';
 
 import wrapper from 'store/root';
 import getArticleReducer from 'redux-getters/getArticleReducer';
-import { getRecentArticles } from 'store/article/action';
-import { Logger, checkNum } from 'lib';
+import { getArticles, getRecentArticles } from 'store/article/action';
+import { Logger } from 'lib';
 import { ArticleItem, Layout, Cover } from 'components';
-import { INIT, LOADING, SUCCESS, FAIL } from 'types/loadState';
-import { Text, Box, Heading, Stack, Link } from '@chakra-ui/core';
+import { Text, Box, Heading, Stack, Link, PseudoBox } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
-import ARTICLE_TYPE, { ALL } from 'types/articleType';
-import theme from 'components/chakraTheme';
 import linkStyle from 'styles/links.module.css';
+import theme from 'components/chakraTheme';
+import { setMenuOpen } from 'store/ui/action';
 
 const logger = new Logger('pages/index.tsx');
 
@@ -136,12 +136,33 @@ const HomePage: _HomePage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // const articleList = articles.map((_article) => (
-  //   <ArticleItem {..._article} key={_article.id} />
-  // ));
+  const onSearchClick = async () => {
+    await dispatch(setMenuOpen(true));
+  };
 
   return (
     <Layout>
+      <Head>
+        <title>sungryeol.com</title>
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          property="og:title"
+          content="sungryeol.com"
+          key="title"
+          name="title"
+        />
+        <meta
+          property="og:description"
+          name="description"
+          content="work, portfolio of sungryeol park"
+          key="description"
+        />
+        <meta property="og:image" content="/memoji1.png" />
+        <meta property="og:type" content="index" />
+        <meta property="og:url" content="http://sungryeol.com" />
+        <meta property="og:site_name" content="sungryeol's portfolio" />
+      </Head>
       <Cover />
       <Box position="relative" top="100vh">
         <Heading as="h1">Recent Post</Heading>
@@ -151,7 +172,15 @@ const HomePage: _HomePage = () => {
             <ArticleItem key={a.id} _article={a} />
           ))}
         </Stack>
-        <Text>Search more articles</Text>
+        <PseudoBox
+          as="p"
+          cursor="pointer"
+          onClick={onSearchClick}
+          _hover={{ transition: '.3s', color: theme.colors.point_teal }}
+          transition=".3s"
+        >
+          Search more articles
+        </PseudoBox>
         <Box h={10} />
         <Stack alignItems="center">
           <Heading as="h1">Contact</Heading>

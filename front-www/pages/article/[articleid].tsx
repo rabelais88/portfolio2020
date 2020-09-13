@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import wrapper from 'store/root';
 import { Logger, date } from 'lib';
 import { Layout, Markdown } from 'components';
@@ -22,6 +23,27 @@ const Article = (props) => {
 
   return (
     <Layout>
+      <Head>
+        <title>sungryeol.com - {post.title}</title>
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          property="og:title"
+          content={`sungryeol - ${post.title}`}
+          key="title"
+          name="title"
+        />
+        <meta
+          property="og:description"
+          name="description"
+          content="work, portfolio of sungryeol park"
+          key="description"
+        />
+        <meta property="og:image" content="/memoji1.png" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="http://sungryeol.com" />
+        <meta property="og:site_name" content="sungryeol's portfolio" />
+      </Head>
       <Tag>
         <span
           role="img"
