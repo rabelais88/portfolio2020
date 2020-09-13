@@ -8,6 +8,9 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+// fig 1.
+// e.Use(CORSMiddlewareWrapper)
+
 func CORSMiddlewareWrapper(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		req := ctx.Request()
@@ -21,6 +24,16 @@ func CORSMiddlewareWrapper(next echo.HandlerFunc) echo.HandlerFunc {
 		return CORSHandler(ctx)
 	}
 }
+
+// fig 2.
+// e.POST(
+//   "/",
+//   handlers.Noop,
+//   ACAOHeaderOverwriteMiddleware,
+//   middleware.ProxyWithConfig(middleware.ProxyConfig{
+//        Balancer: singleTargetBalancer("[backend service URL]"),
+//   })
+// )
 
 func setResponseACAOHeaderFromRequest(req http.Request, resp echo.Response) {
 	resp.Header().Set(echo.HeaderAccessControlAllowOrigin,
