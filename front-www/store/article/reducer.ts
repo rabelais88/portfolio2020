@@ -10,10 +10,12 @@ import {
   SET_ARTICLE_COUNT,
   SET_ARTICLE_KEYWORD,
   SET_ARTICLE_TAG,
+  SET_RECENT_ARTICLES,
 } from './action';
 
 export const getDefaultState = (): defaultStateArticle => ({
   articles: [],
+  recentArticles: [],
   page: 0,
   count: 0,
   keyword: '',
@@ -44,6 +46,8 @@ function reducer(
       return { ...state, keyword: action.payload };
     case SET_ARTICLE_TAG:
       return { ...state, tag: action.payload };
+    case SET_RECENT_ARTICLES:
+      return { ...state, recentArticles: action.payload };
     default:
       return state;
   }

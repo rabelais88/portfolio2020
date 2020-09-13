@@ -6,3 +6,4 @@ export { default as Paginator } from './Paginator';
 export { default as TagViz } from './TagViz';
 export { default as FollowingLogo } from './FollowingLogo';
 export { default as AnimatedLogo } from './AnimatedLogo';
+export { default as Cover } from './Cover';

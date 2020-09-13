@@ -3,4 +3,5 @@ export interface defaultStateUi {
   viewHeight: number;
   menuOpen: boolean;
   isMobile: boolean;
+  searchMode: string;
 }

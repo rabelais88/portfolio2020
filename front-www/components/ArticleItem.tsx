@@ -1,100 +1,75 @@
 import React from 'react';
-import {
-  Box,
-  Tag,
-  TagLabel,
-  Stack,
-  Badge,
-  Flex,
-  Link,
-  Text,
-} from '@chakra-ui/core';
+import { Box, PseudoBox, Text, Heading } from '@chakra-ui/core';
+import theme from 'components/chakraTheme';
+import { date, getArticleUrl } from 'lib';
 import { article } from 'types/article';
-import getUiStore from 'redux-getters/getUiReducer';
-import { POST } from 'types/articleType';
-import { getThumbUrl } from 'lib';
 
-type ArticleItemProps = article;
+import { WORK, POST } from 'types/articleType';
 
-const getUrlByType = {
-  DEFAULT: (props: ArticleItemProps) => props.link,
-  [POST]: (props: ArticleItemProps) => `/post?id=${props.id}`,
-};
-
-const getUrl = (props: ArticleItemProps) => {
-  if (!getUrlByType[props.type]) return getUrlByType.DEFAULT(props);
-  return getUrlByType[props.type](props);
-};
-
-const ArticleItem: React.FunctionComponent<ArticleItemProps> = (props) => {
-  const {
-    id,
-    type: _type,
-    title,
-    desc,
-    coverImage,
-    link,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    tags,
-  } = props;
-
-  const tagLimit = 2;
-  const uiStore = getUiStore();
-  const isTagOmitted = uiStore.viewWidth <= 700 && tags.length > tagLimit;
-  let _tags = tags;
-  if (uiStore.viewWidth <= 700) _tags = tags.slice(0, tagLimit);
-  const tagList = _tags.map((tag) => (
-    <Link key={tag} href={`/?tag=${tag}`}>
-      <Tag size="sm">
-        <TagLabel>{tag}</TagLabel>
-      </Tag>
-    </Link>
-  ));
-
-  const imageUrl = `url(${getThumbUrl(coverImage)})`;
-  const url = getUrl(props);
-
-  const _coverImage = (
-    <Box
-      bgImage={imageUrl}
-      bgPos="center"
-      backgroundRepeat="no-repeat"
-      bgSize="cover"
-      minW={['80px', '110px']}
-      height={['90px', '110px']}
-    >
-      <Badge variant="solid">{_type}</Badge>
-    </Box>
-  );
-
-  return (
-    <Flex overflowY="hidden" borderTopWidth="1px" overflowX="hidden">
-      {coverImage !== '' && _coverImage}
-      <Box p={[2, 4]}>
-        <Box paddingBottom={2}>
-          <Link
-            fontSize="md"
-            fontWeight="bold"
-            backgroundColor="white"
-            href={url}
+const ArticleItem: React.FC<{ _article: article }> = (props) => {
+  const { _article, ..._props } = props;
+  if (_article.type === POST)
+    return (
+      <Box paddingBottom="10">
+        <PseudoBox
+          as="a"
+          {...{ href: getArticleUrl(_article.id) }}
+          role="group"
+          fontSize="md"
+          fontStyle="heading"
+          _hover={{ textDecor: 'none' }}
+        >
+          <PseudoBox
+            as="h2"
+            _groupHover={{ color: theme.colors.point_teal }}
+            transition=".2s"
           >
-            {title}
-          </Link>
-          <Text fontSize="xs">{desc}</Text>
-        </Box>
-        <Stack spacing={4} isInline overflowX="hidden">
-          {tagList}
-          {isTagOmitted && (
-            <Tag size="sm">
-              <TagLabel>{`+${tags.length - tagLimit}`}</TagLabel>
-            </Tag>
-          )}
-        </Stack>
+            <Text as="span" paddingRight="3" fontWeight="bolder">
+              {_article.type}
+            </Text>
+            <Text as="span" fontWeight="normal">
+              {_article.title}
+            </Text>
+          </PseudoBox>
+        </PseudoBox>
+        {_article.desc !== '' && <Text fontSize="sm">{_article.desc}</Text>}
+        <Text color="placeholder" fontSize="sm">
+          {date.formatPastDate(_article.updatedAt)}
+        </Text>
       </Box>
-    </Flex>
-  );
+    );
+
+  if (_article.type === WORK)
+    return (
+      <Box paddingBottom="10">
+        <PseudoBox
+          as="a"
+          {...{ href: _article.link }}
+          role="group"
+          fontSize="md"
+          fontStyle="heading"
+          _hover={{ textDecor: 'none' }}
+        >
+          <PseudoBox
+            as="h2"
+            _groupHover={{ color: theme.colors.point_teal }}
+            transition=".2s"
+          >
+            <Text as="span" paddingRight="3" fontWeight="bolder">
+              {_article.type}
+            </Text>
+            <Text as="span" fontWeight="normal">
+              {_article.title}
+            </Text>
+          </PseudoBox>
+        </PseudoBox>
+        {_article.desc !== '' && <Text fontSize="sm">{_article.desc}</Text>}
+        <Text color="placeholder" fontSize="sm">
+          {date.formatPastDate(_article.updatedAt)}
+        </Text>
+      </Box>
+    );
+  return <Heading>unknown type</Heading>;
 };
 
 export default ArticleItem;

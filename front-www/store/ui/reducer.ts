@@ -1,3 +1,4 @@
+import { SEARCH_ARTICLE } from 'constants/searchMode';
 import { INIT } from 'types/loadState';
 
 import { defaultStateUi } from 'types/ui';
@@ -7,6 +8,7 @@ import {
   SET_VIEW_WIDTH,
   SET_MENU_OPEN,
   SET_MOBILE,
+  SET_SEARCH_MODE,
 } from './action';
 
 export const getDefaultState = (): defaultStateUi => ({
@@ -14,6 +16,7 @@ export const getDefaultState = (): defaultStateUi => ({
   viewHeight: 0,
   menuOpen: false,
   isMobile: false,
+  searchMode: SEARCH_ARTICLE,
 });
 
 function reducer(state: defaultStateUi, action: uiActionTypes): defaultStateUi {
@@ -27,6 +30,8 @@ function reducer(state: defaultStateUi, action: uiActionTypes): defaultStateUi {
       return { ...state, menuOpen: action.payload };
     case SET_MOBILE:
       return { ...state, isMobile: action.payload };
+    case SET_SEARCH_MODE:
+      return { ...state, searchMode: action.payload };
     default:
       return state;
   }

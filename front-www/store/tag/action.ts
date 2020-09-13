@@ -1,3 +1,4 @@
+import _debounce from 'lodash/debounce';
 import { defaultStateTag, tag } from 'types/tag';
 import { defaultStateRoot } from 'types/rootState';
 import Logger from 'lib/logger';
@@ -10,6 +11,7 @@ const logger = new Logger('store/article/tag');
 
 export const SET_TAGS = 'SET_TAGS';
 export const SET_TAG_LOAD_STATE = 'SET_TAG_LOAD_STATE';
+export const SET_TAG_KEYWORD = 'SET_TAG_KEYWORD';
 
 type setTagsType = action<typeof SET_TAGS, tag[]>;
 export const setTags = (tags: tag[]): setTagsType => ({
@@ -23,6 +25,12 @@ export const setTagLoadState = (
 ): setTagLoadStateType => ({
   type: SET_TAG_LOAD_STATE,
   payload: loadState,
+});
+
+type setTagKeywordType = action<typeof SET_TAG_KEYWORD, string>;
+export const setTagKeyword = (keyword: string): setTagKeywordType => ({
+  type: SET_TAG_KEYWORD,
+  payload: keyword,
 });
 
 export const getTags = (): thunkAction => async (
@@ -43,4 +51,16 @@ export const getTags = (): thunkAction => async (
   return null;
 };
 
-export type tagActionTypes = setTagsType | setTagLoadStateType;
+export const getTagsDebounced = _debounce(
+  function (dispatch) {
+    dispatch(getTags());
+    return null;
+  },
+  200,
+  { trailing: true }
+);
+
+export type tagActionTypes =
+  | setTagsType
+  | setTagLoadStateType
+  | setTagKeywordType;

@@ -46,6 +46,7 @@ export interface article {
 
 export interface defaultStateArticle extends queryPaging {
   articles: article[];
+  recentArticles: recentArticles[];
   articleType: ARTICLE_TYPE;
   count: number;
   pages: number[];

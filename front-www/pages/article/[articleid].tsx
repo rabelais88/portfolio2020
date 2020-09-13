@@ -5,10 +5,21 @@ import { Layout, Markdown } from 'components';
 import { usePostStore } from 'redux-getters';
 import { getPost } from 'store/post/action';
 import { Heading, Box, Stack, Tag, Text } from '@chakra-ui/core';
+import { useDispatch } from 'react-redux';
+import { setArticlePage, setArticleTag } from 'store/article/action';
+import { setMenuOpen } from 'store/ui/action';
 
 const logger = new Logger('pages/article/[articleid].tsx');
 const Article = (props) => {
   const { post } = usePostStore();
+  const dispatch = useDispatch();
+
+  const onTagClick = async (tag) => {
+    await dispatch(setArticleTag(tag));
+    await dispatch(setArticlePage(0));
+    await dispatch(setMenuOpen(true));
+  };
+
   return (
     <Layout>
       <Tag>
@@ -37,11 +48,13 @@ const Article = (props) => {
         </Heading>
       </Box>
       <Box h="30px" />
-      <Stack direction="row">
+      <Stack direction="row" flexWrap="wrap" alignItems="space-between">
         {post.tags.map((p) => (
-          <Tag size="sm" key={p.value}>
-            {p.value}
-          </Tag>
+          <Box marginRight="2" marginBottom="2" key={p.value}>
+            <Tag size="sm" cursor="pointer" onClick={() => onTagClick(p.value)}>
+              {p.value}
+            </Tag>
+          </Box>
         ))}
       </Stack>
     </Layout>

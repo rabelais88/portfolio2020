@@ -26,6 +26,7 @@ export const SET_ARTICLE_COUNT = 'SET_ARTICLE_COUNT';
 export const SET_ARTICLE_KEYWORD = 'SET_ARTICLE_KEYWORD';
 export const GET_ARTICLES = 'GET_ARTICLES';
 export const SET_ARTICLE_TAG = 'SET_ARTICLE_TAG';
+export const SET_RECENT_ARTICLES = 'SET_RECENT_ARTICLES';
 
 type setArticlesType = action<typeof SET_ARTICLES, article[]>;
 export const setArticles = (_articles: article[]): setArticlesType => ({
@@ -76,6 +77,14 @@ export const setArticleTag = (tag: string): setArticleTagType => ({
   payload: tag,
 });
 
+type setRecentArticlesType = action<typeof SET_RECENT_ARTICLES, article[]>;
+export const setRecentArticles = (
+  articles: article[]
+): setRecentArticlesType => ({
+  type: SET_RECENT_ARTICLES,
+  payload: articles,
+});
+
 export const getArticles = (): thunkAction => async (
   dispatch,
   getState: () => defaultStateRoot
@@ -100,7 +109,25 @@ export const getArticles = (): thunkAction => async (
   return null;
 };
 
-const getArticlesDebounced = _debounce(
+export const getRecentArticles = (): thunkAction => async (
+  dispatch,
+  getState: () => defaultStateRoot
+) => {
+  const req = await getArticlesRequest({
+    page: 0,
+    size: 10,
+    keyword: '',
+    tag: '',
+  });
+  if (req.error) {
+    logger.log('error while fetching recent article', req.error, req.errorCode);
+    return null;
+  }
+  await dispatch(setRecentArticles(req.result.list.map(mapArticle)));
+  return null;
+};
+
+export const getArticlesDebounced = _debounce(
   function (dispatch) {
     dispatch(getArticles());
     return null;
@@ -125,4 +152,5 @@ export type articleActionTypes =
   | setArticleLoadStateType
   | setArticleCountType
   | setArticleKeywordType
-  | setArticleTagType;
+  | setArticleTagType
+  | setRecentArticlesType;
