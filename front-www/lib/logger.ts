@@ -35,7 +35,7 @@ class Logger {
 
   // https://github.com/vercel/next.js/issues/5354
   log(...args: any): null {
-    if (NODE_ENV === ENV_PROD) return null;
+    // if (NODE_ENV === ENV_PROD) return null;
     if (this.isClient) {
       console.log(`%c${this.filename} ->`, `color:${this.color}`, ...args);
       return null;
