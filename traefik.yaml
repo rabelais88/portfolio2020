@@ -30,14 +30,14 @@ providers:
     swarmMode: true
     watch: true
     # swarmModeRefreshSeconds: 30
-certificatesResolvers:
-  myresolver:
-    acme:
-      email: "sungryeolp@gmail.com"
-      storage: "acme.json"
-      # for staging...remove it later
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
-      acmelogging: true
-      onhostrule: true
-    httpChallenge:
-      entryPoint: web
+# certificatesResolvers:
+#   myresolver:
+#     acme:
+#       email: "sungryeolp@gmail.com"
+#       storage: "acme.json"
+#       # for staging...remove it later
+#       caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+#       acmelogging: true
+#       onhostrule: true
+#     httpChallenge:
+#       entryPoint: web

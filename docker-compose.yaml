@@ -135,7 +135,7 @@ services:
         - traefik.http.routers.portfolio_reverse-proxy.entrypoints=web
         - traefik.http.services.portfolio_reverse-proxy.loadbalancer.server.port=8080
         - traefik.enable=true
-        # - traefik.docker.network=traefik
+        - traefik.docker.network=traefik
         # - traefik.http.routers.portfolio_reverse-proxy.tls=true
         # - traefik.http.routers.portoflio_reverse-proxy.tls.certresolver=myresolver
         # labeling node for certification
