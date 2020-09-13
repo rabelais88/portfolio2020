@@ -5,7 +5,7 @@ go 1.14
 require (
 	cloud.google.com/go v0.65.0 // indirect
 	github.com/aws/aws-sdk-go v1.34.22
-	github.com/brianvoe/gofakeit/v5 v5.9.1
+	github.com/brianvoe/gofakeit/v5 v5.9.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/disintegration/imaging v1.6.2
 	github.com/fatih/structs v1.1.0 // indirect
@@ -36,7 +36,8 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	go.uber.org/atomic v1.6.0 // indirect
 	golang.org/x/image v0.0.0-20200801110659-972c09e46d76 // indirect
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
+	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect
+	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
+	golang.org/x/sys v0.0.0-20200909081042-eff7692f9009 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )

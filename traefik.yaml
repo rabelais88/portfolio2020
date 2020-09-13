@@ -4,6 +4,15 @@ global:
 entryPoints:
   web:
     address: ":80"
+    # just omitted because it seems it's doing the same job as docker-compose setting.
+    # use it if the middleware doesn't work
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: websecure
+    #       scheme: https
+    #   tls:
+    #     certResolver: myresolver
   websecure:
     address: ":443"
 log:
@@ -21,3 +30,14 @@ providers:
     swarmMode: true
     watch: true
     # swarmModeRefreshSeconds: 30
+# certificatesResolvers:
+#   myresolver:
+#     acme:
+#       email: "sungryeolp@gmail.com"
+#       storage: "acme.json"
+#       # for staging...remove it later
+#       caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+#       acmelogging: true
+#       onhostrule: true
+#     httpChallenge:
+#       entryPoint: web
