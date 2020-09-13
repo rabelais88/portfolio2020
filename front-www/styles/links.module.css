@@ -1,0 +1,21 @@
+.links svg path {
+  transition-property: fill;
+  transition-duration: .3s; 
+}
+
+a.links {
+  transition-property: color;
+  transition-duration: .3s;
+}
+
+.links:hover svg path {
+  transition-property: fill;
+  transition-duration: .3s;
+  fill: #52d1df;
+}
+
+a.links:hover {
+  transition-property: color;
+  transition-duration: .3s;
+  color: #52d1df;
+}

@@ -1,7 +1,12 @@
 import { defaultStateTag } from 'types/tag';
 import { INIT } from 'types/loadState';
 
-import { tagActionTypes, SET_TAGS, SET_TAG_LOAD_STATE } from './action';
+import {
+  tagActionTypes,
+  SET_TAGS,
+  SET_TAG_LOAD_STATE,
+  SET_TAG_KEYWORD,
+} from './action';
 
 export const getDefaultState = (): defaultStateTag => ({
   tags: [],
@@ -20,6 +25,8 @@ function reducer(
       return { ...state, tags: action.payload };
     case SET_TAG_LOAD_STATE:
       return { ...state, loadState: action.payload };
+    case SET_TAG_KEYWORD:
+      return { ...state, keyword: action.payload };
     default:
       return state;
   }

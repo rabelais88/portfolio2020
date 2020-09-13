@@ -1,14 +1,20 @@
 import React from 'react';
 import { Grid, Image, Box, Heading, Icon, Flex, Link } from '@chakra-ui/core';
-import { Z_MENU } from 'constants/zIndex';
+import { Z_MENU, Z_SEARCH_BUTTON } from 'constants/zIndex';
 import AnimatedLogo from 'components/AnimatedLogo';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { setMenuOpen } from 'store/ui/action';
+import { useDispatch } from 'react-redux';
+import { useUiStore } from 'redux-getters';
+
 import chakraTheme from './chakraTheme';
 
 const Menu: React.FC = (props) => {
   const router = useRouter();
   const isIndex = router.pathname === '/';
+  const dispatch = useDispatch();
+  const { menuOpen } = useUiStore();
   return (
     <Grid
       h="63px"
@@ -56,6 +62,7 @@ const Menu: React.FC = (props) => {
               fontFamily: chakraTheme.fonts.heading,
               fontSize: chakraTheme.fontSizes.sm,
             }}
+            whileTap={{ textShadow: 'none', scale: 1 }}
             whileHover={{ scale: 1.2 }}
           >
             Sungryeol
@@ -67,10 +74,12 @@ const Menu: React.FC = (props) => {
         alignItems="center"
         justifyContent="center"
         gridColumn={['span 2', 'span 1']}
+        onClick={() => dispatch(setMenuOpen(!menuOpen))}
+        cursor="pointer"
       >
         <Icon
           name="search"
-          color="white"
+          color={isIndex ? 'white' : 'black'}
           style={{
             WebkitFilter: 'drop-shadow(5px 5px 5px #222)',
             filter: 'drop-shadow(5px 5px 5px #222)',
