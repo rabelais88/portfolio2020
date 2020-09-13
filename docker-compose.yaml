@@ -15,9 +15,9 @@ services:
         - traefik.http.services.portfolio_apiserver.loadbalancer.server.port=4500
         - traefik.enable=true
         - traefik.docker.network=traefik
-        - traefik.http.routers.portfolio_apiserver.tls=true
-        - traefik.http.routers.portfolio_apiserver.tls.certresolver=myresolver
-        - traefik.http.routers.portfolio_apiserver.middlewares=portfolio_https_redirect
+        # - traefik.http.routers.portfolio_apiserver.tls=true
+        # - traefik.http.routers.portfolio_apiserver.tls.certresolver=myresolver
+        # - traefik.http.routers.portfolio_apiserver.middlewares=portfolio_https_redirect
     environment:
       - ENV=production
       - PORT=4500
@@ -85,11 +85,11 @@ services:
         - traefik.http.services.portfolio_front-www.loadbalancer.server.port=3000
         - traefik.enable=true
         - traefik.docker.network=traefik
-        - traefik.http.routers.portfolio_front-www.tls=true
-        - traefik.http.routers.portfolio_front-www.tls.certresolver=myresolver
-        - traefik.http.routers.portfolio_front-www.tls.domains[0].main=sungryeol.com
-        - traefik.http.routers.portfolio_front-www.tls.domains[0].sans=www.sungryeol.com
-        - traefik.http.routers.portfolio_front-www.middlewares=portfolio_https_redirect
+        # - traefik.http.routers.portfolio_front-www.tls=true
+        # - traefik.http.routers.portfolio_front-www.tls.certresolver=myresolver
+        # - traefik.http.routers.portfolio_front-www.tls.domains[0].main=sungryeol.com
+        # - traefik.http.routers.portfolio_front-www.tls.domains[0].sans=www.sungryeol.com
+        # - traefik.http.routers.portfolio_front-www.middlewares=portfolio_https_redirect
     environment:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=https://api.sungryeol.com
@@ -110,9 +110,9 @@ services:
         - traefik.http.services.portfolio_front-admin.loadbalancer.server.port=80
         - traefik.enable=true
         - traefik.docker.network=traefik
-        - traefik.http.routers.portfolio_front-admin.tls=true
-        - traefik.http.routers.portfolio_front-admin.tls.certresolver=myresolver
-        - traefik.http.routers.portfolio_front-admin.middlewares=portfolio_https_redirect
+        # - traefik.http.routers.portfolio_front-admin.tls=true
+        # - traefik.http.routers.portfolio_front-admin.tls.certresolver=myresolver
+        # - traefik.http.routers.portfolio_front-admin.middlewares=portfolio_https_redirect
         # API_URL is provided via dockerfile
         # -> environment variable is precompiled
     ports:
@@ -129,20 +129,20 @@ services:
           - node.role == manager
           # only nodes with this label are allowed for Traefik
           # as it is the only node accessible to ACME.json volume. worker nodes doesn't have access to files
-          - node.labels.traefik-public.traefik-public-certificates == true
+          # - node.labels.traefik-public.traefik-public-certificates == true
       labels:
         - traefik.http.routers.portfolio_reverse-proxy.rule=Host(`traefik.sungryeol.com`)
         - traefik.http.routers.portfolio_reverse-proxy.entrypoints=web
         - traefik.http.services.portfolio_reverse-proxy.loadbalancer.server.port=8080
         - traefik.enable=true
-        - traefik.docker.network=traefik
-        - traefik.http.routers.portfolio_reverse-proxy.tls=true
-        - traefik.http.routers.portoflio_reverse-proxy.tls.certresolver=myresolver
+        # - traefik.docker.network=traefik
+        # - traefik.http.routers.portfolio_reverse-proxy.tls=true
+        # - traefik.http.routers.portoflio_reverse-proxy.tls.certresolver=myresolver
         # labeling node for certification
-        - traefik.tags=traefik-public
-        - traefik.http.routers.portfolio_reverse-proxy.middlewares=portfolio_https_redirect
-        - traefik.http.middlewares.portfolio_redirect.redirectscheme.scheme=https
-        - traefik.http.middlewares.portfolio_redirect.redirectscheme.permanent=true
+        # - traefik.tags=traefik-public
+        # - traefik.http.routers.portfolio_reverse-proxy.middlewares=portfolio_https_redirect
+        # - traefik.http.middlewares.portfolio_redirect.redirectscheme.scheme=https
+        # - traefik.http.middlewares.portfolio_redirect.redirectscheme.permanent=true
     ports:
       - 80:80
       - 443:443
@@ -151,7 +151,7 @@ services:
     volumes:
       - /srv/traefik.yaml:/etc/traefik/traefik.yaml
       - /var/run/docker.sock:/var/run/docker.sock
-      - /srv/acme.json:/acme.json
+      # - /srv/acme.json:/acme.json
     networks:
       - traefik
 

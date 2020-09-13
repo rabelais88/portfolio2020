@@ -87,14 +87,20 @@ resource "digitalocean_droplet" "swarm_worker" {
   }
 }
 
+resource "digitalocean_certificate" "cert" {
+  name = "le-sungryeol-portfolio"
+  type = "lets_encrypt"
+  domains = ["sungryeol.com", "www.sungryeol.com", "admin.sungryeol.com", "api.sungryeol.com", "traefik.sungryeol.com"]
+}
+
 # https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/loadbalancer
 resource "digitalocean_loadbalancer" "public" {
   name   = "swarm-load-balancer"
   region = var.do_region
 
   forwarding_rule {
-    entry_port     = 80 # outbound
-    entry_protocol = "http"
+    entry_port     = 443 # outbound
+    entry_protocol = "https"
 
     target_port     = 80 # inbound
     target_protocol = "http"
@@ -106,4 +112,30 @@ resource "digitalocean_loadbalancer" "public" {
   }
 
   droplet_ids = [digitalocean_droplet.swarm_manager.id, digitalocean_droplet.swarm_worker.id]
+  certificate_id = digitalocean_certificate.cert.id
+}
+
+resource "digitalocean_domain" "domain1" {
+  name = "sungryeol.com"
+  ip_address = digitalocean_droplet.public.ipv4_address
+}
+
+resource "digitalocean_domain" "domain2" {
+  name = "admin.sungryeol.com"
+  ip_address = digitalocean_droplet.public.ipv4_address
+}
+
+resource "digitalocean_domain" "domain3" {
+  name = "traefik.sungryeol.com"
+  ip_address = digitalocean_droplet.public.ipv4_address
+}
+
+resource "digitalocean_domain" "domain4" {
+  name = "api.sungryeol.com"
+  ip_address = digitalocean_droplet.public.ipv4_address
+}
+
+resource "digitalocean_domain" "domain5" {
+  name = "www.sungryeol.com"
+  ip_address = digitalocean_droplet.public.ipv4_address
 }
