@@ -2,6 +2,7 @@ if [ -z $DOCKER_PASSWORD ]
 then
   echo "skipping relogin because DOCKER_PASSWORD does not exist"
 else
+  docker logout
   echo $DOCKER_PASSWORD | docker login --username rabelais --password-stdin
 fi
 
