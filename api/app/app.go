@@ -36,12 +36,9 @@ func Init() (http.Handler, *gorm.DB) {
 	config := *env.GetConfig()
 
 	log.Println("app initialized")
+	log.Printf("allowed origins: %v", config.AllowedOrigins)
 	e := echo.New()
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     config.AllowedOrigins,
-		AllowMethods:     []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-		AllowCredentials: true,
-	}))
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Static("/assets", config.FileLocation)
@@ -54,6 +51,13 @@ func Init() (http.Handler, *gorm.DB) {
 	e.Validator = &CustomValidator{validator: validator.New()}
 
 	ConnectRouter(e, &config)
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     append(config.AllowedOrigins, "*"),
+		AllowMethods:     []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowCredentials: true,
+	}))
 	_port := fmt.Sprintf(":%s", config.Port)
 
 	if config.Env != env.PROD && config.FakeData {
