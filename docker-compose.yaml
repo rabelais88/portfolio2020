@@ -12,7 +12,7 @@ services:
       labels:
         - traefik.http.routers.portfolio_apiserver.rule=Host(`api.sungryeol.com`)
         - traefik.http.routers.portfolio_apiserver.entrypoints=web
-        - traefik.http.services.portfolio_apiserver.loadbalancer.server.port=4500
+        - traefik.http.services.portfolio_apiserver.loadbalancer.server.port=6000
         - traefik.enable=true
         - traefik.docker.network=traefik
         # - traefik.http.routers.portfolio_apiserver.tls=true
@@ -20,7 +20,7 @@ services:
         # - traefik.http.routers.portfolio_apiserver.middlewares=portfolio_https_redirect
     environment:
       - ENV=production
-      - PORT=4500
+      - PORT=6000
       # equivalent to postgres://db:5432
       - DB_HOST=db
       - DB_PORT=5432
@@ -94,7 +94,7 @@ services:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=https://api.sungryeol.com
       - NEXT_PUBLIC_IMAGE_URL=https://d3cj1qm2zjlx16.cloudfront.net
-      - NEXT_PUBLIC_SERVER_API_URL=http://apiserver:4500
+      - NEXT_PUBLIC_SERVER_API_URL=http://apiserver:6000
       # - NEXT_PUBLIC_ASSET_URL=https://d2sqdns711i0ti.cloudfront.net/assets
     ports:
       - 3000:3000
