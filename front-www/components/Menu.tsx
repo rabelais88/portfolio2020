@@ -3,6 +3,8 @@ import { Grid, Image, Box, Heading, Icon, Flex, Link } from '@chakra-ui/core';
 import { Z_MENU } from 'constants/zIndex';
 import AnimatedLogo from 'components/AnimatedLogo';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
+import chakraTheme from './chakraTheme';
 
 const Menu: React.FC = (props) => {
   const router = useRouter();
@@ -46,14 +48,18 @@ const Menu: React.FC = (props) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Link href="/">
-          <Heading
-            fontSize="sm"
-            color={isIndex ? 'white' : 'black'}
-            textShadow="sm"
+        <Link href="/" _hover={{ textDecor: 'none' }}>
+          <motion.h2
+            style={{
+              color: isIndex ? 'white' : 'black',
+              textShadow: chakraTheme.shadows.sm,
+              fontFamily: chakraTheme.fonts.heading,
+              fontSize: chakraTheme.fontSizes.sm,
+            }}
+            whileHover={{ scale: 1.2 }}
           >
             Sungryeol
-          </Heading>
+          </motion.h2>
         </Link>
       </Flex>
       <Flex

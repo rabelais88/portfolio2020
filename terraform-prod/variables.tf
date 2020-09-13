@@ -42,3 +42,11 @@ variable "secret_jwt" {
 variable "db_password" {
   type = string
 }
+
+variable "s3_access_id" {
+  type = string
+}
+
+variable "s3_access_secret" {
+  type = string
+}

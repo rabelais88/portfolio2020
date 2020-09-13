@@ -10,7 +10,7 @@ export interface tagResponse {
   // to avoid circular dependency
 }
 
-interface tag {
+export interface tag {
   createdAt: number;
   updatedAt: number;
   deletedAt: number;
@@ -27,7 +27,7 @@ export interface articleResponse {
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
-  tags: tag[];
+  tags: tagResponse[];
 }
 
 // parsed article

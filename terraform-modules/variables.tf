@@ -10,3 +10,5 @@ variable "google_client_id" {}
 variable "google_client_secret" {}
 variable "secret_jwt" {}
 variable "db_password" {}
+variable "s3_access_id" {}
+variable "s3_access_secret" {}

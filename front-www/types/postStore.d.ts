@@ -1,8 +1,17 @@
-import { article } from 'types/article';
+import { article, tag } from 'types/article';
 import LOAD_STATE, { INIT } from 'types/loadState';
 
+interface articleOnPost {
+  id: string;
+  title: string;
+  desc: string;
+  coverImage: string;
+  tags: tags[];
+  link: string;
+}
+
 export interface postResponse {
-  article: article;
+  article: articleOnPost;
   articleId: string;
   content: string;
   createdAt: string;
@@ -10,8 +19,18 @@ export interface postResponse {
   deletedAt?: string;
 }
 
-export interface post extends article {
+export interface post {
+  id: string;
+  title: string;
+  desc: string;
+  coverImage: string;
+  link: string;
+  type: string;
+  createdAt: number;
+  updatedAt: number;
+  deletedAt: number;
   content: string;
+  tags: tag[];
 }
 
 export interface defaultStatePost {

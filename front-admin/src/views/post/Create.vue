@@ -59,34 +59,41 @@
           />
         </el-form-item>
 
-        <el-form-item label="tag">
-          <el-tag
-            v-for="tag in userTags"
-            :key="tag"
-            closable
-            :disable-transitions="false"
-            @close="onRemoveTag(tag)"
-            >{{ tag }}</el-tag
-          >
-          <el-autocomplete
-            class="input-new-tag"
-            v-if="tagInputVisible"
-            v-model="tagInput"
-            ref="saveTagInput"
-            size="mini"
-            @keyup.enter.native="onInputConfirm"
-            @select="onTagSelect"
-            :fetch-suggestions="tagSearch"
-          >
-          </el-autocomplete>
-          <el-button
-            v-else
-            class="button-new-tag"
-            size="small"
-            @click="() => (tagInputVisible = true)"
-            >+ New Tag</el-button
-          >
-        </el-form-item>
+        <validation-provider
+          v-slot="{ errors }"
+          name="tags"
+          rules="required"
+          ref="tagsValidation"
+        >
+          <el-form-item label="tag" :error="errors[0]">
+            <el-tag
+              v-for="tag in userTags"
+              :key="tag"
+              closable
+              :disable-transitions="false"
+              @close="onRemoveTag(tag)"
+              >{{ tag }}</el-tag
+            >
+            <el-autocomplete
+              class="input-new-tag"
+              v-if="tagInputVisible"
+              v-model="tagInput"
+              ref="saveTagInput"
+              size="mini"
+              @keyup.enter.native="onInputConfirm"
+              @select="onTagSelect"
+              :fetch-suggestions="tagSearch"
+            >
+            </el-autocomplete>
+            <el-button
+              v-else
+              class="button-new-tag"
+              size="small"
+              @click="() => (tagInputVisible = true)"
+              >+ New Tag</el-button
+            >
+          </el-form-item>
+        </validation-provider>
 
         <el-form-item>
           <el-button @click="handleSubmit(onSubmit)">submit</el-button>
@@ -174,6 +181,7 @@ export default {
       },
       set(v) {
         this.setUserTags(v);
+        this.$refs.tagsValidation.validate(v);
       },
     },
     fileList() {

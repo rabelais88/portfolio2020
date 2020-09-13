@@ -35,6 +35,10 @@ services:
       - GOOGLE_ID_FILE=portfolio-google-client-id
       - GOOGLE_SECRET_FILE=portfolio-google-client-secret
       - ADMIN_GMAIL_ACCOUNT_FILE=portfolio-admin-gmail-account
+      - S3_ACCESS_ID_FILE=portfolio-s3-access-id
+      - S3_ACCESS_SECRET_FILE=portfolio-s3-access-secret
+      - S3_REGION=ap-northeast-2
+      - S3_IMAGE_BUCKET=sr-portfolio-prod
       - SSL_MODE=disable
       # - SSL_MODE=verify-ca
       # - SSL_ROOT_CERT=
@@ -48,6 +52,8 @@ services:
       - portfolio-google-client-secret
       - portfolio-secret-jwt
       - portfolio-db-password
+      - portfolio-s3-access-id
+      - portfolio-s3-access-secret
     networks:
       - traefik
 
@@ -79,6 +85,8 @@ services:
     environment:
       - PORT=3000
       - NEXT_PUBLIC_API_URL=http://api.sungryeol.com
+      - NEXT_PUBLIC_IMAGE_URL=https://d3cj1qm2zjlx16.cloudfront.net
+      # - NEXT_PUBLIC_ASSET_URL=https://d2sqdns711i0ti.cloudfront.net/assets
     ports:
       - 3000:3000
     networks:
@@ -142,4 +150,8 @@ secrets:
   portfolio-secret-jwt:
     external: true
   portfolio-db-password:
+    external: true
+  portfolio-s3-access-id:
+    external: true
+  portfolio-s3-access-secret:
     external: true

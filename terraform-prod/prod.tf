@@ -14,6 +14,8 @@ module "main" {
   google_client_secret     = var.google_client_secret
   secret_jwt               = var.secret_jwt
   db_password              = var.db_password
+  s3_access_id             = var.s3_access_id
+  s3_access_secret         = var.s3_access_secret
 }
 
 # module outputs are connected to root file output

@@ -44,6 +44,8 @@ resource "digitalocean_droplet" "swarm_manager" {
       "echo ${var.google_client_secret} | docker secret create portfolio-google-client-secret -",
       "echo ${var.secret_jwt} | docker secret create portfolio-secret-jwt -",
       "echo ${var.db_password} | docker secret create portfolio-db-password -",
+      "echo ${var.s3_access_id} | docker secret create portfolio-s3-access-id -",
+      "echo ${var.s3_access_secret} | docker secret create portfolio-s3-access-secret -"
     ]
   }
 

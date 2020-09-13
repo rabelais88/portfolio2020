@@ -67,6 +67,10 @@ type Config struct {
 	SSLCert           string
 	SSLKey            string
 	SSLRootCert       string
+	S3Region          string
+	S3AccessID        string
+	S3AccessSecret    string
+	S3ImageBucket     string
 }
 
 func GetConfig() *Config {
@@ -123,6 +127,10 @@ func GetConfig() *Config {
 		SSLRootCert:       os.Getenv(`SSL_ROOT_CERT`),
 		SSLCert:           os.Getenv(`SSL_CERT`),
 		SSLKey:            os.Getenv(`SSL_KEY`),
+		S3Region:          os.Getenv(`S3_REGION`),
+		S3AccessID:        os.Getenv(`S3_ACCESS_ID`),
+		S3AccessSecret:    os.Getenv(`S3_ACCESS_SECRET`),
+		S3ImageBucket:     os.Getenv(`S3_IMAGE_BUCKET`),
 	}
 
 	if _fakeData == `true` {
@@ -166,6 +174,18 @@ func GetConfig() *Config {
 		if adminGmailAccount != "" {
 			log.Println("docker secret has overwritten ADMIN_GMAIL_ACCOUNT")
 			_config.AdminGmailAccount = adminGmailAccount
+		}
+
+		s3AccessId := secrets[os.Getenv("S3_ACCESS_ID_FILE")]
+		if s3AccessId != "" {
+			log.Println("docker secret has overwritten S3_ACCESS_ID")
+			_config.S3AccessID = s3AccessId
+		}
+
+		s3AccessSecret := secrets[os.Getenv("S3_ACCESS_SECRET_FILE")]
+		if s3AccessSecret != "" {
+			log.Println("docker secret has ovewritten S3_ACCESS_SECRET_FILE")
+			_config.S3AccessSecret = s3AccessSecret
 		}
 	}
 

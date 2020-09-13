@@ -6,14 +6,18 @@ import { extend } from 'vee-validate';
 function validURL(str) {
   const pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
       '(\\#[-a-z\\d_]*)?$',
     'i',
   ); // fragment locator
   return !!pattern.test(str);
+}
+
+function validArrayMinLength(ary, { length }) {
+  return ary.length > length;
 }
 
 function setValidatorRules() {
@@ -26,6 +30,12 @@ function setValidatorRules() {
   extend('url', {
     validate: validURL,
     message: (fieldName, placeholders) => `${fieldName} must be a valid URL`,
+  });
+  extend('array_min', {
+    validate: validArrayMinLength,
+    message: (fieldName, placeholders) =>
+      `${fieldName} must be longer than ${placeholders.length}`,
+    params: ['length'],
   });
 }
 
