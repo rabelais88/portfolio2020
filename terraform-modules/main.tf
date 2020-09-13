@@ -104,6 +104,7 @@ resource "digitalocean_loadbalancer" "public" {
 
     target_port     = 80 # inbound
     target_protocol = "http"
+    certificate_id = digitalocean_certificate.cert.id
   }
 
   healthcheck {
@@ -112,30 +113,29 @@ resource "digitalocean_loadbalancer" "public" {
   }
 
   droplet_ids = [digitalocean_droplet.swarm_manager.id, digitalocean_droplet.swarm_worker.id]
-  certificate_id = digitalocean_certificate.cert.id
 }
 
 resource "digitalocean_domain" "domain1" {
   name = "sungryeol.com"
-  ip_address = digitalocean_droplet.public.ipv4_address
+  ip_address = digitalocean_loadbalancer.public.ip
 }
 
 resource "digitalocean_domain" "domain2" {
   name = "admin.sungryeol.com"
-  ip_address = digitalocean_droplet.public.ipv4_address
+  ip_address = digitalocean_loadbalancer.public.ip
 }
 
 resource "digitalocean_domain" "domain3" {
   name = "traefik.sungryeol.com"
-  ip_address = digitalocean_droplet.public.ipv4_address
+  ip_address = digitalocean_loadbalancer.public.ip
 }
 
 resource "digitalocean_domain" "domain4" {
   name = "api.sungryeol.com"
-  ip_address = digitalocean_droplet.public.ipv4_address
+  ip_address = digitalocean_loadbalancer.public.ip
 }
 
 resource "digitalocean_domain" "domain5" {
   name = "www.sungryeol.com"
-  ip_address = digitalocean_droplet.public.ipv4_address
+  ip_address = digitalocean_loadbalancer.public.ip
 }
