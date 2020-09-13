@@ -4,8 +4,8 @@ COPY package.json package.json
 COPY yarn.lock yarn.lock
 RUN yarn install
 COPY . .
-ENV NEXT_PUBLIC_API_URL=http://api.sungryeol.com
-ENV NEXT_PUBLIC_SERVER_API_URL=http://apiserver:4500
+ENV NEXT_PUBLIC_API_URL=https://api.sungryeol.com
+ENV NEXT_PUBLIC_SERVER_API_URL=https://apiserver:4500
 ENV NEXT_PUBLIC_IMAGE_URL=https://d3cj1qm2zjlx16.cloudfront.net
 RUN yarn build
 
