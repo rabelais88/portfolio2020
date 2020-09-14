@@ -31,6 +31,7 @@ services:
       - REDIRECT_URL=https://admin.sungryeol.com/login
       # CORS setting
       - ALLOWED_ORIGINS=https://sungryeol.com,http://admin.sungryeol.com
+      - FILE_LOCATION=/go/src/app/files
       # secrets(will be later provided via file)
       - SECRET_PATH=/run/secrets
       - DB_PASSWORD_FILE=portfolio-db-password
@@ -60,7 +61,7 @@ services:
     networks:
       - traefik
     volumes:
-      - apiserver-file:/go/src/files
+      - apiserver-file:/go/src/app/files/
   db:
     image: postgres:13
     environment:

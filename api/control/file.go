@@ -83,7 +83,7 @@ func UploadFile(c echo.Context) error {
 			// do not resize for non-resizable extensions
 			_, err := cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)
 			if err != nil {
-				log.Fatal(`error while uploading`, fileLoc)
+				log.Fatalf(`error while uploading %s ...%v`, fileLoc, err)
 			}
 			urls = append(urls, filename)
 			continue
@@ -102,11 +102,11 @@ func UploadFile(c echo.Context) error {
 
 		_, err = cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)
 		if err != nil {
-			log.Fatal(`error while uploading`, fileLoc)
+			log.Fatalf(`error while uploading %s ...%v`, fileLoc, err)
 		}
 		_, err = cc.S3W.UploadFile(cc.Config.S3ImageBucket, resizedFileloc)
 		if err != nil {
-			log.Fatal(`error while uploading`, resizedFileloc)
+			log.Fatalf(`error while uploading %s ...%v`, resizedFileloc, err)
 		}
 		urls = append(urls, filename)
 	}
