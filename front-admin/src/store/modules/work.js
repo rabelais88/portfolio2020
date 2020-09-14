@@ -67,14 +67,14 @@ const actions = {
     }
     const work = mapWork(req.result);
     console.log('mapped work', {work})
-    commit(SET_WORK_ID, work.id);
     commit(SET_WORK, work);
+    commit(SET_WORK_ID, work._articleId);
 
     commit(SET_USER_TITLE, state.work.title);
     commit(SET_USER_LINK, state.work.link);
     commit(SET_USER_COVER_IMAGE, state.work.coverImage);
     commit(SET_USER_DESC, state.work.desc);
-    commit(SET_USER_TAGS, state.work.tags);
+    commit(SET_USER_TAGS, state.work._tags);
     return req;
   },
   async [ADD_WORK]({ getters }) {

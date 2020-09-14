@@ -8,7 +8,8 @@ import { getPost } from 'store/post/action';
 import { Heading, Box, Stack, Tag, Text } from '@chakra-ui/core';
 import { useDispatch } from 'react-redux';
 import { setArticlePage, setArticleTag } from 'store/article/action';
-import { setMenuOpen } from 'store/ui/action';
+import { changeSearchMode, setMenuOpen } from 'store/ui/action';
+import { SEARCH_ARTICLE } from 'constants/searchMode';
 
 const logger = new Logger('pages/article/[articleid].tsx');
 const Article = (props) => {
@@ -17,7 +18,7 @@ const Article = (props) => {
 
   const onTagClick = async (tag) => {
     await dispatch(setArticleTag(tag));
-    await dispatch(setArticlePage(0));
+    await dispatch(changeSearchMode(SEARCH_ARTICLE));
     await dispatch(setMenuOpen(true));
   };
 

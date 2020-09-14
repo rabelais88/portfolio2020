@@ -77,7 +77,7 @@ const actions = {
     commit(SET_USER_LINK, state.post._link);
     commit(SET_USER_COVER_IMAGE, state.post._coverImage);
     commit(SET_USER_DESC, state.post._desc);
-    commit(SET_USER_TAGS, state.post._tags);
+    commit(SET_USER_TAGS, state.post._tags || []);
     return req;
   },
   async [ADD_POST]({ getters }) {
