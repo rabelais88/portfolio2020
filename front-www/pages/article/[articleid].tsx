@@ -59,7 +59,9 @@ const Article = (props) => {
         {date.formatPastDate(post.updatedAt)}
       </Text>
       <Box h="30px" />
-      <Markdown>{post.content}</Markdown>
+      <div className="markdown-body">
+        <Markdown>{post.content}</Markdown>
+      </div>
       <Box h="30px" />
       <Box>
         <Heading as="h3" size="sm" fontFamily="NotoSansKR">

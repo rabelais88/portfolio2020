@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'katex/dist/katex.min.css';
 import 'styles/font.css';
+import 'github-markdown-css';
 
 import wrapper from 'store/root';
 import { VERSION, NODE_ENV } from 'env';
