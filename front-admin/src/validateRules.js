@@ -4,11 +4,10 @@ import { extend } from 'vee-validate';
 
 /* eslint-disable operator-linebreak */
 function validURL(str) {
-  const pattern = new RegExp(
-    // eslint-disable-next-line
-    `^(https?|ftp|torrent|image|irc):\/\/(-\.)?([^\s\/?\.#-]+\.?)+(\/[^\s]*)?$`,
+  if (!str || str === '') return false;
+  return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
+    str,
   );
-  return pattern.test(str);
 }
 
 function validArrayMinLength(ary, { length }) {
