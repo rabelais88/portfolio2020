@@ -4,7 +4,7 @@ import { Z_MENU, Z_SEARCH_BUTTON } from 'constants/zIndex';
 import AnimatedLogo from 'components/AnimatedLogo';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
-import { setMenuOpen } from 'store/ui/action';
+import { changeMenuOpen, setMenuOpen } from 'store/ui/action';
 import { useDispatch } from 'react-redux';
 import { useUiStore } from 'redux-getters';
 
@@ -74,7 +74,7 @@ const Menu: React.FC = (props) => {
         alignItems="center"
         justifyContent="center"
         gridColumn={['span 2', 'span 1']}
-        onClick={() => dispatch(setMenuOpen(!menuOpen))}
+        onClick={() => dispatch(changeMenuOpen(!menuOpen))}
         cursor="pointer"
       >
         <Icon

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useArticleStore, useTagStore, useUiStore } from 'redux-getters';
 import { Z_BLOCKER, Z_SEARCH } from 'constants/zIndex';
@@ -18,32 +18,37 @@ import {
   PseudoBox,
 } from '@chakra-ui/core';
 import { useDispatch } from 'react-redux';
-import { setMenuOpen, setSearchMode } from 'store/ui/action';
+import {
+  changeSearchKeyword,
+  changeSearchMode,
+  setMenuOpen,
+  setSearchMode,
+} from 'store/ui/action';
 import {
   getArticles,
   getArticlesDebounced,
   setArticleKeyword,
   setArticlePage,
   setArticleTag,
+  setArticleType,
 } from 'store/article/action';
 import { date, getArticleUrl } from 'lib';
 import { getTags, getTagsDebounced, setTagKeyword } from 'store/tag/action';
-import { SEARCH_ARTICLE, SEARCH_TAG } from 'constants/searchMode';
+import {
+  SEARCH_ALL,
+  SEARCH_ARTICLE,
+  SEARCH_TAG,
+  SEARCH_WORK,
+} from 'constants/searchMode';
+
 import { Paginator } from 'components';
-import { WORK, POST } from 'types/articleType';
+import { WORK, POST, ALL } from 'types/articleType';
 import theme from './chakraTheme';
 
 const InsideLayout = () => {
   const articleStore = useArticleStore();
   const uiStore = useUiStore();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (uiStore.menuOpen) {
-      if (uiStore.searchMode === SEARCH_ARTICLE) dispatch(getArticles());
-      else dispatch(getTags());
-    }
-  }, [uiStore.menuOpen, uiStore.searchMode]);
 
   const onPageClick = async (pageNum) => {
     await dispatch(setArticlePage(pageNum));
@@ -127,19 +132,14 @@ const InsideLayout = () => {
   const onKeywordChange = async (ev) => {
     // check wrong events
     const { value } = ev.target;
-    await dispatch(setArticleKeyword(value));
-    await dispatch(setTagKeyword(value));
-    if (uiStore.searchMode === SEARCH_ARTICLE)
-      await getArticlesDebounced(dispatch);
-    else if (uiStore.searchMode === SEARCH_TAG)
-      await getTagsDebounced(dispatch);
+    await dispatch(changeSearchKeyword(value));
   };
 
   const onRemoveTag = async () => {
     await dispatch(setArticleTag(''));
     await dispatch(getArticles());
   };
-  const tabIndices = [SEARCH_ARTICLE, SEARCH_TAG];
+  const tabIndices = [SEARCH_ALL, SEARCH_ARTICLE, SEARCH_WORK, SEARCH_TAG];
   return (
     <>
       <Icon
@@ -168,13 +168,23 @@ const InsideLayout = () => {
       <Box height={[3, 10]} />
       <Tabs
         index={tabIndices.findIndex((v) => v === uiStore.searchMode)}
-        onChange={(idx) => dispatch(setSearchMode(tabIndices[idx]))}
+        onChange={(idx) => dispatch(changeSearchMode(tabIndices[idx]))}
       >
         <TabList>
+          <Tab>All</Tab>
           <Tab>Articles</Tab>
+          <Tab>Works</Tab>
           <Tab>Tags</Tab>
         </TabList>
         <TabPanels>
+          <TabPanel>
+            <Box height={[3, 10]} />
+            <FoundArticles />
+          </TabPanel>
+          <TabPanel>
+            <Box height={[3, 10]} />
+            <FoundArticles />
+          </TabPanel>
           <TabPanel>
             <Box height={[3, 10]} />
             <FoundArticles />

@@ -1,7 +1,7 @@
-type AppThunk<ReturnType = void> = ThunkAction<
+type AppThunk<ArgumentType = void, ReturnType = void> = ThunkAction<
   ReturnType,
   defaultStateRoot,
-  unknown,
+  ArgumentType,
   AnyAction
 >;
 
