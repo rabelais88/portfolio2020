@@ -6,10 +6,9 @@ import { extend } from 'vee-validate';
 function validURL(str) {
   const pattern = new RegExp(
     // eslint-disable-next-line
-    `[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)`,
-    'gi',
+    `^(https?|ftp|torrent|image|irc):\/\/(-\.)?([^\s\/?\.#-]+\.?)+(\/[^\s]*)?$`,
   );
-  return !!pattern.test(str);
+  return pattern.test(str);
 }
 
 function validArrayMinLength(ary, { length }) {
