@@ -38,6 +38,7 @@ resource "digitalocean_droplet" "swarm_manager" {
     inline = [
       "cloud-init status --wait",
       "sh /srv/start-swarm.sh",
+      "mkdir /srv/postgres-dbdata",
       "echo ${var.docker_password} | docker login -u ${var.docker_id} --password-stdin",
       "echo ${var.admin_gmail_account} | docker secret create portfolio-admin-gmail-account -",
       "echo ${var.google_client_id} | docker secret create portfolio-google-client-id -",

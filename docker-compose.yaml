@@ -72,7 +72,7 @@ services:
       labels:
         - traefik.enable=false
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - /srv/postgres-dbdata:/var/lib/postgresql/data
     secrets:
       - portfolio-db-password
     networks:
@@ -163,7 +163,6 @@ networks:
     attachable: true
     name: traefik
 volumes:
-  db-data:
   apiserver-file:
 secrets:
   portfolio-admin-gmail-account:
