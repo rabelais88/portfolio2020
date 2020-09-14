@@ -2,16 +2,24 @@ import React from 'react';
 import Head from 'next/head';
 import wrapper from 'store/root';
 import { Logger, date } from 'lib';
-import { Layout, Markdown } from 'components';
+import { Layout } from 'components';
 import { usePostStore } from 'redux-getters';
 import { getPost } from 'store/post/action';
 import { Heading, Box, Stack, Tag, Text } from '@chakra-ui/core';
 import { useDispatch } from 'react-redux';
 import { setArticlePage, setArticleTag } from 'store/article/action';
 import { setMenuOpen } from 'store/ui/action';
+import renderToString from 'next-mdx-remote/render-to-string';
+import hydrate from 'next-mdx-remote/hydrate';
+// import matter from 'gray-matter';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+
+const components = {};
 
 const logger = new Logger('pages/article/[articleid].tsx');
 const Article = (props) => {
+  const { source } = props;
   const { post } = usePostStore();
   const dispatch = useDispatch();
 
@@ -20,6 +28,8 @@ const Article = (props) => {
     await dispatch(setArticlePage(0));
     await dispatch(setMenuOpen(true));
   };
+
+  const content = hydrate(source, { components });
 
   return (
     <Layout>
@@ -59,7 +69,7 @@ const Article = (props) => {
         {date.formatPastDate(post.updatedAt)}
       </Text>
       <Box h="30px" />
-      <Markdown>{post.content}</Markdown>
+      <Box>{content}</Box>
       <Box h="30px" />
       <Box>
         <Heading as="h3" size="sm" fontFamily="NotoSansKR">
@@ -88,6 +98,18 @@ export const getServerSideProps = wrapper.getServerSideProps(async (props) => {
   logger.log({ articleid: query.articleid });
   const articleId = query.articleid.toString();
   await store.dispatch(getPost(articleId));
+  const { post } = store.getState();
+  const source = post.post.content;
+  // const { content, data } = matter(source)
+  const mdxOptions = {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
+    hastPlugins: [],
+    compilers: [],
+    // filepath: '/some/file/path',
+  };
+  const mdxSource = await renderToString(source, components, mdxOptions);
+  return { props: { source: mdxSource } };
 });
 
 export default Article;
