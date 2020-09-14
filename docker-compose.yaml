@@ -59,7 +59,8 @@ services:
       - portfolio-s3-access-secret
     networks:
       - traefik
-
+    volumes:
+      - apiserver-file:/go/src/files
   db:
     image: postgres:13
     environment:
@@ -162,6 +163,7 @@ networks:
     name: traefik
 volumes:
   db-data:
+  apiserver-file:
 secrets:
   portfolio-admin-gmail-account:
     external: true
