@@ -268,6 +268,9 @@ export default {
       // handle deletion
     },
   },
+  mounted() {
+    this.$refs.tagsValidation.validate(this._userTags);
+  },
   async beforeRouteEnter(to, from, next) {
     console.log('loading article', { to, from, next });
     await store.dispatch(`post/${LOAD_POST}`, to.params.articleId, {
