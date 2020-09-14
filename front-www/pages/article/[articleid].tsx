@@ -59,9 +59,14 @@ const Article = (props) => {
         {date.formatPastDate(post.updatedAt)}
       </Text>
       <Box h="30px" />
-      <div className="markdown-body">
-        <Markdown>{post.content}</Markdown>
-      </div>
+      <Box w="full" justifyContent="center">
+        <div
+          className="markdown-body"
+          style={{ maxWidth: '700px', width: '100%' }}
+        >
+          <Markdown>{post.content}</Markdown>
+        </div>
+      </Box>
       <Box h="30px" />
       <Box>
         <Heading as="h3" size="sm" fontFamily="NotoSansKR">

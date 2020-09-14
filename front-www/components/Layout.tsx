@@ -11,8 +11,15 @@ export const Layout: React.FunctionComponent<unknown> = (props) => {
       <DisplayDetect />
       <Search />
       <Menu />
-      <Box p={[3, 12]} marginY={['60px', '30px']}>
-        {children}
+      <Box
+        p={[3, 12]}
+        marginY={['60px', '30px']}
+        justifyContent="center"
+        display="flex"
+      >
+        <Box maxW="700px" w="full">
+          {children}
+        </Box>
       </Box>
     </Box>
   );
