@@ -8,13 +8,15 @@ import { changeMenuOpen, setMenuOpen } from 'store/ui/action';
 import { useDispatch } from 'react-redux';
 import { useUiStore } from 'redux-getters';
 
-import chakraTheme from './chakraTheme';
+const MotionFlex = motion.custom(Flex);
+const MotionHeading = motion.custom(Heading);
 
 const Menu: React.FC = (props) => {
   const router = useRouter();
   const isIndex = router.pathname === '/';
   const dispatch = useDispatch();
   const { menuOpen } = useUiStore();
+
   return (
     <Grid
       h="63px"
@@ -55,27 +57,26 @@ const Menu: React.FC = (props) => {
         justifyContent="center"
       >
         <Link href="/" _hover={{ textDecor: 'none' }}>
-          <motion.h2
-            style={{
-              color: isIndex ? 'white' : 'black',
-              textShadow: chakraTheme.shadows.sm,
-              fontFamily: chakraTheme.fonts.heading,
-              fontSize: chakraTheme.fontSizes.sm,
-            }}
+          <MotionHeading
+            color={isIndex ? 'white' : 'black'}
+            textShadow="sm"
+            fontSize="sm"
             whileTap={{ textShadow: 'none', scale: 1 }}
-            whileHover={{ scale: 1.2 }}
+            whileHover={{ scale: 1.4 }}
           >
             Sungryeol
-          </motion.h2>
+          </MotionHeading>
         </Link>
       </Flex>
-      <Flex
+      <MotionFlex
         w="100%"
         alignItems="center"
         justifyContent="center"
         gridColumn={['span 2', 'span 1']}
         onClick={() => dispatch(changeMenuOpen(!menuOpen))}
         cursor="pointer"
+        zIndex={100}
+        whileHover={{ scale: 1.4 }}
       >
         <Icon
           name="search"
@@ -85,7 +86,7 @@ const Menu: React.FC = (props) => {
             filter: 'drop-shadow(5px 5px 5px #222)',
           }}
         />
-      </Flex>
+      </MotionFlex>
     </Grid>
   );
 };

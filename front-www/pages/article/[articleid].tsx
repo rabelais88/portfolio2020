@@ -55,7 +55,7 @@ const Article = (props) => {
         >
           ✍️
         </span>
-        Post
+        Article
       </Tag>
       <Heading>{post.title}</Heading>
       <Text color="disabled" fontSize="sm">

@@ -12,7 +12,7 @@ import { Text, Box, Heading, Stack, Link, PseudoBox } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 import linkStyle from 'styles/links.module.css';
 import theme from 'components/chakraTheme';
-import { setMenuOpen } from 'store/ui/action';
+import { changeMenuOpen, setMenuOpen } from 'store/ui/action';
 
 const logger = new Logger('pages/index.tsx');
 
@@ -138,7 +138,7 @@ const HomePage: _HomePage = () => {
   const router = useRouter();
 
   const onSearchClick = async () => {
-    await dispatch(setMenuOpen(true));
+    await dispatch(changeMenuOpen(true));
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { useArticleStore, useTagStore, useUiStore } from 'redux-getters';
 import { Z_BLOCKER, Z_SEARCH } from 'constants/zIndex';
 import {
@@ -16,6 +16,11 @@ import {
   TabPanel,
   Input,
   PseudoBox,
+  InputGroup,
+  InputRightElement,
+  Button,
+  TagLabel,
+  TagCloseButton,
 } from '@chakra-ui/core';
 import { useDispatch } from 'react-redux';
 import {
@@ -41,10 +46,37 @@ import {
   SEARCH_WORK,
 } from 'constants/searchMode';
 
-import { Paginator, FullSpinner } from 'components';
+import { Paginator, FullSpinner, TagViz } from 'components';
 import { WORK, POST, ALL } from 'types/articleType';
-import theme from './chakraTheme';
 import { LOADING, SUCCESS } from 'types/loadState';
+import theme from './chakraTheme';
+
+const MotionIcon = motion.custom(Icon);
+
+// only "variants" work with parent-children animation
+const containerVariants: Variants = {
+  enter: {
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.05,
+    },
+  },
+  exit: {},
+};
+
+const childVariants: Variants = {
+  enter: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: {
+    x: 20,
+    opacity: 0,
+  },
+};
+
+const MotionStack = motion.custom(Stack);
+const MotionBox = motion.custom(Box);
 
 const InsideLayout = () => {
   const articleStore = useArticleStore();
@@ -60,9 +92,12 @@ const InsideLayout = () => {
   const FoundArticles = () => {
     return (
       <>
-        <Stack>
+        <MotionStack variants={containerVariants}>
+          {articleStore.count === 0 && (
+            <MotionBox>No articles including the keyword</MotionBox>
+          )}
           {articleStore.articles.map((a) => (
-            <Box key={a.id}>
+            <motion.div key={a.id} variants={childVariants}>
               <PseudoBox
                 as="a"
                 {...{ href: a.type === WORK ? a.link : getArticleUrl(a.id) }}
@@ -99,9 +134,9 @@ const InsideLayout = () => {
               <Text fontSize={['xs', 'sm']} color="placeholder">
                 {date.formatPastDate(a.updatedAt)}
               </Text>
-            </Box>
+            </motion.div>
           ))}
-        </Stack>
+        </MotionStack>
         <Paginator
           count={articleStore.count}
           size={articleStore.size}
@@ -114,19 +149,32 @@ const InsideLayout = () => {
 
   const onTagClick = async (tag) => {
     await dispatch(setArticleTag(tag));
-    await dispatch(setSearchMode(SEARCH_ARTICLE));
+    await dispatch(changeSearchMode(SEARCH_ARTICLE));
   };
   const FoundTags = () => {
     return (
-      <Stack flexWrap="wrap" direction="row" alignItems="space-between">
+      <MotionStack
+        flexWrap="wrap"
+        direction="row"
+        alignItems="space-between"
+        variants={containerVariants}
+      >
+        {tagStore.tags.length === 0 && (
+          <MotionBox>No tags including the keyword</MotionBox>
+        )}
         {tagStore.tags.map((t) => (
-          <Box key={t.tag} paddingRight="3" paddingBottom="3">
+          <MotionBox
+            key={t.tag}
+            paddingRight="3"
+            paddingBottom="3"
+            variants={childVariants}
+          >
             <Tag onClick={() => onTagClick(t.tag)} size="sm" cursor="pointer">
               {t.tag}
             </Tag>
-          </Box>
+          </MotionBox>
         ))}
-      </Stack>
+      </MotionStack>
     );
   };
 
@@ -140,10 +188,16 @@ const InsideLayout = () => {
     await dispatch(setArticleTag(''));
     await dispatch(getArticles());
   };
+
+  const onSearchClick = () => {
+    if (uiStore.searchMode === SEARCH_TAG) getTagsDebounced(dispatch);
+    else getArticlesDebounced(dispatch);
+  };
+
   const tabIndices = [SEARCH_ALL, SEARCH_ARTICLE, SEARCH_WORK, SEARCH_TAG];
   return (
     <>
-      <Icon
+      <MotionIcon
         cursor="pointer"
         name="close"
         color="black"
@@ -152,18 +206,31 @@ const InsideLayout = () => {
           filter: 'drop-shadow(5px 5px 5px #222)',
         }}
         onClick={() => dispatch(setMenuOpen(false))}
+        whileHover={{ scale: 1.5 }}
       />
       <Heading fontSize="md">Search</Heading>
-      <Input
-        variant="flushed"
-        placeholder="type keyword to search..."
-        onChange={onKeywordChange}
-      />
+      <InputGroup size="sm">
+        <Input
+          variant="flushed"
+          placeholder="type keyword to search..."
+          onChange={onKeywordChange}
+          value={
+            uiStore.searchMode === SEARCH_TAG
+              ? tagStore.keyword
+              : articleStore.keyword
+          }
+        />
+        <InputRightElement w="5rem">
+          <Button h="1.4rem" w="auto" size="sm" onClick={onSearchClick}>
+            Search
+          </Button>
+        </InputRightElement>
+      </InputGroup>
       <Box height={[3, 10]} />
       {articleStore.tag !== '' && (
-        <Tag onClick={onRemoveTag} cursor="pointer">
-          <Icon name="small-close" color="black" />
-          {articleStore.tag}
+        <Tag onClick={onRemoveTag} cursor="pointer" size="sm">
+          <TagLabel>{articleStore.tag}</TagLabel>
+          <TagCloseButton />
         </Tag>
       )}
       <Box height={[3, 10]} />
@@ -178,22 +245,22 @@ const InsideLayout = () => {
           <Tab>Tags</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>
+          <TabPanel h="full">
             <Box height={[3, 10]} />
             {articleStore.loadState === LOADING && <FullSpinner fullMode />}
             {articleStore.loadState === SUCCESS && <FoundArticles />}
           </TabPanel>
-          <TabPanel>
+          <TabPanel h="full">
             <Box height={[3, 10]} />
             {articleStore.loadState === LOADING && <FullSpinner fullMode />}
             {articleStore.loadState === SUCCESS && <FoundArticles />}
           </TabPanel>
-          <TabPanel>
+          <TabPanel h="full">
             <Box height={[3, 10]} />
             {articleStore.loadState === LOADING && <FullSpinner fullMode />}
             {articleStore.loadState === SUCCESS && <FoundArticles />}
           </TabPanel>
-          <TabPanel>
+          <TabPanel h="full">
             <Box height={[3, 10]} />
             {tagStore.loadState === LOADING && <FullSpinner fullMode />}
             {tagStore.loadState === SUCCESS && <FoundTags />}
@@ -208,25 +275,20 @@ const Search = () => {
   const uiStore = useUiStore();
   const menuWidthMin = 400;
   const menuWidth = Math.max(menuWidthMin, uiStore.viewWidth / 2);
+
+  const menuBGvariant: Variants = {
+    enter: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: {
+      x: menuWidth,
+      opacity: 0,
+    },
+  };
+
   return (
     <AnimatePresence>
-      {uiStore.menuOpen && (
-        <motion.div
-          key="blocker"
-          style={{
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            zIndex: Z_BLOCKER,
-            position: 'fixed',
-            backgroundColor: 'rgba(0,0,0,0.3)',
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
-      )}
       {uiStore.menuOpen && (
         <motion.nav
           key="search"
@@ -236,18 +298,14 @@ const Search = () => {
             bottom: 0,
             top: 0,
             right: 0,
+            float: 'right',
             zIndex: Z_SEARCH,
-          }}
-          initial={{
-            width: 0,
-          }}
-          transition={{ duration: 0.2 }}
-          animate={{
             width: menuWidth,
           }}
-          exit={{
-            width: 0,
-          }}
+          variants={menuBGvariant}
+          initial="exit"
+          animate="enter"
+          exit="exit"
         >
           <Box p={10}>
             <InsideLayout />
