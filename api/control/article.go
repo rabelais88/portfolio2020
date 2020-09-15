@@ -16,7 +16,7 @@ import (
 )
 
 type ArticleQuery struct {
-	ID string `query:"id" json:"id" validate:"required,uuid"`
+	ID string `query:"id" json:"id" validate:"required"`
 }
 
 func GetArticle(c echo.Context) error {
@@ -34,7 +34,7 @@ func GetArticle(c echo.Context) error {
 	if cc.Db.Where(&model.Article{
 		ID: q.ID,
 	}).Last(&a).RecordNotFound() {
-		return MakeError(http.StatusNotFound, "ARTICLE_NOT_FOUND")
+		return MakeError(http.StatusBadRequest, "ARTICLE_NOT_FOUND")
 	}
 
 	switch a.Type {

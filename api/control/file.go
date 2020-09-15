@@ -80,6 +80,11 @@ func UploadFile(c echo.Context) error {
 			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_PARSING_FILE_EXTENSION")
 		}
 		if extIndex == -1 {
+			if cc.Config.Env == env.ENVIRONMENTS.TEST {
+				urls = append(urls, filename)
+				// skip s3 for test
+				continue
+			}
 			// do not resize for non-resizable extensions
 			_, err := cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)
 			if err != nil {
@@ -98,6 +103,11 @@ func UploadFile(c echo.Context) error {
 		resized = imaging.Resize(resized, thumbWidth, thumbHeight, imaging.Lanczos)
 		if err := imaging.Save(resized, resizedFileloc); err != nil {
 			return MakeError(http.StatusInternalServerError, "ERROR_WHILE_SAVING_RESIZED_IMAGE")
+		}
+		if cc.Config.Env == env.ENVIRONMENTS.TEST {
+			urls = append(urls, filename)
+			// skip s3 for test
+			continue
 		}
 
 		_, err = cc.S3W.UploadFile(cc.Config.S3ImageBucket, fileLoc)

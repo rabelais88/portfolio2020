@@ -71,7 +71,7 @@ func AddPost(c echo.Context) error {
 }
 
 type ModifyPostBody struct {
-	ID         string `json:"id" validate:"required,uuid"`
+	ID         string `json:"id" validate:"required"`
 	Content    string `json:"content"`
 	Title      string `json:"title" validate:"required"`
 	Desc       string `json:"desc" validate:"max=100"`

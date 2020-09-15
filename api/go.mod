@@ -3,7 +3,6 @@ module github.com/rabelais88/portfolio2020/api
 go 1.14
 
 require (
-	cloud.google.com/go v0.65.0 // indirect
 	github.com/aws/aws-sdk-go v1.34.22
 	github.com/brianvoe/gofakeit/v5 v5.9.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -27,9 +26,8 @@ require (
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
 	github.com/novalagung/gubrak/v2 v2.0.1
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rs/xid v1.2.1
 	github.com/sergi/go-diff v1.1.0 // indirect
-	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 	github.com/valyala/fasthttp v1.13.1 // indirect
 	github.com/vcraescu/go-paginator v0.0.0-20200304054438-86d84f27c0b3

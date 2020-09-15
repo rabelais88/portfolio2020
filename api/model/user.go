@@ -3,8 +3,8 @@ package model
 import (
 	"log"
 
-	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
+	"github.com/rs/xid"
 )
 
 type User struct {
@@ -17,8 +17,8 @@ type User struct {
 }
 
 func (user *User) BeforeCreate(scope *gorm.Scope) error {
-	_uuid := uuid.New().String()
-	err := scope.SetColumn("UserID", _uuid)
+	uid := xid.New().String()
+	err := scope.SetColumn("UserID", uid)
 	if err != nil {
 		// handle error
 		log.Println("error while creating UUID(user)")
