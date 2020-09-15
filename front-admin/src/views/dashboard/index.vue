@@ -1,7 +1,12 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
-    <div v-if="loadState === SUCCESS">{{ JSON.stringify(tags) }}</div>
+    <!-- <div class="dashboard-text">name: {{ name }}</div> -->
+    <div v-if="loadState === SUCCESS">
+      <el-table :data="tags">
+        <el-table-column prop="tag" label="tag" />
+        <el-table-column prop="articleCount" label="articles" />
+      </el-table>
+    </div>
   </div>
 </template>
 
