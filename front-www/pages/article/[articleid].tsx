@@ -2,7 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import wrapper from 'store/root';
 import { Logger, date } from 'lib';
-import { Layout, Markdown } from 'components';
+import { Markdown, DefaultIconHeader } from 'components';
+import Layout from 'components/Layout';
 import { usePostStore } from 'redux-getters';
 import { getPost } from 'store/post/action';
 import { Heading, Box, Stack, Tag, Text } from '@chakra-ui/core';
@@ -25,6 +26,7 @@ const Article = (props) => {
   return (
     <Layout>
       <Head>
+        <DefaultIconHeader />
         <title>sungryeol.com - {post.title}</title>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />

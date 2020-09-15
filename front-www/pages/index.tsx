@@ -6,7 +6,8 @@ import wrapper from 'store/root';
 import getArticleReducer from 'redux-getters/getArticleReducer';
 import { getArticles, getRecentArticles } from 'store/article/action';
 import { Logger } from 'lib';
-import { ArticleItem, Layout, Cover } from 'components';
+import { ArticleItem, Cover, DefaultIconHeader } from 'components';
+import Layout from 'components/Layout';
 import { Text, Box, Heading, Stack, Link, PseudoBox } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 import linkStyle from 'styles/links.module.css';
@@ -143,6 +144,7 @@ const HomePage: _HomePage = () => {
   return (
     <Layout>
       <Head>
+        <DefaultIconHeader />
         <title>sungryeol.com</title>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
