@@ -41,14 +41,16 @@ import {
   SEARCH_WORK,
 } from 'constants/searchMode';
 
-import { Paginator } from 'components';
+import { Paginator, FullSpinner } from 'components';
 import { WORK, POST, ALL } from 'types/articleType';
 import theme from './chakraTheme';
+import { LOADING, SUCCESS } from 'types/loadState';
 
 const InsideLayout = () => {
   const articleStore = useArticleStore();
   const uiStore = useUiStore();
   const dispatch = useDispatch();
+  const tagStore = useTagStore();
 
   const onPageClick = async (pageNum) => {
     await dispatch(setArticlePage(pageNum));
@@ -115,7 +117,6 @@ const InsideLayout = () => {
     await dispatch(setSearchMode(SEARCH_ARTICLE));
   };
   const FoundTags = () => {
-    const tagStore = useTagStore();
     return (
       <Stack flexWrap="wrap" direction="row" alignItems="space-between">
         {tagStore.tags.map((t) => (
@@ -179,19 +180,23 @@ const InsideLayout = () => {
         <TabPanels>
           <TabPanel>
             <Box height={[3, 10]} />
-            <FoundArticles />
+            {articleStore.loadState === LOADING && <FullSpinner fullMode />}
+            {articleStore.loadState === SUCCESS && <FoundArticles />}
           </TabPanel>
           <TabPanel>
             <Box height={[3, 10]} />
-            <FoundArticles />
+            {articleStore.loadState === LOADING && <FullSpinner fullMode />}
+            {articleStore.loadState === SUCCESS && <FoundArticles />}
           </TabPanel>
           <TabPanel>
             <Box height={[3, 10]} />
-            <FoundArticles />
+            {articleStore.loadState === LOADING && <FullSpinner fullMode />}
+            {articleStore.loadState === SUCCESS && <FoundArticles />}
           </TabPanel>
           <TabPanel>
             <Box height={[3, 10]} />
-            <FoundTags />
+            {tagStore.loadState === LOADING && <FullSpinner fullMode />}
+            {tagStore.loadState === SUCCESS && <FoundTags />}
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -203,7 +208,6 @@ const Search = () => {
   const uiStore = useUiStore();
   const menuWidthMin = 400;
   const menuWidth = Math.max(menuWidthMin, uiStore.viewWidth / 2);
-
   return (
     <AnimatePresence>
       {uiStore.menuOpen && (
