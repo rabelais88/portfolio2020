@@ -190,7 +190,7 @@ const HomePage: _HomePage = () => {
             flexWrap="wrap"
             justifyContent="space-between"
             maxW="400px"
-            width="full"
+            width={['300px', 'full']}
           >
             <LinkObservable />
             <LinkGithub />
@@ -198,9 +198,7 @@ const HomePage: _HomePage = () => {
             <LinkCodepen />
           </Stack>
           <Box h="10" />
-          <Link href="mailto:sungryeolp@gmail.com">
-            email: sungryeolp@gmail.com
-          </Link>
+          <Link href="mailto:sungryeolp@gmail.com">sungryeolp@gmail.com</Link>
           <Box h="10" />
         </Stack>
       </Box>
@@ -210,9 +208,9 @@ const HomePage: _HomePage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(async (props) => {
   const { store } = props;
-  // await store.dispatch(setSize)
   await store.dispatch(getRecentArticles());
   logger.log(store.getState());
 });
 
-export default connect(null, null)(HomePage);
+// export default connect(null, null)(HomePage);
+export default HomePage;
