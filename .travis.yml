@@ -17,7 +17,7 @@ matrix:
         on:
           branch: master
     # --- front-www
-    - langauge: node_js
+    - language: node_js
       node_js:
         - "14.4.0"
       services:
@@ -33,7 +33,7 @@ matrix:
         on:
           branch: master
     # --- front-admin
-    - langauge: node_js
+    - language: node_js
       node_js:
         - "14.4.0"
       services:
