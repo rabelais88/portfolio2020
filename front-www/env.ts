@@ -1,4 +1,5 @@
 /* eslint-disable prefer-destructuring */
+// DO NOT CONNECT ANY DEPENDENCIES TO THIS FILE UNLESS NECESSARY
 import processType from 'types/process';
 import pkg from './package.json';
 /**
@@ -24,6 +25,8 @@ export const SERVER_API_URL = process.env.NEXT_PUBLIC_SERVER_API_URL;
 export const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 export const IS_BROWSER = _process.browser;
 export const IS_SERVER = !IS_BROWSER;
+export const GOOGLE_ANALYTICS_TRACKING_ID =
+  process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TRACKING_ID || '';
 
 export default {
   NODE_ENV,
@@ -34,4 +37,5 @@ export default {
   IMAGE_URL,
   IS_BROWSER,
   IS_SERVER,
+  GOOGLE_ANALYTICS_TRACKING_ID,
 };

@@ -7,6 +7,7 @@ COPY . .
 ENV NEXT_PUBLIC_API_URL=https://api.sungryeol.com
 ENV NEXT_PUBLIC_SERVER_API_URL=http://apiserver:6000
 ENV NEXT_PUBLIC_IMAGE_URL=https://d3cj1qm2zjlx16.cloudfront.net
+ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_TRACKING_ID=UA-178254104-1
 RUN yarn build
 
 FROM node:14.4.0-alpine

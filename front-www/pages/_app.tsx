@@ -11,18 +11,23 @@ import 'styles/font.css';
 import 'github-markdown-css';
 
 import wrapper from 'store/root';
-import { VERSION, NODE_ENV } from 'env';
+import { VERSION, NODE_ENV, GOOGLE_ANALYTICS_TRACKING_ID } from 'env';
 import Logger from 'lib/logger';
 import ChakraProvider from 'components/ChakraProvider';
+import { GoogleAnalyticsHeader } from 'components';
+import useGoogleAnalytics from 'components/useGoogleAnalytics';
 
 const logger = new Logger('pages/_app.js');
+const GAenabled = GOOGLE_ANALYTICS_TRACKING_ID !== '';
 
 const MyApp = ({ Component, pageProps }): JSX.Element => {
   useEffect(() => {
     logger.log(`${NODE_ENV} v${VERSION}`);
   }, []);
+  if (GAenabled) useGoogleAnalytics();
   return (
     <ChakraProvider>
+      {GAenabled && <GoogleAnalyticsHeader />}
       <Component {...pageProps} />
       <ToastContainer />
     </ChakraProvider>
