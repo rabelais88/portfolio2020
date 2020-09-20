@@ -79,6 +79,7 @@ docker_password = "..."
  - backend: cached DB(redis) or cached full-text search engine support(meilisearch) is required
  - backend: GORM v2 upgrade is required
  - backend: rigorous stress test is required
+ - backend: detailed performance monitoring is required(Jaeger)
  - frontend: SWR is required
  - frontend: add more D3.js element on frontend
  - frontend: integrate Cypress to CI
