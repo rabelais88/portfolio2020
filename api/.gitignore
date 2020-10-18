@@ -72,4 +72,4 @@ files/
 
 dev.env
 stage.env
-prod.env`
+prod.env

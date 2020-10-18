@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import wrapper from 'store/root';
-import { Logger, date } from 'lib';
+import { Logger, date, useIsDarkMode } from 'lib';
 import { Markdown, DefaultIconHeader } from 'components';
 import Layout from 'components/Layout';
 import { usePostStore } from 'redux-getters';
@@ -11,11 +11,13 @@ import { useDispatch } from 'react-redux';
 import { setArticlePage, setArticleTag } from 'store/article/action';
 import { changeSearchMode, setMenuOpen } from 'store/ui/action';
 import { SEARCH_ARTICLE } from 'constants/searchMode';
+import { darkmode } from 'styles/darkmode.module.css';
 
 const logger = new Logger('pages/article/[articleid].tsx');
 const Article = (props) => {
   const { post } = usePostStore();
   const dispatch = useDispatch();
+  const isDarkMode = useIsDarkMode();
 
   const onTagClick = async (tag) => {
     await dispatch(setArticleTag(tag));
@@ -64,7 +66,7 @@ const Article = (props) => {
       <Box h="30px" />
       <Box w="full" justifyContent="center">
         <div
-          className="markdown-body"
+          className={['markdown-body', darkmode].join(' ')}
           style={{ maxWidth: '700px', width: '100%' }}
         >
           <Markdown>{post.content}</Markdown>
