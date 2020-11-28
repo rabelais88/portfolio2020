@@ -50,6 +50,7 @@ import { Paginator, FullSpinner, TagViz } from 'components';
 import { WORK, POST, ALL } from 'types/articleType';
 import { LOADING, SUCCESS } from 'types/loadState';
 import theme from './chakraTheme';
+import Emoji from './Emoji';
 
 const MotionIcon = motion.custom(Icon);
 const MotionBox = motion.custom(Box);
@@ -111,24 +112,8 @@ const InsideLayout = () => {
                   fontSize={['sm', 'md']}
                   fontFamily={theme.fonts.heading}
                 >
-                  {a.type === WORK && (
-                    <span
-                      role="img"
-                      aria-label="linking chains"
-                      style={{ paddingRight: '10px' }}
-                    >
-                      🔗
-                    </span>
-                  )}
-                  {a.type === POST && (
-                    <span
-                      role="img"
-                      aria-label="writing hand"
-                      style={{ paddingRight: '10px' }}
-                    >
-                      ✍️
-                    </span>
-                  )}
+                  {a.type === WORK && <Emoji type="🔗" label="link" />}
+                  {a.type === POST && <Emoji type="✍" label="writing-hand" />}
                   <span>{a.title}</span>
                 </PseudoBox>
               </PseudoBox>

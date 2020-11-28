@@ -12,3 +12,4 @@ export { default as Cover } from './Cover';
 export { default as DefaultIconHeader } from './DefaultIconHeader';
 export { default as FullSpinner } from './FullSpinner';
 export { default as GoogleAnalyticsHeader } from './GoogleAnalyticsHeader';
+export { default as Emoji } from './Emoji';
