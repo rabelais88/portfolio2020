@@ -37,7 +37,7 @@ import {
   setArticleTag,
   setArticleType,
 } from 'store/article/action';
-import { date, getArticleUrl } from 'lib';
+import { date, getArticleUrl, useIsDarkMode } from 'lib';
 import { getTags, getTagsDebounced, setTagKeyword } from 'store/tag/action';
 import {
   SEARCH_ALL,
@@ -50,8 +50,10 @@ import { Paginator, FullSpinner, TagViz } from 'components';
 import { WORK, POST, ALL } from 'types/articleType';
 import { LOADING, SUCCESS } from 'types/loadState';
 import theme from './chakraTheme';
+import Emoji from './Emoji';
 
 const MotionIcon = motion.custom(Icon);
+const MotionBox = motion.custom(Box);
 
 // only "variants" work with parent-children animation
 const containerVariants: Variants = {
@@ -76,13 +78,13 @@ const childVariants: Variants = {
 };
 
 const MotionStack = motion.custom(Stack);
-const MotionBox = motion.custom(Box);
 
 const InsideLayout = () => {
   const articleStore = useArticleStore();
   const uiStore = useUiStore();
   const dispatch = useDispatch();
   const tagStore = useTagStore();
+  const isDarkMode = useIsDarkMode();
 
   const onPageClick = async (pageNum) => {
     await dispatch(setArticlePage(pageNum));
@@ -97,7 +99,7 @@ const InsideLayout = () => {
             <MotionBox>No articles including the keyword</MotionBox>
           )}
           {articleStore.articles.map((a) => (
-            <motion.div key={a.id} variants={childVariants}>
+            <MotionBox key={a.id} variants={childVariants}>
               <PseudoBox
                 as="a"
                 {...{ href: a.type === WORK ? a.link : getArticleUrl(a.id) }}
@@ -110,31 +112,15 @@ const InsideLayout = () => {
                   fontSize={['sm', 'md']}
                   fontFamily={theme.fonts.heading}
                 >
-                  {a.type === WORK && (
-                    <span
-                      role="img"
-                      aria-label="linking chains"
-                      style={{ paddingRight: '10px' }}
-                    >
-                      🔗
-                    </span>
-                  )}
-                  {a.type === POST && (
-                    <span
-                      role="img"
-                      aria-label="writing hand"
-                      style={{ paddingRight: '10px' }}
-                    >
-                      ✍️
-                    </span>
-                  )}
-                  {a.title}
+                  {a.type === WORK && <Emoji type="🔗" label="link" />}
+                  {a.type === POST && <Emoji type="✍" label="writing-hand" />}
+                  <span>{a.title}</span>
                 </PseudoBox>
               </PseudoBox>
               <Text fontSize={['xs', 'sm']} color="placeholder">
                 {date.formatPastDate(a.updatedAt)}
               </Text>
-            </motion.div>
+            </MotionBox>
           ))}
         </MotionStack>
         <Paginator
@@ -200,7 +186,7 @@ const InsideLayout = () => {
       <MotionIcon
         cursor="pointer"
         name="close"
-        color="black"
+        color={isDarkMode ? 'white' : 'black'}
         style={{
           WebkitFilter: 'drop-shadow(5px 5px 5px #222)',
           filter: 'drop-shadow(5px 5px 5px #222)',
@@ -275,6 +261,7 @@ const Search = () => {
   const uiStore = useUiStore();
   const menuWidthMin = 400;
   const menuWidth = Math.max(menuWidthMin, uiStore.viewWidth / 2);
+  const isDarkMode = useIsDarkMode();
 
   const menuBGvariant: Variants = {
     enter: {
@@ -290,10 +277,11 @@ const Search = () => {
   return (
     <AnimatePresence>
       {uiStore.menuOpen && (
-        <motion.nav
+        <MotionBox
+          as="nav"
           key="search"
+          backgroundColor={isDarkMode ? 'black' : 'white'}
           style={{
-            backgroundColor: theme.colors.white,
             position: 'fixed',
             bottom: 0,
             top: 0,
@@ -310,7 +298,7 @@ const Search = () => {
           <Box p={10}>
             <InsideLayout />
           </Box>
-        </motion.nav>
+        </MotionBox>
       )}
     </AnimatePresence>
   );

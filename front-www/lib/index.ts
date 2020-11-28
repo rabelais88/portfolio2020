@@ -7,3 +7,4 @@ export { default as joinUrl } from './joinUrl';
 export { default as getThumbUrl } from './getThumbUrl';
 export { default as date } from './date';
 export { default as getArticleUrl } from './getArticleUrl';
+export { default as useIsDarkMode } from './useIsDarkMode';

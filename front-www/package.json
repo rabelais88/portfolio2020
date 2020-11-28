@@ -23,6 +23,7 @@
     "react-blob": "^2.1.0",
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
+    "react-easy-emoji": "^1.4.0",
     "react-katex": "^2.0.2",
     "react-markdown": "^4.3.1",
     "react-redux": "^7.2.0",
