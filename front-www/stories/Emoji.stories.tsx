@@ -5,4 +5,5 @@ import { Emoji } from '../components';
 
 export default { title: 'Emoji', decorators: [withKnobs] };
 
-export const writingHand = () => <Emoji type="✍️" />;
+export const writingHand = () => <Emoji type="✍️" label="writing-hand" />;
+export const chain = () => <Emoji type="🔗" label="link" />;
