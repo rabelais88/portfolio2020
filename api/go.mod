@@ -11,7 +11,6 @@ require (
 	github.com/gavv/httpexpect/v2 v2.0.3
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
-	github.com/google/uuid v1.1.2
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/ijustfool/docker-secrets v0.0.0-20191021062307-b25ea5007562
 	github.com/imkira/go-interpol v1.1.0 // indirect
@@ -19,7 +18,7 @@ require (
 	github.com/jinzhu/now v1.1.1 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo-contrib v0.9.0
-	github.com/labstack/echo/v4 v4.1.17
+	github.com/labstack/echo/v4 v4.9.0
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
@@ -34,8 +33,6 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	go.uber.org/atomic v1.6.0 // indirect
 	golang.org/x/image v0.0.0-20200801110659-972c09e46d76 // indirect
-	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
-	golang.org/x/sys v0.0.0-20200909081042-eff7692f9009 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )
